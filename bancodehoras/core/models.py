@@ -33,7 +33,7 @@ class Status(models.Model):
 
 
 class BancoDeHoras(models.Model):
-    data = models.DateTimeField(auto_now=True)
+    data = models.DateField(auto_now=True)
     hora_inicial = models.TimeField()
     hora_final = models.TimeField()
     motivo = models.TextField()

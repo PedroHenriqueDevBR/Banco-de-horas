@@ -82,21 +82,21 @@
 
             <label for="">Usuario</label>
             {% if perfis %}
-            {% for perfil in perfis %}
             <select name="usuario_adicionar">
+                {% for perfil in perfis %}
                 <option value="{{ perfil.id }}">{{ perfil.usuario.username }} - {{ perfil.nome }}</option>
+                {% endfor %}
             </select>
-            {% endfor %}
             {% endif %}
             <br>
 
             <label for="">Permissao</label>
             {% if permissoes %}
-            {% for permissao in permissoes %}
             <select name="permissao_adicionar">
+                {% for permissao in permissoes %}
                 <option value="{{ permissao.id }}">{{ permissao.nome }}</option>
+                {% endfor %}
             </select>
-            {% endfor %}
             {% endif %}
             <br>
 
@@ -106,13 +106,22 @@
 
     <div>
         <h1>Cadastrar status</h1>
-        <form action="" method="POST">{% csrf_token %}
+        <form action="{% url 'cadastrar_status' %}" method="POST">{% csrf_token %}
             <label for="">Nome do status</label>
             <input type="text" name="nome_status">
             <button type="submit">Cadastrar</button>
         </form>
     </div>
 
+
+    <div>
+        <h1>Cadastrar forma de pagamento</h1>
+        <form action="{% url 'forma_de_pagamento' %}" method="POST">{% csrf_token %}
+            <label for="">Nome da forma de pagamento</label>
+            <input type="text" name="forma_de_pagamento">
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
 
 </body>
 

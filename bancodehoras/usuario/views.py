@@ -68,23 +68,29 @@ class LoginUsuarioView(View):
 
 
 class LogoutUsuarioView(View):
-    template_name = ''
-
     def get(self, request):
-        return render(request, self.template_name)
-
-    def post(self, request):
-        return render(request, self.template_name)
+        logout(request)
+        return redirect('login')
 
 
 class  ConfiguraAutorizacaoView(View):
-    template_name = ''
+    template_name = 'usuario/cadastrarusuario.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        return redirect('cadastrar_usuario')
 
     def post(self, request):
-        return render(request, self.template_name)
+        id_usuario = request.POST.get('usuario_adicionar')
+        id_permissao = request.POST.get('permissao_adicionar')
+
+        usuario_emissor = request.user.perfil
+        usuario_receptor = Perfil.objects.get(id=id_usuario)
+        permissao = Permissao.objects.get(id=id_permissao)
+        UsuarioPermissao.objects.create(permissao=permissao, perfil_emissor=usuario_emissor, perfil_receptor=usuario_receptor)
+
+        messages.add_message(request, messages.INFO, 'Permissao adiciona ao colaborador.')
+
+        return redirect('cadastrar_usuario')
 
 
 
