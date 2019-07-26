@@ -16,9 +16,6 @@ class Perfil(models.Model):
     def email(self):
         return self.usuario.perfil
 
-    def adicionar_subordinado(self, perfil_subordinado):
-        self.subordinados.add(perfil_subordinado)
-
 
 class Permissao(models.Model):
     nome = models.CharField(max_length = 100)

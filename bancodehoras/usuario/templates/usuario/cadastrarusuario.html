@@ -78,7 +78,7 @@
 
     <div>
         <h1>Adicionar permissão ao usuário</h1>
-        <form action="" method="POST">{% csrf_token %}
+        <form action="{% url 'vincular_permissao' %}" method="POST">{% csrf_token %}
 
             <label for="">Usuario</label>
             {% if perfis %}

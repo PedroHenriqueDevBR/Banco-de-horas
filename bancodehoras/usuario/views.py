@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from core.models import *
@@ -43,12 +44,26 @@ class CadastrarUsuarioView(View):
 
 
 class LoginUsuarioView(View):
-    template_name = ''
+    template_name = 'usuario/login.html'
 
     def get(self, request):
         return render(request, self.template_name)
 
     def post(self, request):
+        username = request.POST.get('login')
+        password = request.POST.get('senha')
+
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            if User.objects.filter(username=username):
+                messages.add_message(request, messages.INFO, 'Usuário inativo.')
+            else:
+                messages.add_message(request, messages.INFO, 'Colaborador não cadastrado.')
+        else:
+            login(request, user)
+            return redirect('cadastrar_usuario')
+
         return render(request, self.template_name)
 
 
