@@ -9,7 +9,6 @@ class Setor(models.Model):
 class Perfil(models.Model):
     nome = models.CharField(max_length=100)
     matricula = models.CharField(max_length=10)
-    subordinados = models.ManyToManyField('self')
     setor = models.ForeignKey(Setor, on_delete=models.CASCADE, related_name='perfis_do_setor')
     usuario = models.OneToOneField(User, on_delete = models.CASCADE, related_name='perfil')
 
@@ -60,6 +59,7 @@ class Baixa(models.Model):
     data_cadastro = models.DateField()
     data_baixa = models.DateField()
     quantidade_de_horas = models.IntegerField()
+    forma_de_pagamento = models.ForeignKey(FormaDePagamento, on_delete=models.CASCADE, related_name='forma_de_pagamento_baixa')
     status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='baixas_do_status')
     colaborador = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='baixas_do_perfil')
 
