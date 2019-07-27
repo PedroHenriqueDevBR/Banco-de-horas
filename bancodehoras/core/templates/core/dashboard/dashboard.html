@@ -1,0 +1,84 @@
+{% extends 'core/base-dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="card-header px-0">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Página inicial</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">Solicitações</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">Relatórios</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card-body">
+        <h2 class="container"> Painel de gestão </h2>
+
+        <div class="card full-w">
+            <div class="card-body">
+                <canvas id="general-vision" width="100%" height="30px"></canvas>
+            </div>
+        </div>
+
+        <div class="row">
+            <section class="card col my-3 mx-3 px-0 auto-h">
+                <div class="card-header">
+                    <h3 class="text-center">Colaboradores do meu setor</h3>
+                </div>
+                <div class="card-body px-0 py-0">
+                    <ul class="list-group list-group-flush full-w">
+                        <li class="list-group-item list-group-item-action">
+                            <div class="list-item-colaborador">
+                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
+                                <h4 class="pl-3">Colaborador 01</h4>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-action">
+                            <div class="list-item-colaborador">
+                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
+                                <h4 class="pl-3">Colaborador 02</h4>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-action">
+                            <div class="list-item-colaborador">
+                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
+                                <h4 class="pl-3">Colaborador 03</h4>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-action">
+                            <div class="list-item-colaborador">
+                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
+                                <h4 class="pl-3">Colaborador 04</h4>
+                            </div>
+                        </li>
+                        <li class="list-group-item list-group-item-action">
+                            <div class="list-item-colaborador">
+                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
+                                <h4 class="pl-3">Colaborador 05</h4>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+
+
+            <aside class="card col my-3 mx-3 px-0 py-0 auto-h">
+                <div class="card-header">
+                    <h3 class="text-center">@Colaborador 01</h3>
+                </div>
+                <div class="card-body px-0 py-0">
+                    <div class="chart-colaborador-horas full-w auto-h">
+                        <canvas id="chart-colaborador-extras-cadastrados"></canvas>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
+{% endblock %}

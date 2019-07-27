@@ -1,0 +1,59 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Painel de controle{% endblock %}
+
+{% block main %}
+
+<main class="container-index">
+
+    <nav class="navbar navbar-light bg-light">
+        <div class="container">
+            <a class="navbar-brand">
+                <!-- <img src="img/icon-user.png" width="75" alt="logo da página"> -->
+                Banco de horas
+            </a>
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Colaborador" aria-label="Search">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="row" style="max-width: 100%;">
+        <div class="col col-md-3 bg-light px-0 sticky-top" style="height: 100vh;">
+            <ul class="list-group">
+                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Painel de controle</a>
+                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Solicitações</a>
+                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Minhas solicitações</a>
+                <a href="#" class="list-group-item list-group-item-action list-group-item-light">opção</a>
+                <a href="{% url 'logout' %}"
+                    class="list-group-item list-group-item-action list-group-item-danger">Encerrar sessão</a>
+            </ul>
+        </div>
+
+        <div class="col col-md-9 mb-3 px-5" style="margin: auto;">
+
+            {% if messages %}
+            <div class="full-w mt-3 mb-0">
+                {% for message in messages %}
+                <div class="alert alert-primary alert-dismissible fade show full-w" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span
+                            aria-hidden="true">&times;</span> </button>
+                </div>
+                {% endfor  %}
+            </div>
+            {% endif %}
+
+            <div class="container bg-light mt-3 card px-0 ">
+                {% block content %}
+                <h1>Nada a ser visualizado</h1>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}

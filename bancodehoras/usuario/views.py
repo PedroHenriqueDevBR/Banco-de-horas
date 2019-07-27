@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from core.models import *
 from django.contrib import messages 
 from usuario.forms import RegistrarUsuarioForm
@@ -11,6 +11,7 @@ from usuario.forms import RegistrarUsuarioForm
 class CadastrarUsuarioView(View):
     template_name = 'usuario/cadastrarusuario.html'
 
+    
     def get(self, request):
         dados = {
             'setores': Setor.objects.all(),
@@ -19,6 +20,7 @@ class CadastrarUsuarioView(View):
         }
         return render(request, self.template_name, dados)
 
+    
     def post(self, request):
         form = RegistrarUsuarioForm(request.POST)
         if form.is_valid():
@@ -61,24 +63,30 @@ class LoginUsuarioView(View):
             else:
                 messages.add_message(request, messages.INFO, 'Colaborador não cadastrado.')
         else:
+            messages.add_message(request, messages.INFO, 'Seja bem vindo {}.'.format(user.perfil.nome))
             login(request, user)
-            return redirect('cadastrar_usuario')
+            return redirect('dashboard')
 
         return render(request, self.template_name)
 
 
+
 class LogoutUsuarioView(View):
+    
     def get(self, request):
         logout(request)
         return redirect('login')
 
 
+
 class  ConfiguraAutorizacaoView(View):
     template_name = 'usuario/cadastrarusuario.html'
 
+    
     def get(self, request):
         return redirect('cadastrar_usuario')
 
+    
     def post(self, request):
         id_usuario = request.POST.get('usuario_adicionar')
         id_permissao = request.POST.get('permissao_adicionar')
@@ -97,28 +105,36 @@ class  ConfiguraAutorizacaoView(View):
 class AlterarSenhaView(View):
     template_name = ''
 
+    
     def get(self, request):
         return render(request, self.template_name)
 
+    
     def post(self, request):
         return render(request, self.template_name)
+
 
 
 class InativarUsuarioView(View):
     template_name = ''
 
+    
     def get(self, request):
         return render(request, self.template_name)
 
+    
     def post(self, request):
         return render(request, self.template_name)
+
 
 
 class ReativarUsuarioView(View):
     template_name = ''
 
+    
     def get(self, request):
         return render(request, self.template_name)
 
+    
     def post(self, request):
         return render(request, self.template_name)

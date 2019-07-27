@@ -1,0 +1,97 @@
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+.container-login {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #BE93C5;
+    background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);
+    background: linear-gradient(to right, #7BC6CC, #BE93C5);
+}
+
+.form-login {
+    background: #ffffffcc;
+    padding: 0 25px 25px 25px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.form-login img {
+    position: relative;
+    top: -50px;
+    left: calc(50% - 50px);
+}
+
+.form-login form {
+    margin-top: -40px;
+}
+
+.mouse-acao {
+    cursor: pointer;
+}
+
+
+
+/*
+ * Página de acesso
+*/
+.opcao-de-escolha {
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background: #BE93C5;
+    background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);
+    background: linear-gradient(to right, #7BC6CC, #BE93C5);
+}
+
+.opcao .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/*
+ * Estilização da página inicial
+*/
+.container-index {
+    width: 100%;
+    min-height: 100%;
+    background: #473B7B;
+    background: -webkit-linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%);;
+    background-image: linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%);
+}
+
+.list-item-colaborador {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+/* minhas funcionalidades */
+.full-w {
+    width: 100%;
+}
+
+.auto-h {
+    height: fit-content;
+}
+
+.limit-height {
+    max-height: 80vh;
+    overflow-y: auto;
+}
