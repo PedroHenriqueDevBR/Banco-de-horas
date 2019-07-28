@@ -24,7 +24,11 @@ class DashboardView(View):
 
     def get(self, request):
         dados = {}
+
+        setor = request.user.perfil.setor
+
         dados['perfil_logado'] = request.user
+        dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
         return render(request, self.tamplate_name, dados)
 
 
@@ -140,7 +144,7 @@ class SolicitacaoBancoDeHorasView(View):
     def get(self, request):
         dados = {}
         dados['perfil_logado'] = request.user
-        return render(request, self.template_name)
+        return redirect('solicitacoes')
 
     def post(self, request):
         data_movimentacao = request.POST.get('data')
@@ -167,7 +171,7 @@ class SolicitacaoBancoDeHorasView(View):
         )
 
         messages.add_message(request, messages.INFO, 'Banco de horas solicitado com sucesso.')
-        return redirect('dashboard')
+        return redirect('solicitacoes')
 
 
 class SolicitacaoBaixaView(View):
@@ -193,7 +197,7 @@ class SolicitacaoBaixaView(View):
         )
 
         messages.add_message(request, messages.INFO, 'Baixa solicitada com sucesso.')
-        return redirect('dashboard')
+        return redirect('solicitacoes')
 
 
 class PainelDeControleSolicitacoesView(View):

@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block content %}
-<div class="card-header px-0">
+<div class="bg-light card">
+    <div class="card-header px-0">
         <ul class="nav justify-content-center">
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'dashboard' %}">Página inicial</a>
@@ -30,36 +31,16 @@
                 </div>
                 <div class="card-body px-0 py-0">
                     <ul class="list-group list-group-flush full-w">
+                        {% if colaboradores_do_setor %}
+                        {% for colaborador in colaboradores_do_setor %}
                         <li class="list-group-item list-group-item-action">
                             <div class="list-item-colaborador">
-                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
-                                <h4 class="pl-3">Colaborador 01</h4>
+                                <img src="{% static 'img/icon-user.png' %}" width="50" alt="Colaborador">
+                                <h4 class="pl-3">{{ colaborador.nome }}</h4>
                             </div>
                         </li>
-                        <li class="list-group-item list-group-item-action">
-                            <div class="list-item-colaborador">
-                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
-                                <h4 class="pl-3">Colaborador 02</h4>
-                            </div>
-                        </li>
-                        <li class="list-group-item list-group-item-action">
-                            <div class="list-item-colaborador">
-                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
-                                <h4 class="pl-3">Colaborador 03</h4>
-                            </div>
-                        </li>
-                        <li class="list-group-item list-group-item-action">
-                            <div class="list-item-colaborador">
-                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
-                                <h4 class="pl-3">Colaborador 04</h4>
-                            </div>
-                        </li>
-                        <li class="list-group-item list-group-item-action">
-                            <div class="list-item-colaborador">
-                                <img src="../img/icon-user.png" width="50" alt="Colaborador">
-                                <h4 class="pl-3">Colaborador 05</h4>
-                            </div>
-                        </li>
+                        {% endfor %}
+                        {% endif %}
                     </ul>
                 </div>
             </section>
@@ -77,4 +58,5 @@
             </aside>
         </div>
     </div>
+</div>
 {% endblock %}

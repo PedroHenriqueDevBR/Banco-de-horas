@@ -46,6 +46,7 @@
     </div>
 </div>
 
+{% if bancospendentes %}
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
         <h3>Banco de horas / em análise</h3>
@@ -65,7 +66,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if bancospendentes %}
                     {% for banco in bancospendentes %}
                     <tr>
                         <th scope="row">{{ banco.data_movimentacao }}</th>
@@ -76,13 +76,14 @@
                         <td class="text-warning">{{ banco.status.nome }}</td>
                     </tr>
                     {% endfor %}
-                    {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+{% endif %}
 
+{% if baixaspendentes %}
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
         <h3>Solicitação de folga / em análise</h3>
@@ -100,7 +101,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if baixaspendentes %}
                     {% for baixa in baixaspendentes %}
                     <tr>
                         <th scope="row">{{ baixa.data_cadastro }}</th>
@@ -109,12 +109,12 @@
                         <td class="text-warning">{{ baixa.status.nome }}</td>
                     </tr>
                     {% endfor %}
-                    {% endif %}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+{% endif %}
 
 
 
