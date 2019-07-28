@@ -38,7 +38,7 @@
 
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
-        <h3>Banco de horas / em análise</h3>
+        <h3>Setores cadastrados</h3>
     </div>
 
     <div class="card-body px-0 py-0 limit-height">
@@ -51,10 +51,14 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if setores %}
+                    {% for setor in setores %}
                     <tr>
-                        <th scope="row">Tecnologia da informação</th>
-                        <td><a href="#" class="btn btn-primary">Acessar setor</a></td>
+                        <td scope="row">{{ setor.nome }}</td>
+                        <td><a href="{% url 'administrador_setor_id' setor.id %}">Acessar setor</a></td>
                     </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>

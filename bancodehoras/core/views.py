@@ -43,6 +43,25 @@ class AdministradorSetorView(View):
         dados['colaboradores'] = Perfil.objects.all()
         return render(request, self.tamplate_name, dados)
 
+
+class AdministradorMostraSetorView(View):
+    tamplate_name = 'core/super/mostra-setor.html'
+    
+    def get(self, request, id):
+        dados = {}
+        dados['setor'] = Setor.objects.get(id=id)
+        return render(request, self.tamplate_name, dados)
+
+
+class AdministradorMostraUsuarioView(View):
+    tamplate_name = 'core/super/mostra-usuario.html'
+    
+    def get(self, request, id):
+        dados = {}
+        dados['colaborador'] = User.objects.get(username=id)
+        return render(request, self.tamplate_name, dados)
+
+
 ###
 #### Solicitações do colaborador
 ###

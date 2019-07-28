@@ -1,0 +1,92 @@
+{% extends 'core/base-super.html' %}
+
+{% block content %}
+
+<div class="container bg-light card px-0 text-center">
+    <div class="card-header px-0">
+        <h1>Colaborador: 32595</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="card col">
+                <div class="card-body text-left">
+                    <p>Nome: {{ colaborador.perfil.nome }}</p>
+                    <p>Matricula: {{ colaborador.username }}</p>
+                    <p>Email: {{ colaborador.email }}</p>
+                    <p>Setor: {{ colaborador.perfil.setor.nome }}</p>
+                    <p>Gerencia o setor: <span class="text-success">Sim</span></p>
+                    <p>Administrador: <span class="text-danger">Não</span></p>
+                    <p>Ativo: <span class="text-success">Sim</span></p>
+                </div>
+            </div>
+
+            <div class="card col">
+                <div class="card-body text-left">
+                    <h2>Opções</h2>
+                    <button class="btn btn-primary mx-2 my-2" data-toggle="modal" data-target="#editar-colaborador">Editar dados</button><br>
+                    <button class="btn btn-success mx-2 my-2">Tornar administrador</button><br>
+                    <button class="btn btn-success mx-2 my-2">Tornar responsável por setor</button><br>
+                    <button class="btn btn-danger mx-2 my-2">Inativar usuário</button><br>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modais -->
+<div class="modal fade" id="editar-colaborador" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar colaborador</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-cadastrar-colaborador" action="{% url 'cadastrar_usuario' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3 mt-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">setor</label>
+                        </div>
+                        <select class="custom-select" name="setor" id="setor">
+                            {% if setores %}
+                            {% for setor in setores %}
+                            <option value="{{ setor.id }}">{{setor.nome}}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome" class="col-form-label">Nome (*):</label>
+                        <input class="form-control" name="nome" id="nome" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matricula" class="col-form-label">Matricula (*):</label>
+                        <input class="form-control" name="matricula" id="matricula" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email (*):</label>
+                        <input class="form-control" name="email" id="email" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha" class="col-form-label">Senha (*):</label>
+                        <input class="form-control" name="senha" id="senha" type="password">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btn-cadastrar-colaborador">Atualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

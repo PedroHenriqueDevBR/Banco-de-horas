@@ -97,3 +97,10 @@ html, body {
     max-height: 80vh;
     overflow-y: auto;
 }
+
+.center-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
