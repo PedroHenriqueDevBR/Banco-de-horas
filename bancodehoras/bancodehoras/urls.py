@@ -14,6 +14,11 @@ urlpatterns = [
     path('cadastrarpermissao/', login_required(views_core.PermissaoView.as_view() ,login_url='login'), name='cadastrar_permissao'),
     path('cadastrarstatus/', login_required(views_core.StatusView.as_view() ,login_url='login'), name='cadastrar_status'),
     path('cadastrarformadepagamento/', login_required(views_core.FormaDePagamentoView.as_view() ,login_url='login'), name='forma_de_pagamento'),
+    # Atualiza
+    path('setor/atualiza/<int:id>', login_required(views_core.SetorAtualizaView.as_view() ,login_url='login'), name='setor_atualiza'),
+    path('usuario/atualiza/<str:id>', login_required(views_usuario.AtualizarUsuarioView.as_view() ,login_url='login'), name='usuario_atualiza'),
+    # Delete
+    path('setor/delete/<int:id>', login_required(views_core.SetorDeleteView.as_view() ,login_url='login'), name='setor_deletar'),
     # Painel de controle do super administrador
     path('administrador/', login_required(views_core.AdministradorView.as_view() ,login_url='login'), name='administrador'),
     path('administrador/setor', login_required(views_core.AdministradorSetorView.as_view() ,login_url='login'), name='administrador_setor'),

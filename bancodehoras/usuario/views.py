@@ -10,7 +10,6 @@ from usuario.forms import RegistrarUsuarioForm
 
 class CadastrarUsuarioView(View):
     template_name = 'usuario/cadastrarusuario.html'
-
     
     def get(self, request):
         dados = {
@@ -43,6 +42,35 @@ class CadastrarUsuarioView(View):
             return redirect('cadastrar_usuario')
 
         return render(request, self.template_name, {'form': form})
+
+
+class AtualizarUsuarioView(View):
+    template_name = 'usuario/cadastrarusuario.html'
+
+    def get(self, request):
+        return redirect('administrador_usuario_id')
+    
+    def post(self, request, id):
+        nome = request.POST.get('nome')
+        matricula = request.POST.get('matricula')
+        id_setor = request.POST.get('setor')
+        email = request.POST.get('email')
+        senha = request.POST.get('senha')
+
+        user = User.objects.get(username=id)
+        user.username = matricula
+        user.email = email
+        perfil = user.perfil
+        perfil.nome = nome
+        perfil.setor = Setor.objects.get(id=id_setor)
+
+        if senha != '':
+            user.set_password(senha)
+        
+        perfil.save()
+        user.save()
+
+        return redirect('administrador_setor')
 
 
 class LoginUsuarioView(View):

@@ -59,6 +59,7 @@ class AdministradorMostraUsuarioView(View):
     def get(self, request, id):
         dados = {}
         dados['colaborador'] = User.objects.get(username=id)
+        dados['setores'] = Setor.objects.all()
         return render(request, self.tamplate_name, dados)
 
 
@@ -136,17 +137,15 @@ class PainelDeControleSolicitacoesView(View):
 class SetorView(View):
     template_name = 'usuario/cadastrarusuario.html'
 
-    
     def get(self, request):
         return redirect('cadastrar_usuario')
-
     
     def post(self, request):
         nome_setor = request.POST.get('nome_setor')
         Setor.objects.create(nome=nome_setor)
         messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
         return redirect('cadastrar_usuario')
-
+    
 
 class PermissaoView(View):
     template_name = 'usuario/cadastrarusuario.html'
@@ -188,3 +187,36 @@ class FormaDePagamentoView(View):
         FormaDePagamento.objects.create(nome=forma_de_pagamento)
         messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
         return redirect('cadastrar_usuario')
+
+
+##
+### Delete de dados
+##
+class SetorAtualizaView(View):
+    template_name = 'usuario/cadastrarusuario.html'
+
+    def get(self, request):
+        return redirect('administrador_setor')
+
+    def post(self, request, id):
+        nome = request.POST.get('nome_setor')
+        setor = Setor.objects.get(id=id)
+        setor.nome = nome
+        setor.save()
+        return redirect('administrador_setor')
+
+
+class SetorDeleteView(View):
+    template_name = 'usuario/cadastrarusuario.html'
+
+    def get(self, request, id):
+        setor = Setor.objects.get(id=id)
+        colaboradores = setor.perfis_do_setor.all()
+
+        if colaboradores.count() > 0:
+            messages.add_message(request, messages.INFO, 'Impossível deletar, há colaboradores cadastrados no setor selecionado.')
+        else:
+            messages.add_message(request, messages.INFO, 'Setor deletado com sucesso.')
+            setor.delete()
+
+        return redirect('administrador_setor')
