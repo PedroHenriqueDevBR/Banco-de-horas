@@ -11,6 +11,7 @@ class Perfil(models.Model):
     matricula = models.CharField(max_length=10)
     setor = models.ForeignKey(Setor, on_delete=models.CASCADE, related_name='perfis_do_setor')
     usuario = models.OneToOneField(User, on_delete = models.CASCADE, related_name='perfil')
+    gerente = models.BooleanField(default=False)
 
     @property
     def email(self):

@@ -15,19 +15,39 @@
                     <p>Matricula: {{ colaborador.username }}</p>
                     <p>Email: {{ colaborador.email }}</p>
                     <p>Setor: {{ colaborador.perfil.setor.nome }}</p>
-                    <p>Gerencia o setor: <span class="text-success">Sim</span></p>
-                    <p>Administrador: <span class="text-danger">Não</span></p>
-                    <p>Ativo: <span class="text-success">Sim</span></p>
+                    <p>Gerencia o setor:
+                        {% if colaborador.perfil.gerente %}
+                        <span class="badge badge-success">Sim</span>
+                        {% else %}
+                        <span class="badge badge-danger">Não</span>
+                        {% endif %}
+                    </p>
+                    <p>Administrador:
+                        {% if colaborador.is_superuser %}
+                        <span class="badge badge-success">Sim</span>
+                        {% else %}
+                        <span class="badge badge-danger">Não</span>
+                        {% endif %}
+                    </p>
+                    <p>Ativo:
+                        {% if colaborador.is_active %}
+                        <span class="badge badge-success">Sim</span>
+                        {% else %}
+                        <span class="badge badge-danger">Não</span>
+                        {% endif %}
+                    </p>
+                    <p>Data de cadastro: <span class="badge badge-warning">{{ colaborador.date_joined }}</span></p>
+                    <p>Ultimo acesso: <span class="badge badge-warning">{{ colaborador.last_login }}</span></p>
                 </div>
             </div>
 
             <div class="card col">
                 <div class="card-body text-left">
                     <h2>Opções</h2>
-                    <button class="btn btn-primary mx-2 my-2" data-toggle="modal" data-target="#editar-colaborador">Editar dados</button><br>
-                    <button class="btn btn-success mx-2 my-2">Tornar administrador</button><br>
-                    <button class="btn btn-success mx-2 my-2">Tornar responsável por setor</button><br>
-                    <button class="btn btn-danger mx-2 my-2">Inativar usuário</button><br>
+                    <button class="btn btn-secondary mx-2 my-2" data-toggle="modal" data-target="#editar-colaborador">Editar dados</button><br>
+                    <a href="{% url 'usuario_administrador' colaborador.id %}" class="btn btn-secondary mx-2 my-2">Administrador</a><br>
+                    <a href="{% url 'usuario_gerente' colaborador.perfil.id %}" class="btn btn-secondary mx-2 my-2">Responsável por setor</a><br>
+                    <a href="{% url 'usuario_ativo' colaborador.id %}" class="btn btn-secondary mx-2 my-2">ativar / inativar</a><br>
                 </div>
             </div>
         </div>
@@ -45,7 +65,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-cadastrar-colaborador" action="{% url 'usuario_atualiza' colaborador.username %}" method="post">
+                <form id="form-cadastrar-colaborador" action="{% url 'usuario_atualiza' colaborador.username %}"
+                    method="post">
                     {% csrf_token %}
                     <div class="input-group mb-3 mt-2">
                         <div class="input-group-prepend">
@@ -66,12 +87,14 @@
 
                     <div class="form-group">
                         <label for="nome" class="col-form-label">Nome (*):</label>
-                        <input class="form-control" name="nome" id="nome" type="text" value="{{ colaborador.perfil.nome }}">
+                        <input class="form-control" name="nome" id="nome" type="text"
+                            value="{{ colaborador.perfil.nome }}">
                     </div>
 
                     <div class="form-group">
                         <label for="matricula" class="col-form-label">Matricula (*):</label>
-                        <input class="form-control" name="matricula" id="matricula" type="text" value="{{ colaborador.username }}">
+                        <input class="form-control" name="matricula" id="matricula" type="text"
+                            value="{{ colaborador.username }}">
                     </div>
 
                     <div class="form-group">
@@ -81,7 +104,8 @@
 
                     <div class="form-group">
                         <label for="senha" class="col-form-label">Senha (*):</label>
-                        <input class="form-control" name="senha" id="senha" type="password" placeholder="Deixar campo vazio para não alterar a senha">
+                        <input class="form-control" name="senha" id="senha" type="password"
+                            placeholder="Deixar campo vazio para não alterar a senha">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>

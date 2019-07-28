@@ -100,7 +100,6 @@ class LoginUsuarioView(View):
 
 
 class LogoutUsuarioView(View):
-    
     def get(self, request):
         logout(request)
         return redirect('login')
@@ -129,40 +128,34 @@ class  ConfiguraAutorizacaoView(View):
         return redirect('cadastrar_usuario')
 
 
-
-class AlterarSenhaView(View):
-    template_name = ''
-
-    
-    def get(self, request):
-        return render(request, self.template_name)
-
-    
-    def post(self, request):
-        return render(request, self.template_name)
+class UsuarioGerenteView(View):
+    def get(self, request, id):
+        perfil = Perfil.objects.get(id=id)
+        if perfil.gerente:
+            perfil.gerente = False
+        else:
+            perfil.gerente = True
+        perfil.save()
+        return redirect('administrador_setor')
 
 
-
-class InativarUsuarioView(View):
-    template_name = ''
-
-    
-    def get(self, request):
-        return render(request, self.template_name)
-
-    
-    def post(self, request):
-        return render(request, self.template_name)
+class UsuarioAdministradorView(View):
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+        if user.is_superuser:
+            user.is_superuser = False
+        else:
+            user.is_superuser = True
+        user.save()
+        return redirect('administrador_setor')
 
 
-
-class ReativarUsuarioView(View):
-    template_name = ''
-
-    
-    def get(self, request):
-        return render(request, self.template_name)
-
-    
-    def post(self, request):
-        return render(request, self.template_name)
+class UsuarioAtivoView(View):
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+        if user.is_active:
+            user.is_active = False
+        else:
+            user.is_active = True
+        user.save()
+        return redirect('administrador_setor')

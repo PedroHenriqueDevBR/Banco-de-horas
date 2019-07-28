@@ -16,7 +16,6 @@ urlpatterns = [
     path('cadastrarformadepagamento/', login_required(views_core.FormaDePagamentoView.as_view() ,login_url='login'), name='forma_de_pagamento'),
     # Atualiza
     path('setor/atualiza/<int:id>', login_required(views_core.SetorAtualizaView.as_view() ,login_url='login'), name='setor_atualiza'),
-    path('usuario/atualiza/<str:id>', login_required(views_usuario.AtualizarUsuarioView.as_view() ,login_url='login'), name='usuario_atualiza'),
     # Delete
     path('setor/delete/<int:id>', login_required(views_core.SetorDeleteView.as_view() ,login_url='login'), name='setor_deletar'),
     # Painel de controle do super administrador
@@ -38,4 +37,8 @@ urlpatterns = [
     path('logout/', views_usuario.LogoutUsuarioView.as_view(), name='logout'),
     path('cadastrarusuario/', login_required(views_usuario.CadastrarUsuarioView.as_view() ,login_url='login'), name='cadastrar_usuario'),
     path('vincularpermissao/', login_required(views_usuario.ConfiguraAutorizacaoView.as_view() ,login_url='login'), name='vincular_permissao'),
+    path('usuario/atualiza/<str:id>', login_required(views_usuario.AtualizarUsuarioView.as_view() ,login_url='login'), name='usuario_atualiza'),
+    path('usuario/atualiza/gerente/<int:id>', login_required(views_usuario.UsuarioGerenteView.as_view() ,login_url='login'), name='usuario_gerente'),
+    path('usuario/atualiza/ativo/<int:id>', login_required(views_usuario.UsuarioAtivoView.as_view() ,login_url='login'), name='usuario_ativo'),
+    path('usuario/atualiza/administrador/<int:id>', login_required(views_usuario.UsuarioAdministradorView.as_view() ,login_url='login'), name='usuario_administrador'),
 ]
