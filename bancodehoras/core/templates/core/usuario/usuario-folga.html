@@ -1,154 +1,124 @@
-<!doctype html>
-<html lang="pt-br">
+{% extends 'core/base-dashboard.html' %}
+{% load static %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Titulo</title>
-    <link rel="stylesheet" href="../css/bootstrap.min.css">
-    <link rel="stylesheet" href="../css/estilo.css">
-</head>
+{% block content %}
 
-<body>
+<div class="container bg-light card px-0">
+        <div class="card-header px-0">
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'solicitacoes' %}">Página inicial</a>
+                </li>
 
-    <main class="container-index pb-5">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'solicitacoes_banco_de_horas' %}">Solicitações</a>
+                </li>
 
-        <nav class="navbar navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand">
-                    <!-- <img src="img/icon-user.png" width="75" alt="logo da página"> -->
-                    Banco de horas
-                </a>
-                <form class="form-inline">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Colaborador" aria-label="Search">
-                    <button class="btn btn-secondary my-2 my-sm-0" type="submit">Buscar</button>
-                </form>
-            </div>
-        </nav>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'solicitacoes_baixas' %}">Folgas</a>
+                </li>
+            </ul>
+        </div>
 
-        <div class="container bg-light mt-5 card px-0">
-            <div class="card-header px-0">
-                <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link" href="usuario.html">Página inicial</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="usuario-bancodehoras.html">Solicitações</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="usuario-folga.html">Folgas</a>
-                    </li>
-                </ul>
-            </div>
-
-            <div class="container">
-                <div class="row">
-                    <div class="card col">
-                        <div class="card-body">
-                            <canvas id="general-vision" width="100%" height="60px"></canvas>
-                        </div>
+        <div class="container">
+            <div class="row">
+                <div class="card col">
+                    <div class="card-body">
+                        <canvas id="general-vision" width="100%" height="60px"></canvas>
                     </div>
+                </div>
 
-                    <div class="card col">
-                        <div class="card-body">
-                            <canvas id="chart-colaborador-extras-cadastrados" width="100%" height="50px"></canvas>
-                        </div>
+                <div class="card col">
+                    <div class="card-body">
+                        <canvas id="chart-colaborador-extras-cadastrados" width="100%" height="50px"></canvas>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="container bg-light mt-5 card px-0">
-            <div class="card-header">
-                <h3>Relatório de Folgas</h3>
-            </div>
-
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover table-bordered">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th scope="col">Data da solicitação</th>
-                                <th scope="col">Data da folga</th>
-                                <th scope="col">inicio</th>
-                                <th scope="col">fim</th>
-                                <th scope="col">total</th>
-                                <th scope="col">status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">22/07/2018</th>
-                                <th scope="row">22/07/2018</th>
-                                <td>16:00</td>
-                                <td>16:00</td>
-                                <td>00:26</td>
-                                <td class="text-warning">Em análise</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">22/07/2018</th>
-                                <th scope="row">22/07/2018</th>
-                                <td>16:00</td>
-                                <td>16:00</td>
-                                <td>00:26</td>
-                                <td class="text-warning">Em análise</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">22/07/2018</th>
-                                <th scope="row">22/07/2018</th>
-                                <td>16:00</td>
-                                <td>16:00</td>
-                                <td>00:26</td>
-                                <td class="text-warning">Em análise</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">22/07/2018</th>
-                                <th scope="row">22/07/2018</th>
-                                <td>16:00</td>
-                                <td>16:00</td>
-                                <td>00:26</td>
-                                <td class="text-warning">Em análise</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">22/07/2018</th>
-                                <th scope="row">22/07/2018</th>
-                                <td>16:00</td>
-                                <td>16:00</td>
-                                <td>00:26</td>
-                                <td class="text-warning">Em análise</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">22/07/2018</th>
-                                <th scope="row">22/07/2018</th>
-                                <td>16:00</td>
-                                <td>16:00</td>
-                                <td>00:26</td>
-                                <td class="text-warning">Em análise</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <nav class="full-w d-flex justify-content-center">
-                        <ul class="pagination">
-                            <li class="page-item disabled">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-                            </li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Próxima</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
-            </div>
+    <div class="container bg-light mt-5 card px-0">
+        <div class="card-header">
+            <h3>Relatório de baixas</h3>
         </div>
 
-        <script src="../js/jquery-3.4.1.min.js"></script>
-        <script src="../js/popper.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
-        <script src="../js/Chart.min.js"></script>
-        <script src="../js/script.js"></script>
-</body>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Data da solicitação</th>
+                            <th scope="col">Data da folga</th>
+                            <th scope="col">inicio</th>
+                            <th scope="col">fim</th>
+                            <th scope="col">total</th>
+                            <th scope="col">status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">22/07/2018</th>
+                            <th scope="row">22/07/2018</th>
+                            <td>16:00</td>
+                            <td>16:00</td>
+                            <td>00:26</td>
+                            <td class="text-warning">Em análise</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">22/07/2018</th>
+                            <th scope="row">22/07/2018</th>
+                            <td>16:00</td>
+                            <td>16:00</td>
+                            <td>00:26</td>
+                            <td class="text-warning">Em análise</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">22/07/2018</th>
+                            <th scope="row">22/07/2018</th>
+                            <td>16:00</td>
+                            <td>16:00</td>
+                            <td>00:26</td>
+                            <td class="text-warning">Em análise</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">22/07/2018</th>
+                            <th scope="row">22/07/2018</th>
+                            <td>16:00</td>
+                            <td>16:00</td>
+                            <td>00:26</td>
+                            <td class="text-warning">Em análise</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">22/07/2018</th>
+                            <th scope="row">22/07/2018</th>
+                            <td>16:00</td>
+                            <td>16:00</td>
+                            <td>00:26</td>
+                            <td class="text-warning">Em análise</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">22/07/2018</th>
+                            <th scope="row">22/07/2018</th>
+                            <td>16:00</td>
+                            <td>16:00</td>
+                            <td>00:26</td>
+                            <td class="text-warning">Em análise</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-</html>
+                <nav class="full-w d-flex justify-content-center">
+                    <ul class="pagination">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Próxima</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -7,15 +7,15 @@
     <div class="card-header px-0">
         <ul class="nav justify-content-center">
             <li class="nav-item">
-                <a class="nav-link" href="usuario.html">Página inicial</a>
+                <a class="nav-link" href="{% url 'solicitacoes' %}">Página inicial</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="usuario-bancodehoras.html">Solicitações</a>
+                <a class="nav-link" href="{% url 'solicitacoes_banco_de_horas' %}">Solicitações</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="usuario-folga.html">Folgas</a>
+                <a class="nav-link" href="{% url 'solicitacoes_baixas' %}">Folgas</a>
             </li>
         </ul>
     </div>

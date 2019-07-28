@@ -106,4 +106,7 @@ function iniciaChart() {
     mostraGraficoDoColaborador();
 }
 
+/**
+ * Inicializador do sistema
+ */
 addEventListener('load', iniciaChart);

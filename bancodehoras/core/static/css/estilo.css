@@ -55,7 +55,9 @@ html, body {
     background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);
     background: linear-gradient(to right, #7BC6CC, #BE93C5);
 }
-
+.opcao-de-escolha a {
+    width: 250px;
+}
 .opcao .card-body {
     display: flex;
     flex-direction: column;
