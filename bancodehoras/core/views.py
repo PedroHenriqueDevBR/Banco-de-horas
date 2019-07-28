@@ -3,15 +3,19 @@ from django.views.generic.base import View
 from core.models import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from datetime import datetime
 
 ##
 ### Administrador
 ##
 class EscolhaDashboardView(View):
     tamplate_name = 'core/dashboard/opcaodeacesso.html'
-    
+
     def get(self, request):
-        return render(request, self.tamplate_name)    
+        dados = {}
+        dados['perfil_logado'] = request.user
+        return render(request, self.tamplate_name, dados)    
 
 
 # Colaborador
@@ -19,17 +23,13 @@ class DashboardView(View):
     tamplate_name = 'core/dashboard/dashboard.html'
 
     def get(self, request):
-        # dados = {
-        #     'bancos_solicitados': BancoDeHoras.objects.all()
-        # }
         dados = {}
+        dados['perfil_logado'] = request.user
         return render(request, self.tamplate_name, dados)
 
 
 # Administrador
 class AdministradorView(View):
-    tamplate_name = 'core/super/controle.html'
-    
     def get(self, request):
         return redirect('administrador_setor')
 
@@ -41,6 +41,7 @@ class AdministradorSetorView(View):
         dados = {}
         dados['setores'] = Setor.objects.all()
         dados['colaboradores'] = Perfil.objects.all()
+        dados['perfil_logado'] = request.user
         return render(request, self.tamplate_name, dados)
 
 
@@ -50,6 +51,7 @@ class AdministradorMostraSetorView(View):
     def get(self, request, id):
         dados = {}
         dados['setor'] = Setor.objects.get(id=id)
+        dados['perfil_logado'] = request.user
         return render(request, self.tamplate_name, dados)
 
 
@@ -60,6 +62,7 @@ class AdministradorMostraUsuarioView(View):
         dados = {}
         dados['colaborador'] = User.objects.get(username=id)
         dados['setores'] = Setor.objects.all()
+        dados['perfil_logado'] = request.user
         return render(request, self.tamplate_name, dados)
 
 
@@ -68,6 +71,7 @@ class AdministradorExtraView(View):
 
     def get(self, request):
         dados = {}
+        dados['perfil_logado'] = request.user
         dados['formasdepagamentos'] = FormaDePagamento.objects.all()
         dados['status'] = Status.objects.all()
         return render(request, self.tamplate_name, dados)
@@ -76,33 +80,91 @@ class AdministradorExtraView(View):
 ###
 #### Solicitações do colaborador
 ###
+class FormataDados:
+    def calcular_hora(self, inicio, fim):
+        if ':' not in inicio or ':' not in fim:
+            return 0
+
+        hora_inicio = self.converte_hora_em_minutos(inicio)
+        hora_final = self.converte_hora_em_minutos(fim)
+
+        if hora_inicio > hora_final:
+            return 0
+        else:
+            return self.converter_minutos_em_horas(hora_final - hora_inicio)
+
+
+    def converte_hora_em_minutos(self, hora_completa):
+        if ':' not in hora_completa:
+            return 0
+        
+        horas = int(hora_completa.split(':')[0]) * 60
+        minutos = int(hora_completa.split(':')[1])
+
+        return horas + minutos
+
+
+    def converter_minutos_em_horas(self, minutos):
+        if minutos > 60:
+            horas = minutos // 60
+            minutos = minutos - (horas * 60)
+        else:
+            horas = 0
+            minutos
+
+        return '{}:{}'.format(horas, minutos)
+
+
 class SolicitacaoView(View):
     template_name = 'core/usuario/solicitacao.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        dados = {}
+        analise = Status.objects.all()[0]
+        autorizado = Status.objects.all()[1]
+        dados['perfil_logado'] = request.user
+        dados['bancospendentes'] = Movimentacao.objects.filter(
+            Q(status=analise),
+            Q(eh_entrada=True)
+        )
+        dados['baixaspendentes'] = Movimentacao.objects.filter(
+            Q(status=analise),
+            Q(eh_entrada=False)
+        )
+        return render(request, self.template_name, dados)
 
 
 class SolicitacaoBancoDeHorasView(View):
     template_name = 'core/usuario/usuario-bancodehoras.html'
 
     def get(self, request):
+        dados = {}
+        dados['perfil_logado'] = request.user
         return render(request, self.template_name)
 
     def post(self, request):
-        data = request.POST.get('data_banco')
-        hora_inicial = request.POST.get('hora_inicial_banco')
-        hora_final = request.POST.get('hora_final_banco')
-        motivo = request.POST.get('motivo_banco')
+        data_movimentacao = request.POST.get('data')
+        hora_inicial = request.POST.get('hora_inicial')
+        hora_final = request.POST.get('hora_final')
+        motivo = request.POST.get('motivo')
         status = Status.objects.all()[0]
         solicitante = request.user.perfil
+        format_data = FormataDados()
+        hora_total = format_data.calcular_hora(hora_inicial, hora_final)
+        data_movimentacao_formatada = datetime.strptime(data_movimentacao, '%Y-%m-%d').date()
 
-        # BancoDeHoras.objects.create(data=data, 
-        #                             hora_inicial=hora_inicial, 
-        #                             hora_final=hora_final, 
-        #                             motivo=motivo, 
-        #                             status=status,
-        #                             colaborador=solicitante)
+        # import pdb; pdb.set_trace()
+
+        Movimentacao.objects.create(
+            data_movimentacao=data_movimentacao_formatada,
+            hora_inicial = hora_inicial,
+            hora_final = hora_final,
+            hora_total = hora_total,
+            motivo = motivo,
+            status = status,
+            eh_entrada = True,
+            colaborador = solicitante
+        )
 
         messages.add_message(request, messages.INFO, 'Banco de horas solicitado com sucesso.')
         return redirect('dashboard')
@@ -112,24 +174,25 @@ class SolicitacaoBaixaView(View):
     template_name = 'core/usuario/usuario-folga.html'
 
     def get(self, request):
+        dados = {}
+        dados['perfil_logado'] = request.user
         return render(request, self.template_name)
 
     def post(self, request):
-        data = request.POST.get('data_banco')
-        hora_inicial = request.POST.get('hora_inicial_banco')
-        hora_final = request.POST.get('hora_final_banco')
-        motivo = request.POST.get('motivo_banco')
+        data_folga = request.POST.get('data_folga')
+        total_horas = request.POST.get('horas_total')
         status = Status.objects.all()[0]
         solicitante = request.user.perfil
 
-        # BancoDeHoras.objects.create(data=data, 
-        #                             hora_inicial=hora_inicial, 
-        #                             hora_final=hora_final, 
-        #                             motivo=motivo, 
-        #                             status=status,
-        #                             colaborador=solicitante)
+        Movimentacao.objects.create(
+            data_movimentacao=data_folga,
+            eh_entrada=False,
+            hora_total=total_horas,
+            status = status,
+            colaborador = solicitante
+        )
 
-        messages.add_message(request, messages.INFO, 'Banco de horas solicitado com sucesso.')
+        messages.add_message(request, messages.INFO, 'Baixa solicitada com sucesso.')
         return redirect('dashboard')
 
 
@@ -137,20 +200,22 @@ class PainelDeControleSolicitacoesView(View):
     template_name = 'core/dashboard/dashboard-solicitacoes.html'
 
     def get(self, request):
-        return render(request, self.template_name)
+        dados = {}
+        dados['perfil_logado'] = request.user
+        return render(request, self.template_name, dados)
 
 
 class SetorView(View):
     template_name = 'usuario/cadastrarusuario.html'
 
     def get(self, request):
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_setor')
     
     def post(self, request):
         nome_setor = request.POST.get('nome_setor')
         Setor.objects.create(nome=nome_setor)
         messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_setor')
 
 
 ##
@@ -161,13 +226,13 @@ class PermissaoView(View):
 
     
     def get(self, request):
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_setor')
 
     
     def post(self, request):
         nome_permissao = request.POST.get('nome_permissao')
         Permissao.objects.create(nome=nome_permissao)
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_setor')
 
 
 class StatusView(View):
@@ -175,27 +240,27 @@ class StatusView(View):
 
     
     def get(self, request):
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_extra')
 
     
     def post(self, request):
         nome_status = request.POST.get('nome_status')
         Status.objects.create(nome=nome_status)
         messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_extra')
 
 
 class FormaDePagamentoView(View):
     
     def get(self, request):
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_extra')
 
     
     def post(self, request):
         forma_de_pagamento = request.POST.get('forma_de_pagamento')
         FormaDePagamento.objects.create(nome=forma_de_pagamento)
         messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
-        return redirect('cadastrar_usuario')
+        return redirect('administrador_extra')
 
 
 ##

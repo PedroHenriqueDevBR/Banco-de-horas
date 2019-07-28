@@ -23,13 +23,16 @@
     <div class="row" style="max-width: 100%;">
         <div class="col col-md-3 bg-light px-0 sticky-top" style="height: 100vh;">
             <ul class="list-group">
-                <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-success">Painel de controle</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Solicitações</a>
-                <a href="{% url 'solicitacoes' %}" class="list-group-item list-group-item-action list-group-item-success">Minhas solicitações</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-light">opção</a>
+                {% if perfil_logado.is_superuser %}
                 <a href="{% url 'administrador' %}" class="list-group-item list-group-item-action list-group-item-light">Alterar visão</a>
+                {% endif %}
+                {% if perfil_logado.perfil.gerente %}
+                <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light">Painel de controle</a>
+                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Solicitações (*)</a>
+                {% endif %}
+                <a href="{% url 'solicitacoes' %}" class="list-group-item list-group-item-action list-group-item-light">Minhas solicitações</a>
                 <a href="{% url 'logout' %}"
-                    class="list-group-item list-group-item-action list-group-item-danger">Encerrar sessão</a>
+                    class="list-group-item list-group-item-action list-group-item-light">Encerrar sessão</a>
             </ul>
         </div>
 

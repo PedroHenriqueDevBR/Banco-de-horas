@@ -40,11 +40,13 @@ class FormaDePagamento(models.Model):
 
 class Movimentacao(models.Model):
     data_cadastro = models.DateField(auto_now=True)
-    data_movimentacao = models.DateField(auto_now=True)
-    hora_inicial = models.TimeField()
-    hora_final = models.TimeField()
-    motivo = models.TextField()
-    forma_de_pagamento = models.ForeignKey(FormaDePagamento, on_delete=models.CASCADE, related_name='pagamento_movimentacoes')
+    data_movimentacao = models.DateField()
+    hora_inicial = models.TimeField(null=True, blank=True)
+    hora_final = models.TimeField(null=True, blank=True)
+    hora_total = models.CharField(max_length=10)
+    eh_entrada = models.BooleanField()
+    motivo = models.TextField(null=True, blank=True)
+    forma_de_pagamento = models.ForeignKey(FormaDePagamento, on_delete=models.CASCADE, related_name='pagamento_movimentacoes', null=True, blank=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='status_movimentacoes')
     colaborador = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='movimentacoes')
 

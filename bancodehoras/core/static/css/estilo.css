@@ -10,9 +10,7 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: #BE93C5;
-    background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);
-    background: linear-gradient(to right, #7BC6CC, #BE93C5);
+    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
 }
 
 .form-login {
@@ -51,9 +49,10 @@ html, body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    background: #BE93C5;
+    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
+    /* background: #BE93C5;
     background: -webkit-linear-gradient(to right, #7BC6CC, #BE93C5);
-    background: linear-gradient(to right, #7BC6CC, #BE93C5);
+    background: linear-gradient(to right, #7BC6CC, #BE93C5); */
 }
 .opcao-de-escolha a {
     width: 250px;
@@ -72,9 +71,10 @@ html, body {
 .container-index {
     width: 100%;
     min-height: 100%;
-    background: #473B7B;
+    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
+    /* background: #473B7B;
     background: -webkit-linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%);;
-    background-image: linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%);
+    background-image: linear-gradient(-225deg, #CBBACC 0%, #2580B3 100%); */
 }
 
 .list-item-colaborador {

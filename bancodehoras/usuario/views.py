@@ -39,7 +39,7 @@ class CadastrarUsuarioView(View):
             perfil.save()
 
             messages.add_message(request, messages.INFO, 'Colaborador cadastrado com sucesso')
-            return redirect('cadastrar_usuario')
+            return redirect('administrador_setor')
 
         return render(request, self.template_name, {'form': form})
 
@@ -93,7 +93,12 @@ class LoginUsuarioView(View):
         else:
             messages.add_message(request, messages.INFO, 'Seja bem vindo {}.'.format(user.perfil.nome))
             login(request, user)
-            return redirect('dashboard')
+
+            if user.is_superuser:
+                return redirect('escolha_dashboard')
+            elif user.perfil.gerente:
+                return redirect('dashboard')
+            return redirect('solicitacoes')
 
         return render(request, self.template_name)
 

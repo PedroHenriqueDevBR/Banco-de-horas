@@ -54,7 +54,7 @@
     <div class="card-body px-0 py-0 limit-height">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Data</th>
                         <th scope="col">Hora inicial</th>
@@ -65,14 +65,18 @@
                     </tr>
                 </thead>
                 <tbody>
+                    {% if bancospendentes %}
+                    {% for banco in bancospendentes %}
                     <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
+                        <th scope="row">{{ banco.data_movimentacao }}</th>
+                        <td>{{ banco.hora_inicial }}</td>
+                        <td>{{ banco.hora_final }}</td>
+                        <td>{{ banco.hora_total }}</td>
+                        <td>{{ banco.motivo }}</td>
+                        <td class="text-warning">{{ banco.status.nome }}</td>
                     </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -87,25 +91,25 @@
     <div class="card-body px-0 py-0 limit-height">
         <div class="table-responsive">
             <table class="table table-hover mb-0">
-                <thead>
+                <thead class="thead-dark">
                     <tr>
                         <th scope="col">Data da solicitação</th>
                         <th scope="col">Data da folga</th>
-                        <th scope="col">inicio</th>
-                        <th scope="col">fim</th>
-                        <th scope="col">total</th>
+                        <th scope="col">total de horas</th>
                         <th scope="col">status</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% if baixaspendentes %}
+                    {% for baixa in baixaspendentes %}
                     <tr>
-                        <th scope="row">22/07/2018</th>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:00</td>
+                        <th scope="row">{{ baixa.data_cadastro }}</th>
+                        <th scope="row">{{ baixa.data_movimentacao }}</th>
                         <td>00:26</td>
-                        <td class="text-warning">Em análise</td>
+                        <td class="text-warning">{{ baixa.status.nome }}</td>
                     </tr>
+                    {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -126,42 +130,38 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" action="{% url 'solicitacoes_banco_de_horas' %}">{% csrf_token %}
                     <div class="form-group">
-                        <label for="form-input-data-cadastro" class="col-form-label">Data da
-                            solicitação:</label>
-                        <input type="date" class="form-control" id="form-input-data-cadastro">
+                        <label for="form-input-data-cadastro" class="col-form-label">Data do evento:</label>
+                        <input name="data" type="date" class="form-control" id="form-input-data-cadastro">
                     </div>
 
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
-                                <label for="form-input-hora-inicial" class="col-form-label">Hora
-                                    inicial:</label>
-                                <input type="time" class="form-control" id="form-input-hora-inicial">
+                                <label for="form-input-hora-inicial" class="col-form-label">Hora inicial:</label>
+                                <input name="hora_inicial" type="time" class="form-control"
+                                    id="form-input-hora-inicial">
                             </div>
                         </div>
 
                         <div class="col">
                             <div class="form-group">
-                                <label for="form-input-hora-final" class="col-form-label">Hora
-                                    final:</label>
-                                <input type="time" class="form-control" id="form-input-hora-final">
+                                <label for="form-input-hora-final" class="col-form-label">Hora final:</label>
+                                <input name="hora_final" type="time" class="form-control" id="form-input-hora-final">
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="form-input-motivo" class="col-form-label">motivo:</label>
-                        <textarea name="form-input-motivo" id="form-input-motivo" rows="5"
-                            class="form-control"></textarea>
+                        <textarea name="motivo" id="form-input-motivo" rows="5" class="form-control"></textarea>
                     </div>
-
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
             </div>
         </div>
     </div>
@@ -178,42 +178,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form>
+                <form method="POST" action="{% url 'solicitacoes_baixas' %}">{% csrf_token %}
                     <div class="form-group">
-                        <label for="form-input-data-cadastro" class="col-form-label">Data da
-                            solicitação:</label>
-                        <input type="date" class="form-control" id="form-input-data-cadastro">
+                        <label for="form-input-data-cadastro" class="col-form-label">Data da folga:</label>
+                        <input name="data_folga" type="date" class="form-control" id="form-input-data-cadastro">
                     </div>
 
                     <div class="form-group">
-                        <label for="form-input-data-cadastro" class="col-form-label">Data da
-                            folga:</label>
-                        <input type="date" class="form-control" id="form-input-data-cadastro">
+                        <label for="form-input-data-cadastro" class="col-form-label">Total de horas:</label>
+                        <input name="horas_total" type="number" min="1" max="8" class="form-control" id="form-input-data-cadastro">
                     </div>
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="form-input-hora-inicial" class="col-form-label">Hora
-                                    inicial:</label>
-                                <input type="time" class="form-control" id="form-input-hora-inicial">
-                            </div>
-                        </div>
-
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="form-input-hora-final" class="col-form-label">Hora
-                                    final:</label>
-                                <input type="time" class="form-control" id="form-input-hora-final">
-                            </div>
-                        </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
                     </div>
-
                 </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
-                <button type="button" class="btn btn-primary">Salvar</button>
             </div>
         </div>
     </div>
