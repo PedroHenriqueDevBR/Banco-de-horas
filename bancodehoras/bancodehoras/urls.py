@@ -23,6 +23,7 @@ urlpatterns = [
     path('administrador/', login_required(views_core.AdministradorView.as_view() ,login_url='login'), name='administrador'),
     path('administrador/setor', login_required(views_core.AdministradorSetorView.as_view() ,login_url='login'), name='administrador_setor'),
     path('administrador/setor/<int:id>', login_required(views_core.AdministradorMostraSetorView.as_view() ,login_url='login'), name='administrador_setor_id'),
+    path('administrador/extra', login_required(views_core.AdministradorExtraView.as_view() ,login_url='login'), name='administrador_extra'),
     path('administrador/usuario/<str:id>', login_required(views_core.AdministradorMostraUsuarioView.as_view() ,login_url='login'), name='administrador_usuario_id'),
     # Painel de controle
     path('paineldecontrole/', login_required(views_core.DashboardView.as_view() ,login_url='login'), name='dashboard'),

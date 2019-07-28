@@ -63,6 +63,16 @@ class AdministradorMostraUsuarioView(View):
         return render(request, self.tamplate_name, dados)
 
 
+class AdministradorExtraView(View):
+    tamplate_name = 'core/super/super-dados-extras.html'
+
+    def get(self, request):
+        dados = {}
+        dados['formasdepagamentos'] = FormaDePagamento.objects.all()
+        dados['status'] = Status.objects.all()
+        return render(request, self.tamplate_name, dados)
+
+
 ###
 #### Solicitações do colaborador
 ###
@@ -130,10 +140,6 @@ class PainelDeControleSolicitacoesView(View):
         return render(request, self.template_name)
 
 
-
-##
-### Classes de controle
-##
 class SetorView(View):
     template_name = 'usuario/cadastrarusuario.html'
 
@@ -145,8 +151,11 @@ class SetorView(View):
         Setor.objects.create(nome=nome_setor)
         messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
         return redirect('cadastrar_usuario')
-    
 
+
+##
+### Classes de controle
+##
 class PermissaoView(View):
     template_name = 'usuario/cadastrarusuario.html'
 
@@ -190,7 +199,7 @@ class FormaDePagamentoView(View):
 
 
 ##
-### Delete de dados
+### Deletar e atualizar dados
 ##
 class SetorAtualizaView(View):
     template_name = 'usuario/cadastrarusuario.html'
