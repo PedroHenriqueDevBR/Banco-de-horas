@@ -126,6 +126,13 @@ class FormataDados:
 
         return '{}:{}'.format(hora_str, min_str)
 
+    def calcular_total_de_horas(self, obj):
+        total_min = 0
+        # import pdb; pdb.set_trace()
+        for movimentacao in obj:
+            total_min += self.converte_hora_em_minutos(movimentacao.hora_total)
+        return self.converter_minutos_em_horas(total_min)
+
 
 class SolicitacaoView(View):
     template_name = 'core/usuario/solicitacao.html'
@@ -134,15 +141,19 @@ class SolicitacaoView(View):
         dados = {}
         analise = Status.objects.all()[0]
         autorizado = Status.objects.all()[1]
+        format_data = FormataDados()
+        
         dados['perfil_logado'] = request.user
-        dados['bancospendentes'] = Movimentacao.objects.filter(
+        dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
             Q(status=analise),
             Q(eh_entrada=True)
         )
-        dados['baixaspendentes'] = Movimentacao.objects.filter(
+        dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(
             Q(status=analise),
             Q(eh_entrada=False)
         )
+        dados['total_de_banco_solicitado'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
+        dados['total_de_baixa_solicitado'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
         return render(request, self.template_name, dados)
 
 
@@ -152,7 +163,8 @@ class SolicitacaoBancoDeHorasView(View):
     def get(self, request):
         dados = {}
         dados['perfil_logado'] = request.user
-        return redirect('solicitacoes')
+        dados['solicitacoes'] = request.user.perfil.movimentacoes.all().filter(eh_entrada=True)
+        return render(request, self.template_name, dados)
 
     def post(self, request):
         data_movimentacao = request.POST.get('data')
@@ -188,13 +200,15 @@ class SolicitacaoBaixaView(View):
     def get(self, request):
         dados = {}
         dados['perfil_logado'] = request.user
-        return render(request, self.template_name)
+        dados['solicitacoes'] = request.user.perfil.movimentacoes.all().filter(eh_entrada=False)
+        return render(request, self.template_name, dados)
 
     def post(self, request):
         data_folga = request.POST.get('data_folga')
         total_horas = request.POST.get('horas_total')
         status = Status.objects.all()[0]
         solicitante = request.user.perfil
+        total_horas = '0{}:00'.format(total_horas) if int(total_horas) < 10 else '{}:00'.format(total_horas)
 
         Movimentacao.objects.create(
             data_movimentacao=data_folga,

@@ -3,7 +3,7 @@
 
 {% block content %}
 
-<div class="container bg-light card px-0">
+<div class="container bg-light mt-0 card px-0">
     <div class="card-header px-0">
         <ul class="nav justify-content-center">
             <li class="nav-item">
@@ -23,28 +23,88 @@
     <div class="container">
         <div class="row">
             <div class="card col">
-                <div class="card-body">
-                    <canvas id="general-vision" width="100%" height="60px"></canvas>
+                <div class="card-body px-0">
+                    <table class="table table-striped table-bordered">
+                        <caption>Dados referentes a banco de horas</caption>
+                        <thead class="thead-dark">
+                                <tr>
+                                    <th>BANCO DE HORAS</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                        <tbody>
+                            <tr>
+                                <td>Horas solicitadas</td>
+                                <td>01:00</td>
+                            </tr>
+                            <tr>
+                                <td>Horas autorizadas</td>
+                                <td>01:00</td>
+                            </tr>
+                            <tr>
+                                <td>Total de horas cadastradas</td>
+                                <td>01:00</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
             <div class="card col">
-                <div class="card-body">
-                    <canvas id="chart-colaborador-extras-cadastrados" width="100%" height="50px"></canvas>
+                <div class="card-body px-0">
+                    <table class="table table-striped table-bordered">
+                        <caption>Dados referentes a baixas</caption>
+                        <thead class="thead-dark">
+                            <tr>
+                                <th>FOLGAS</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Horas solicitadas</td>
+                                <td>01:00</td>
+                            </tr>
+                            <tr>
+                                <td>Horas autorizadas</td>
+                                <td>01:00</td>
+                            </tr>
+                            <tr>
+                                <td>Total de horas cadastradas</td>
+                                <td>01:00</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card col-sm-12 px-0">
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col d-flex flex-row-reverse px-0">
+                            <button class="btn btn-primary mx-1" data-toggle="modal"
+                                data-target="#cadastrar-banco-de-horas">cadastrar banco de horas</button>
+                        </div>
+                        <div class="col px-0">
+                            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#solicitar-folga">Solicitar
+                                nova folga</button>                            
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+{% if solicitacoes %}
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
-        <h3>Relatório de banco de horas</h3>
+        <h3>Banco de horas</h3>
     </div>
 
-    <div class="card-body">
+    <div class="card-body px-0 py-0 limit-height">
         <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover mb-0">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Data</th>
@@ -53,102 +113,105 @@
                         <th scope="col">Total</th>
                         <th scope="col">motivo</th>
                         <th scope="col">status</th>
+                        <th scope="col">Mais</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for banco in solicitacoes %}
                     <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
+                        <th scope="row">{{ banco.data_movimentacao }}</th>
+                        <td>{{ banco.hora_inicial }}</td>
+                        <td>{{ banco.hora_final }}</td>
+                        <td>{{ banco.hora_total }}</td>
+                        <td>{{ banco.motivo }}</td>
+                        <td class="text-warning">{{ banco.status.nome }}</td>
+                        <td><a href="#">Acessar</a></td>
                     </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+{% endif %}
 
-            <nav class="full-w d-flex justify-content-center">
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Próxima</a>
-                    </li>
-                </ul>
-            </nav>
+<!-- Modais -->
+<div class="modal fade" id="cadastrar-banco-de-horas" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar banco de horas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'solicitacoes_banco_de_horas' %}">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="form-input-data-cadastro" class="col-form-label">Data do evento:</label>
+                        <input name="data" type="date" class="form-control" id="form-input-data-cadastro">
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="form-input-hora-inicial" class="col-form-label">Hora inicial:</label>
+                                <input name="hora_inicial" type="time" class="form-control"
+                                    id="form-input-hora-inicial">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="form-input-hora-final" class="col-form-label">Hora final:</label>
+                                <input name="hora_final" type="time" class="form-control" id="form-input-hora-final">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="form-input-motivo" class="col-form-label">motivo:</label>
+                        <textarea name="motivo" id="form-input-motivo" rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="solicitar-folga" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Solicitar nova folga</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'solicitacoes_baixas' %}">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="form-input-data-cadastro" class="col-form-label">Data da folga:</label>
+                        <input name="data_folga" type="date" class="form-control" id="form-input-data-cadastro">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="form-input-data-cadastro" class="col-form-label">Total de horas:</label>
+                        <input name="horas_total" type="number" min="1" max="8" class="form-control"
+                            id="form-input-data-cadastro">
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
