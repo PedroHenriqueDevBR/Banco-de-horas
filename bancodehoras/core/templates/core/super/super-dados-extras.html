@@ -15,7 +15,9 @@
                     <ul class="list-group">
                         {% if formasdepagamentos %}
                         {% for pagamento in formasdepagamentos %}
-                        <a href="#" class="list-group-item">{{ pagamento.nome }}</a>
+                        <li class="list-group-item">
+                            <a>{{ pagamento.nome }}</a> - <a href="#">Deletar</a>
+                        </li>
                         {% endfor %}
                         {% endif %}
                     </ul>
@@ -28,7 +30,10 @@
                     <ul class="list-group">
                         {% if status %}
                         {% for statu in status %}
-                        <a href="#" class="list-group-item">{{ statu.nome }}</a>
+                        <li class="list-group-item">
+                            <a class="badge badge-success text-white">{{ statu.nome }}</a> - <a href="#">tornar
+                                análise</a> - <a href="#">Deletar</a>
+                        </li>
                         {% endfor %}
                         {% endif %}
                     </ul>

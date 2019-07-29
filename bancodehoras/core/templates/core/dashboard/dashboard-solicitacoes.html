@@ -33,14 +33,15 @@
     </div>
 </div>
 
+{% if solciitacoes_pendentes %}
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
-        <h3>Relatório de banco de horas</h3>
+        <h3>Solicitações de banco de horas em análise</h3>
     </div>
 
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-hover table-bordered">
+            <table class="table table-hover mb-0">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Data</th>
@@ -49,89 +50,21 @@
                         <th scope="col">Total</th>
                         <th scope="col">motivo</th>
                         <th scope="col">status</th>
+                        <th scope="col">Mais</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for banco in solciitacoes_pendentes %}
                     <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
+                        <th scope="row">{{ banco.data_movimentacao }}</th>
+                        <td>{{ banco.hora_inicial }}</td>
+                        <td>{{ banco.hora_final }}</td>
+                        <td>{{ banco.hora_total }}</td>
+                        <td>{{ banco.motivo }}</td>
+                        <td class="text-warning">{{ banco.status.nome }}</td>
+                        <td><a href="#">Acessar</a></td>
                     </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-warning">Em análise</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">22/07/2018</th>
-                        <td>16:00</td>
-                        <td>16:26</td>
-                        <td>00:26</td>
-                        <td>Reparo no banco de dados da filial 115</td>
-                        <td class="text-success">Autorizado</td>
-                    </tr>
+                    {% endfor %}
                 </tbody>
             </table>
 
@@ -148,5 +81,6 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 {% endblock %}

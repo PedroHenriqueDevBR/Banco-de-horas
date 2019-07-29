@@ -32,6 +32,7 @@ class UsuarioPermissao(models.Model):
 
 class Status(models.Model):
     nome = models.CharField(max_length=50)
+    padrao_analise = models.BooleanField(default=False)
 
 
 class FormaDePagamento(models.Model):
@@ -45,6 +46,7 @@ class Movimentacao(models.Model):
     hora_final = models.TimeField(null=True, blank=True)
     hora_total = models.CharField(max_length=10)
     eh_entrada = models.BooleanField()
+    finalizado = models.BooleanField(default=False)
     motivo = models.TextField(null=True, blank=True)
     forma_de_pagamento = models.ForeignKey(FormaDePagamento, on_delete=models.CASCADE, related_name='pagamento_movimentacoes', null=True, blank=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='status_movimentacoes')

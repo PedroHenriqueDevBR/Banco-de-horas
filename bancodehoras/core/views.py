@@ -32,6 +32,29 @@ class DashboardView(View):
         return render(request, self.tamplate_name, dados)
 
 
+# Gerente
+class PainelDeControleSolicitacoesView(View):
+    template_name = 'core/dashboard/dashboard-solicitacoes.html'
+
+    def get(self, request):
+        dados = {}
+        dados['perfil_logado'] = request.user
+        dados['solciitacoes_pendentes'] = self.seleciona_todas_movimentacoes(request.user.perfil.setor.perfis_do_setor.all())
+        return render(request, self.template_name, dados)
+
+    def seleciona_todas_movimentacoes(self, perfis):
+        movimentacoes = []
+        analise = Status.objects.all()[0]
+        for perfil in perfis:
+            movimentacoes.extend(
+                perfil.movimentacoes.all().filter(
+                    Q(status=analise),
+                    Q(eh_entrada=True)
+                )
+            )
+        return movimentacoes
+
+
 # Administrador
 class AdministradorView(View):
     def get(self, request):
@@ -220,15 +243,6 @@ class SolicitacaoBaixaView(View):
 
         messages.add_message(request, messages.INFO, 'Baixa solicitada com sucesso.')
         return redirect('solicitacoes')
-
-
-class PainelDeControleSolicitacoesView(View):
-    template_name = 'core/dashboard/dashboard-solicitacoes.html'
-
-    def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
-        return render(request, self.template_name, dados)
 
 
 class SetorView(View):
