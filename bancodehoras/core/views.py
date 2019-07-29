@@ -109,14 +109,22 @@ class FormataDados:
 
 
     def converter_minutos_em_horas(self, minutos):
-        if minutos > 60:
+        if minutos >= 60:
             horas = minutos // 60
             minutos = minutos - (horas * 60)
         else:
             horas = 0
             minutos
 
-        return '{}:{}'.format(horas, minutos)
+        hora_str = '{}'.format(horas)
+        if horas < 10:
+            hora_str = '0{}'.format(horas)
+
+        min_str = '{}'.format(minutos)
+        if minutos < 10:
+            min_str = '0{}'.format(minutos)
+
+        return '{}:{}'.format(hora_str, min_str)
 
 
 class SolicitacaoView(View):
