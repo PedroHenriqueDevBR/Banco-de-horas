@@ -6,39 +6,34 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', views_core.EscolhaDashboardView, name='escolha_dashboard'),
 
-    # Core
-    path('', login_required(views_core.EscolhaDashboardView.as_view() ,login_url='login'), name='escolha_dashboard'),
-    # Cadastros
-    path('cadastrarsetor/', login_required(views_core.SetorView.as_view() ,login_url='login'), name='cadastrar_setor'),
-    path('cadastrarpermissao/', login_required(views_core.PermissaoView.as_view() ,login_url='login'), name='cadastrar_permissao'),
-    path('cadastrarstatus/', login_required(views_core.StatusView.as_view() ,login_url='login'), name='cadastrar_status'),
-    path('cadastrarformadepagamento/', login_required(views_core.FormaDePagamentoView.as_view() ,login_url='login'), name='forma_de_pagamento'),
-    # Atualiza
-    path('setor/atualiza/<int:id>', login_required(views_core.SetorAtualizaView.as_view() ,login_url='login'), name='setor_atualiza'),
-    # Delete
-    path('setor/delete/<int:id>', login_required(views_core.SetorDeleteView.as_view() ,login_url='login'), name='setor_deletar'),
     # Painel de controle do super administrador
-    path('administrador/', login_required(views_core.AdministradorView.as_view() ,login_url='login'), name='administrador'),
-    path('administrador/setor', login_required(views_core.AdministradorSetorView.as_view() ,login_url='login'), name='administrador_setor'),
-    path('administrador/setor/<int:id>', login_required(views_core.AdministradorMostraSetorView.as_view() ,login_url='login'), name='administrador_setor_id'),
-    path('administrador/extra', login_required(views_core.AdministradorExtraView.as_view() ,login_url='login'), name='administrador_extra'),
-    path('administrador/usuario/<str:id>', login_required(views_core.AdministradorMostraUsuarioView.as_view() ,login_url='login'), name='administrador_usuario_id'),
+    path('administrador/', views_core.AdministradorView, name='administrador'),
+    path('administrador/setor', views_core.AdministradorSetorView, name='administrador_setor'),
+    path('administrador/setor/<int:id>', views_core.AdministradorMostraSetorView, name='administrador_setor_id'),
+    path('administrador/setor/cadastro', views_core.SetorView, name='cadastrar_setor'),
+    path('administrador/setor/delete/<int:id>', views_core.SetorDeleteView, name='setor_deletar'),
+    path('administrador/setor/atualiza/<int:id>', views_core.SetorAtualizaView, name='setor_atualiza'),
+    path('administrador/extra', views_core.AdministradorExtraView, name='administrador_extra'),
+    path('administrador/usuario/<str:id>', views_core.AdministradorMostraUsuarioView, name='administrador_usuario_id'),
+    path('administrador/status/cadastro', views_core.StatusView, name='cadastrar_status'),
+    path('administrador/formadepagamento/cadastro', views_core.FormaDePagamentoView, name='forma_de_pagamento'),
+    
     # Painel de controle
-    path('paineldecontrole/', login_required(views_core.DashboardView.as_view() ,login_url='login'), name='dashboard'),
-    path('paineldecontrole/solicitacoes', login_required(views_core.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
-    # painel de solicitações
-    path('solicitacoes/', login_required(views_core.SolicitacaoView.as_view() ,login_url='login'), name='solicitacoes'),
-    path('solicitacoes/bancodehoras', login_required(views_core.SolicitacaoBancoDeHorasView.as_view() ,login_url='login'), name='solicitacoes_banco_de_horas'),
-    path('solicitacoes/baixas', login_required(views_core.SolicitacaoBaixaView.as_view() ,login_url='login'), name='solicitacoes_baixas'),
+    path('paineldecontrole/', views_core.DashboardView, name='dashboard'),
+    path('paineldecontrole/solicitacoes/', views_core.SolicitacaoView, name='solicitacoes'),
+    path('paineldecontrole/solicitacoes/pendentes', login_required(views_core.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
+    path('paineldecontrole/solicitacoes/bancodehoras', login_required(views_core.SolicitacaoBancoDeHorasView.as_view() ,login_url='login'), name='solicitacoes_banco_de_horas'),
+    path('paineldecontrole/solicitacoes/baixas', login_required(views_core.SolicitacaoBaixaView.as_view() ,login_url='login'), name='solicitacoes_baixas'),
 
     # usuario
     path('login/', views_usuario.LoginUsuarioView.as_view(), name='login'),
-    path('logout/', views_usuario.LogoutUsuarioView.as_view(), name='logout'),
-    path('cadastrarusuario/', login_required(views_usuario.CadastrarUsuarioView.as_view() ,login_url='login'), name='cadastrar_usuario'),
-    path('vincularpermissao/', login_required(views_usuario.ConfiguraAutorizacaoView.as_view() ,login_url='login'), name='vincular_permissao'),
-    path('usuario/atualiza/<str:id>', login_required(views_usuario.AtualizarUsuarioView.as_view() ,login_url='login'), name='usuario_atualiza'),
-    path('usuario/atualiza/gerente/<int:id>', login_required(views_usuario.UsuarioGerenteView.as_view() ,login_url='login'), name='usuario_gerente'),
-    path('usuario/atualiza/ativo/<int:id>', login_required(views_usuario.UsuarioAtivoView.as_view() ,login_url='login'), name='usuario_ativo'),
-    path('usuario/atualiza/administrador/<int:id>', login_required(views_usuario.UsuarioAdministradorView.as_view() ,login_url='login'), name='usuario_administrador'),
+    path('logout/', views_usuario.LogoutUsuarioView, name='logout'),
+    path('usuario/cadastrar/', views_usuario.CadastrarUsuarioView, name='cadastrar_usuario'),
+    path('usuario/atualiza/<str:id>', views_usuario.AtualizarUsuarioView, name='usuario_atualiza'),
+    path('usuario/atualiza/ativo/<int:id>', views_usuario.UsuarioAtivoView, name='usuario_ativo'),
+    path('usuario/atualiza/gerente/<int:id>', views_usuario.UsuarioGerenteView, name='usuario_gerente'),
+    path('usuario/atualiza/administrador/<int:id>', views_usuario.UsuarioAdministradorView, name='usuario_administrador'),
+
 ]

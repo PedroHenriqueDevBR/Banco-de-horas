@@ -9,27 +9,23 @@ from datetime import datetime
 ##
 ### Administrador
 ##
-class EscolhaDashboardView(View):
+def EscolhaDashboardView(request):
     tamplate_name = 'core/dashboard/opcaodeacesso.html'
-
-    def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
-        return render(request, self.tamplate_name, dados)    
+    dados = {}
+    dados['perfil_logado'] = request.user
+    return render(request, tamplate_name, dados)    
 
 
 # Colaborador
-class DashboardView(View):
+def DashboardView(request):
     tamplate_name = 'core/dashboard/dashboard.html'
+    dados = {}
 
-    def get(self, request):
-        dados = {}
+    setor = request.user.perfil.setor
 
-        setor = request.user.perfil.setor
-
-        dados['perfil_logado'] = request.user
-        dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
-        return render(request, self.tamplate_name, dados)
+    dados['perfil_logado'] = request.user
+    dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
+    return render(request, tamplate_name, dados)
 
 
 # Gerente
@@ -56,52 +52,43 @@ class PainelDeControleSolicitacoesView(View):
 
 
 # Administrador
-class AdministradorView(View):
-    def get(self, request):
-        return redirect('administrador_setor')
+def AdministradorView(request):
+    return redirect('administrador_setor')
 
 
-class AdministradorSetorView(View):
+def AdministradorSetorView(request):
     tamplate_name = 'core/super/super-setor.html'
-    
-    def get(self, request):
-        dados = {}
-        dados['setores'] = Setor.objects.all()
-        dados['colaboradores'] = Perfil.objects.all()
-        dados['perfil_logado'] = request.user
-        return render(request, self.tamplate_name, dados)
+    dados = {}
+    dados['setores'] = Setor.objects.all()
+    dados['colaboradores'] = Perfil.objects.all()
+    dados['perfil_logado'] = request.user
+    return render(request, tamplate_name, dados)
 
 
-class AdministradorMostraSetorView(View):
+def AdministradorMostraSetorView(request, id):
     tamplate_name = 'core/super/mostra-setor.html'
-    
-    def get(self, request, id):
-        dados = {}
-        dados['setor'] = Setor.objects.get(id=id)
-        dados['perfil_logado'] = request.user
-        return render(request, self.tamplate_name, dados)
+    dados = {}
+    dados['setor'] = Setor.objects.get(id=id)
+    dados['perfil_logado'] = request.user
+    return render(request, tamplate_name, dados)
 
 
-class AdministradorMostraUsuarioView(View):
+def AdministradorMostraUsuarioView(request, id):
     tamplate_name = 'core/super/mostra-usuario.html'
-    
-    def get(self, request, id):
-        dados = {}
-        dados['colaborador'] = User.objects.get(username=id)
-        dados['setores'] = Setor.objects.all()
-        dados['perfil_logado'] = request.user
-        return render(request, self.tamplate_name, dados)
+    dados = {}
+    dados['colaborador'] = User.objects.get(username=id)
+    dados['setores'] = Setor.objects.all()
+    dados['perfil_logado'] = request.user
+    return render(request, tamplate_name, dados)
 
 
-class AdministradorExtraView(View):
+def AdministradorExtraView(request):
     tamplate_name = 'core/super/super-dados-extras.html'
-
-    def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
-        dados['formasdepagamentos'] = FormaDePagamento.objects.all()
-        dados['status'] = Status.objects.all()
-        return render(request, self.tamplate_name, dados)
+    dados = {}
+    dados['perfil_logado'] = request.user
+    dados['formasdepagamentos'] = FormaDePagamento.objects.all()
+    dados['status'] = Status.objects.all()
+    return render(request, tamplate_name, dados)
 
 
 ###
@@ -157,27 +144,25 @@ class FormataDados:
         return self.converter_minutos_em_horas(total_min)
 
 
-class SolicitacaoView(View):
+def SolicitacaoView(request):
     template_name = 'core/usuario/solicitacao.html'
-
-    def get(self, request):
-        dados = {}
-        analise = Status.objects.all()[0]
-        autorizado = Status.objects.all()[1]
-        format_data = FormataDados()
-        
-        dados['perfil_logado'] = request.user
-        dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
-            Q(status=analise),
-            Q(eh_entrada=True)
-        )
-        dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(
-            Q(status=analise),
-            Q(eh_entrada=False)
-        )
-        dados['total_de_banco_solicitado'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
-        dados['total_de_baixa_solicitado'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
-        return render(request, self.template_name, dados)
+    dados = {}
+    analise = Status.objects.all()[0]
+    autorizado = Status.objects.all()[1]
+    format_data = FormataDados()
+    
+    dados['perfil_logado'] = request.user
+    dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
+        Q(status=analise),
+        Q(eh_entrada=True)
+    )
+    dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(
+        Q(status=analise),
+        Q(eh_entrada=False)
+    )
+    dados['total_de_banco_solicitado'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
+    dados['total_de_baixa_solicitado'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
+    return render(request, template_name, dados)
 
 
 class SolicitacaoBancoDeHorasView(View):
@@ -199,8 +184,6 @@ class SolicitacaoBancoDeHorasView(View):
         format_data = FormataDados()
         hora_total = format_data.calcular_hora(hora_inicial, hora_final)
         data_movimentacao_formatada = datetime.strptime(data_movimentacao, '%Y-%m-%d').date()
-
-        # import pdb; pdb.set_trace()
 
         Movimentacao.objects.create(
             data_movimentacao=data_movimentacao_formatada,
@@ -245,92 +228,47 @@ class SolicitacaoBaixaView(View):
         return redirect('solicitacoes')
 
 
-class SetorView(View):
-    template_name = 'usuario/cadastrarusuario.html'
+# Setor
+def SetorView(request):
+    nome_setor = request.POST.get('nome_setor')
+    Setor.objects.create(nome=nome_setor)
+    messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
+    return redirect('administrador_setor')
 
-    def get(self, request):
-        return redirect('administrador_setor')
-    
-    def post(self, request):
-        nome_setor = request.POST.get('nome_setor')
-        Setor.objects.create(nome=nome_setor)
-        messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
-        return redirect('administrador_setor')
+
+def SetorAtualizaView(request, id):
+    nome = request.POST.get('nome_setor')
+    setor = Setor.objects.get(id=id)
+    setor.nome = nome
+    setor.save()
+    return redirect('administrador_setor')
+
+
+def SetorDeleteView(request, id):
+    setor = Setor.objects.get(id=id)
+    colaboradores = setor.perfis_do_setor.all()
+
+    if colaboradores.count() > 0:
+        messages.add_message(request, messages.INFO, 'Impossível deletar, há colaboradores cadastrados no setor selecionado.')
+    else:
+        messages.add_message(request, messages.INFO, 'Setor deletado com sucesso.')
+        setor.delete()
+
+    return redirect('administrador_setor')
 
 
 ##
 ### Classes de controle
 ##
-class PermissaoView(View):
-    template_name = 'usuario/cadastrarusuario.html'
-
-    
-    def get(self, request):
-        return redirect('administrador_setor')
-
-    
-    def post(self, request):
-        nome_permissao = request.POST.get('nome_permissao')
-        Permissao.objects.create(nome=nome_permissao)
-        return redirect('administrador_setor')
+def StatusView(request):
+    nome_status = request.POST.get('nome_status')
+    Status.objects.create(nome=nome_status)
+    messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
+    return redirect('administrador_extra')
 
 
-class StatusView(View):
-    template_name = 'usuario/cadastrarusuario.html'
-
-    
-    def get(self, request):
-        return redirect('administrador_extra')
-
-    
-    def post(self, request):
-        nome_status = request.POST.get('nome_status')
-        Status.objects.create(nome=nome_status)
-        messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
-        return redirect('administrador_extra')
-
-
-class FormaDePagamentoView(View):
-    
-    def get(self, request):
-        return redirect('administrador_extra')
-
-    
-    def post(self, request):
-        forma_de_pagamento = request.POST.get('forma_de_pagamento')
-        FormaDePagamento.objects.create(nome=forma_de_pagamento)
-        messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
-        return redirect('administrador_extra')
-
-
-##
-### Deletar e atualizar dados
-##
-class SetorAtualizaView(View):
-    template_name = 'usuario/cadastrarusuario.html'
-
-    def get(self, request):
-        return redirect('administrador_setor')
-
-    def post(self, request, id):
-        nome = request.POST.get('nome_setor')
-        setor = Setor.objects.get(id=id)
-        setor.nome = nome
-        setor.save()
-        return redirect('administrador_setor')
-
-
-class SetorDeleteView(View):
-    template_name = 'usuario/cadastrarusuario.html'
-
-    def get(self, request, id):
-        setor = Setor.objects.get(id=id)
-        colaboradores = setor.perfis_do_setor.all()
-
-        if colaboradores.count() > 0:
-            messages.add_message(request, messages.INFO, 'Impossível deletar, há colaboradores cadastrados no setor selecionado.')
-        else:
-            messages.add_message(request, messages.INFO, 'Setor deletado com sucesso.')
-            setor.delete()
-
-        return redirect('administrador_setor')
+def FormaDePagamentoView(request):
+    forma_de_pagamento = request.POST.get('forma_de_pagamento')
+    FormaDePagamento.objects.create(nome=forma_de_pagamento)
+    messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
+    return redirect('administrador_extra')
