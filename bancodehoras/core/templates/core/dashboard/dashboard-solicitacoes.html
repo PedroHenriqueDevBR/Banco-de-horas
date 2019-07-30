@@ -1,20 +1,10 @@
-{% extends 'core/base-dashboard.html' %}
+{% extends 'core/componentes/base-dashboard.html' %}
 {% load static %}
 
 {% block content %}
 
 <div class="container bg-light card px-0">
-    <div class="card-header px-0">
-        <ul class="nav justify-content-center">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard' %}">Página inicial</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard_solicitacoes' %}">Solicitações pendentes</a>
-            </li>
-        </ul>
-    </div>
+    {% include 'core/componentes/barra-menu-dashboard.html' %}
 
     <div class="container">
         <div class="row">

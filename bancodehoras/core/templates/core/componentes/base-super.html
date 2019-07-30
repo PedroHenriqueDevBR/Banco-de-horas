@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+{% extends 'core/componentes/base.html' %}
 {% load static %}
 
 {% block title %}Painel de controle{% endblock %}
@@ -8,26 +8,18 @@
 <main class="container-index">
 
     <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand">
-            <!-- <img src="img/icon-user.png" width="75" alt="logo da página"> -->
-            {{ perfil_logado.perfil.nome }}
-        </a>
+            <a class="navbar-brand">
+                <!-- <img src="img/icon-user.png" width="75" alt="logo da página"> -->
+                Banco de horas
+            </a>
     </nav>
 
     <div class="row" style="max-width: 100%;">
         <div class="col col-md-3 bg-light px-0 sticky-top" style="height: 100vh;">
             <ul class="list-group">
-                {% if perfil_logado.is_superuser %}
-                <a href="{% url 'administrador' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Alterar visão</a>
-                {% endif %}
-                {% if perfil_logado.perfil.gerente %}
-                <a href="{% url 'dashboard' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Painel de controle</a>
-                <a href="#" class="list-group-item list-group-item-action list-group-item-light">Solicitações (*)</a>
-                {% endif %}
-                <a href="{% url 'solicitacoes' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Minhas solicitações</a>
+                <a href="{% url 'dashboard' %}" class="list-group-item list-group-item-action list-group-item-light">Alterar visão</a>
+                <a href="{% url 'administrador_setor' %}" class="list-group-item list-group-item-action list-group-item-light">Controle de setor</a>
+                <a href="{% url 'administrador_extra' %}" class="list-group-item list-group-item-action list-group-item-light">Dados para cadastro</a>
                 <a href="{% url 'logout' %}"
                     class="list-group-item list-group-item-action list-group-item-light">Encerrar sessão</a>
             </ul>
@@ -47,7 +39,7 @@
             </div>
             {% endif %}
 
-            <div class="container bg-transparent mt-3 px-0 ">
+            <div class="container bg-transparent mt-5 px-0 ">
                 {% block content %}
                 <h1>Nada a ser visualizado</h1>
                 {% endblock %}
