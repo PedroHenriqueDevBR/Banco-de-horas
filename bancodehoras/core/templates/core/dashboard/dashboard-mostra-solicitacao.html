@@ -61,31 +61,85 @@
     {% endif %}
 
     <div class="card-footer">
-        <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modal-log">
             Mostrar log
+        </button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#modal-modifica-log">
+            Modificar solicitação
         </button>
     </div>
 </div>
 
 
-<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content px-3">
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger font-weight-bold" data-dismiss="modal">X</button>
+<!-- Modal -->
+<div class="modal fade" id="modal-log" tabindex="-1" role="dialog" aria-labelledby="modal-log-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="font-size: 11pt;">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="modal-log-title">Log</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body px-1">
+                <ul class="list-group">
+                    {% if solicitacao %}
+                    {% for log in solicitacao.log_movimentacoes.all %}
+                    <li class="list-group-item mb-1 shadow">
+                        {{ log.perfil_emissor.nome }} - {{ log.data }} <br>
+                        <hr>
+                        {{ log.log }}
+                    </li>
+                    {% endfor %}
+                    {% else %}
+                    <li class="list-group-item mb-2 shadow"> Não há log para a solicitação atual! </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <div class="card my-2 py-1 shadow p-3 bg-white rounded">
-                <div class="card-body py-1">
-                    <p>Pedro Henrique - 30/07/2019</p>
-                    <p>
-                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio vel vero aspernatur quam fugit.
-                        Vero iste
-                        optio voluptate provident culpa, aliquam dolore ducimus, autem fuga quam illo dolorem, nihil
-                        aut.
-                    </p>
-                </div>
+<!-- Modal -->
+<div class="modal fade" id="modal-modifica-log" tabindex="-1" role="dialog" aria-labelledby="modal-modifica-log-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="font-size: 11pt;">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="modal-modifica-log-title">Log</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01">
+                            <option selected>Choose...</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">With textarea</span>
+                        </div>
+                        <textarea class="form-control" aria-label="With textarea"></textarea>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>

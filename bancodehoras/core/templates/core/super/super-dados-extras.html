@@ -9,7 +9,7 @@
 
     <div class="container">
         <div class="row">
-            <div class="card col">
+            <div class="card col col-sm-12">
                 <div class="card-body text-center px-0">
                     {% if formasdepagamentos %}
                     <h2>Forma de pagamento</h2>
@@ -41,37 +41,47 @@
                 </div>
             </div>
 
-            <div class="card col">
+            <div class="card col col-sm-12">
                 <div class="card-body text-center px-0">
                     {% if status %}
                     <h2>Status</h2>
-                        <table class="table table-tableless">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Padrão</th>
-                                        <th>Tornar padrão</th>
-                                        <th>Deletar</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for statu in status %}
-                                    <tr>
-                                        <td>{{ statu.nome }}</td>
-                                        <td>
-                                            {% if statu.padrao %}
-                                            <span class="badge badge-primary">X</span>
-                                            {% else %}
-                                            <span> </span>
-                                            {% endif %}
-                                        </td>
-                                        <td><a href="{% url 'status_tornar_padrao' statu.id %}">Tornar padrão</a></td>
-                                        <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
-                                    </tr>
-                                    {% endfor %}
-        
-                                </tbody>
-                            </table>
+                    <table class="table table-tableless">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Analise</th>
+                                <th>Finalizado</th>
+                                <th>Tornar análise</th>
+                                <th>Tornar autorizado</th>
+                                <th>Deletar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for statu in status %}
+                            <tr>
+                                <td>{{ statu.nome }}</td>
+                                <td>
+                                    {% if statu.analise %}
+                                    <span class="badge badge-warning">X</span>
+                                    {% else %}
+                                    <span> </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if statu.finalizado %}
+                                    <span class="badge badge-success">X</span>
+                                    {% else %}
+                                    <span> </span>
+                                    {% endif %}
+                                </td>
+                                <td><a href="{% url 'status_tornar_padrao' statu.id %}">Selecionar</a></td>
+                                <td><a href="{% url 'status_tornar_autorizado' statu.id %}">Selecionar</a></td>
+                                <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
+                            </tr>
+                            {% endfor %}
+
+                        </tbody>
+                    </table>
                     {% endif %}
                 </div>
             </div>

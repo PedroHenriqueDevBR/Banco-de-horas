@@ -44,13 +44,13 @@ class SolicitacaoBancoDeHorasView(View):
         hora_inicial = request.POST.get('hora_inicial')
         hora_final = request.POST.get('hora_final')
         motivo = request.POST.get('motivo')
-        status = Status.objects.filter(padrao=True)[0]
+        status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
         format_data = FormataDados()
         hora_total = format_data.calcular_hora(hora_inicial, hora_final)
         data_movimentacao_formatada = datetime.strptime(data_movimentacao, '%Y-%m-%d').date()
 
-        Movimentacao.objects.create(
+        movimentacao = Movimentacao(
             data_movimentacao=data_movimentacao_formatada,
             hora_inicial = hora_inicial,
             hora_final = hora_final,
@@ -59,6 +59,15 @@ class SolicitacaoBancoDeHorasView(View):
             status = status,
             entrada = True,
             colaborador = solicitante
+        )
+        movimentacao.save()
+
+        log = 'Solicitação realizada com sucesso, solicitação de número: {}'.format(movimentacao.id)
+
+        LogMovimentacao.objects.create(
+            log=log,
+            perfil_emissor=solicitante,
+            movimentacao=movimentacao
         )
 
         messages.add_message(request, messages.INFO, 'Banco de horas solicitado com sucesso.')
@@ -172,7 +181,7 @@ def AdministradorExtraView(request):
 def SolicitacaoView(request):
     template_name = 'core/usuario/solicitacao.html'
     dados = {}
-    analise = Status.objects.filter(padrao=True)[0]
+    analise = Status.objects.filter(analise=True)[0]
     format_data = FormataDados()
     
     dados['perfil_logado'] = request.user
@@ -238,15 +247,16 @@ def SetorDeleteView(request, id):
 @login_required(login_url='login')
 def StatusView(request):
     nome_status = request.POST.get('nome_status')
-    padrao = request.POST.get('padrao')
-    padrao = False if padrao is None else True
+    analise = request.POST.get('padrao')
+    analise = False if analise is None else True
     
     busca_status = Status.objects.filter(nome=nome_status)
     if len(busca_status) > 0:
         messages.add_message(request, messages.INFO, 'Status já cadastrado')
     else:
-        salvar_novo_padrao()
-        Status.objects.create(nome=nome_status, padrao=padrao)
+        if analise:
+            salvar_novo_padrao()
+        Status.objects.create(nome=nome_status, analise=analise)
         messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
     return redirect('administrador_extra')
 
@@ -256,11 +266,25 @@ def StatusTornaPadraoView(request, id):
     salvar_novo_padrao(id)
     return redirect('administrador_extra')
 
+@login_required(login_url='login')
+def StatusTornaAutorizadoView(request, id):
+    salvar_novo_padrao_finalizado(id)
+    return redirect('administrador_extra')
+
 
 @login_required(login_url='login')
 def StatusDeleteView(request, id):
     status = Status.objects.get(id=id)
-    status.delete()
+    if status.analise:
+        if len(Status.objects.all()) != 1:
+            status.delete()
+            status = Status.objects.all()[0]
+            status.analise = True
+            status.save()
+        else:
+            status.delete()
+    else:
+        status.delete()
     return redirect('administrador_extra')
 
 
@@ -268,17 +292,35 @@ def salvar_novo_padrao(id=None):
     if not id:
         status = Status.objects.all()
         for statu in status:
-            statu.padrao = False
+            statu.analise = False
             statu.save()
     else:
         status = Status.objects.all()
         for statu in status:
             if statu.id == id:
-                statu.padrao = True
+                statu.analise = True
                 statu.save()
                 continue
 
-            statu.padrao = False
+            statu.analise = False
+            statu.save()
+
+
+def salvar_novo_padrao_finalizado(id=None):
+    if not id:
+        status = Status.objects.all()
+        for statu in status:
+            statu.finalizado = False
+            statu.save()
+    else:
+        status = Status.objects.all()
+        for statu in status:
+            if statu.id == id:
+                statu.finalizado = True
+                statu.save()
+                continue
+
+            statu.finalizado = False
             statu.save()
 
 

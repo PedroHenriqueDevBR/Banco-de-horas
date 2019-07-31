@@ -17,7 +17,8 @@ class Perfil(models.Model):
 
 class Status(models.Model):
     nome = models.CharField(max_length=50)
-    padrao = models.BooleanField(default=False)
+    analise = models.BooleanField(default=False)
+    finalizado = models.BooleanField(default=False)
 
 
 class FormaDePagamento(models.Model):
@@ -43,4 +44,4 @@ class LogMovimentacao(models.Model):
     data = models.DateTimeField(auto_now=True)
     log = models.TextField()
     perfil_emissor = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='logs_movimentacao_emitidos')
-    banco_de_horas = models.ForeignKey(Movimentacao, on_delete=models.CASCADE, related_name='log_movimentacoes')
+    movimentacao = models.ForeignKey(Movimentacao, on_delete=models.CASCADE, related_name='log_movimentacoes')
