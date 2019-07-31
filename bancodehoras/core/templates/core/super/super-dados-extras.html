@@ -11,32 +11,68 @@
         <div class="row">
             <div class="card col">
                 <div class="card-body text-center px-0">
+                    {% if formasdepagamentos %}
                     <h2>Forma de pagamento</h2>
-                    <ul class="list-group">
-                        {% if formasdepagamentos %}
-                        {% for pagamento in formasdepagamentos %}
-                        <li class="list-group-item">
-                            <a>{{ pagamento.nome }}</a> - <a href="#">Deletar</a>
-                        </li>
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
+                    <table class="table table-tableless">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Hora dupla</th>
+                                <th>Opção</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pagamento in formasdepagamentos %}
+                            <tr>
+                                <td>{{ pagamento.nome }}</td>
+                                <td>
+                                    {% if pagamento.valor_duplo %}
+                                    Sim
+                                    {% else %}
+                                    Não
+                                    {% endif %}
+                                </td>
+                                <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}">Deletar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% endif %}
                 </div>
             </div>
 
             <div class="card col">
                 <div class="card-body text-center px-0">
+                    {% if status %}
                     <h2>Status</h2>
-                    <ul class="list-group">
-                        {% if status %}
-                        {% for statu in status %}
-                        <li class="list-group-item">
-                            <a class="badge badge-success text-white">{{ statu.nome }}</a> - <a href="#">tornar
-                                análise</a> - <a href="#">Deletar</a>
-                        </li>
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
+                        <table class="table table-tableless">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Padrão</th>
+                                        <th>Tornar padrão</th>
+                                        <th>Deletar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for statu in status %}
+                                    <tr>
+                                        <td>{{ statu.nome }}</td>
+                                        <td>
+                                            {% if statu.padrao %}
+                                            <span class="badge badge-primary">X</span>
+                                            {% else %}
+                                            <span> </span>
+                                            {% endif %}
+                                        </td>
+                                        <td><a href="{% url 'status_tornar_padrao' statu.id %}">Tornar padrão</a></td>
+                                        <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
+                                    </tr>
+                                    {% endfor %}
+        
+                                </tbody>
+                            </table>
+                    {% endif %}
                 </div>
             </div>
 
@@ -54,56 +90,7 @@
 </div>
 
 <!-- Modais -->
-<div class="modal fade" id="cadastrar-pagamento" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cadastrar setor</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{% url 'forma_de_pagamento' %}" method="POST">{% csrf_token %}
-                    <div class="form-group">
-                        <label for="form-input-motivo" class="col-form-label">Forma de pagamento:</label>
-                        <input class="form-control" name="forma_de_pagamento" type="text"
-                            placeholder="Digite a forma de pagamento"><br>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="cadastrar-status" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cadastrar status</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{% url 'cadastrar_status' %}" method="POST">{% csrf_token %}
-                    <div class="form-group">
-                        <label for="form-input-motivo" class="col-form-label">Nome do status:</label>
-                        <input class="form-control" name="nome_status" type="text"
-                            placeholder="Digite o nome do status"><br>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
-                        <button type="submit" class="btn btn-primary">Cadastrar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+{% include 'core/componentes/modal-cadastrar-pagamento.html' %}
+{% include 'core/componentes/modal-cadastrar-status.html' %}
 
 {% endblock %}

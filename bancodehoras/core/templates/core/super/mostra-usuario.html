@@ -15,6 +15,8 @@
                     <p>Matricula: {{ colaborador.username }}</p>
                     <p>Email: {{ colaborador.email }}</p>
                     <p>Setor: {{ colaborador.perfil.setor.nome }}</p>
+                    <p>Primeira carga horária: {{ colaborador.perfil.ch_primeira }}</p>
+                    <p>Segunda carga horária: {{ colaborador.perfil.ch_segunda }}</p>
                     <p>Gerencia o setor:
                         {% if colaborador.perfil.gerente %}
                         <span class="badge badge-success">Sim</span>
@@ -44,10 +46,14 @@
             <div class="card col">
                 <div class="card-body text-left">
                     <h2>Opções</h2>
-                    <button class="btn btn-secondary mx-2 my-2" data-toggle="modal" data-target="#editar-colaborador">Editar dados</button><br>
-                    <a href="{% url 'usuario_administrador' colaborador.id %}" class="btn btn-secondary mx-2 my-2">Administrador</a><br>
-                    <a href="{% url 'usuario_gerente' colaborador.perfil.id %}" class="btn btn-secondary mx-2 my-2">Responsável por setor</a><br>
-                    <a href="{% url 'usuario_ativo' colaborador.id %}" class="btn btn-secondary mx-2 my-2">ativar / inativar</a><br>
+                    <button class="btn btn-secondary mx-2 my-2" data-toggle="modal"
+                        data-target="#editar-colaborador">Editar dados</button><br>
+                    <a href="{% url 'usuario_administrador' colaborador.id %}"
+                        class="btn btn-secondary mx-2 my-2">Administrador</a><br>
+                    <a href="{% url 'usuario_gerente' colaborador.perfil.id %}"
+                        class="btn btn-secondary mx-2 my-2">Responsável por setor</a><br>
+                    <a href="{% url 'usuario_ativo' colaborador.id %}" class="btn btn-secondary mx-2 my-2">ativar /
+                        inativar</a><br>
                 </div>
             </div>
         </div>
@@ -107,6 +113,20 @@
                         <input class="form-control" name="senha" id="senha" type="password"
                             placeholder="Deixar campo vazio para não alterar a senha">
                     </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label for="senha" class="col-form-label">Primeira carga horária:</label>
+                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time" value="{{ colaborador.perfil.ch_primeira }}">
+                            </div>
+                            <div class="col">
+                                <label for="senha" class="col-form-label">Segunda carga horária:</label>
+                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time" value="{{ colaborador.perfil.ch_segunda }}">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
                         <button type="submit" class="btn btn-primary" id="btn-cadastrar-colaborador">Atualizar</button>

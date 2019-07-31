@@ -7,11 +7,13 @@ class RegistrarUsuarioForm(forms.Form):
     setor = forms.IntegerField(required=True)
     email = forms.CharField(required=True)
     senha = forms.CharField(required=True)
+    ch_primeira = forms.TimeField(required=True)
+    ch_segunda = forms.TimeField(required=True)
     
     def is_valid(self):
         valid = True
         if not super(RegistrarUsuarioForm, self).is_valid():
-            self.adiciona_erro('Por favor verifique os campos informados.')
+            self.adiciona_erro('Por favor verifique os campos digitados.')
             valid = False
 
         user_exists = User.objects.filter(username=self.cleaned_data['matricula']).exists()

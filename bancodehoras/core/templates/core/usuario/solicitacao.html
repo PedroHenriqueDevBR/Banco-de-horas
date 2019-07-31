@@ -33,7 +33,7 @@
                         <td>{{ banco.hora_total }}</td>
                         <td>{{ banco.motivo }}</td>
                         <td class="text-warning">{{ banco.status.nome }}</td>
-                        <td><a href="#">Acessar</a></td>
+                        <td><a href="{% url 'solicitacoes_mostrar' banco.id %}">Acessar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
@@ -68,7 +68,7 @@
                         <th scope="row">{{ baixa.data_movimentacao }}</th>
                         <td>{{ baixa.hora_total }}</td>
                         <td class="text-warning">{{ baixa.status.nome }}</td>
-                        <td><a href="#">Acessar</a></td>
+                        <td><a href="{% url 'solicitacoes_mostrar' baixa.id %}">Acessar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

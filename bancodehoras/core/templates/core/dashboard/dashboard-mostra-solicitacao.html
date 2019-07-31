@@ -1,0 +1,94 @@
+{% extends 'core/componentes/base-dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-light card">
+    <div class="card-header bg-dark text-white text-center">
+        <h3>Solicitacao número: {{ solicitacao.id }}</h3>
+    </div>
+
+    {% if solicitacao %}
+    <table class="table table-striped">
+        <thead class="thead-dark">
+            <tr>
+                <th>Propriedade</th>
+                <th>Informação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Data solicitacao</td>
+                <td>{{ solicitacao.data_cadastro }}</td>
+            </tr>
+            <tr>
+                <td>Data referente</td>
+                <td>{{ solicitacao.data_movimentacao }}</td>
+            </tr>
+            <tr>
+                <td>Hora inicial</td>
+                <td>{{ solicitacao.hora_inicial }}</td>
+            </tr>
+            <tr>
+                <td>Hora final</td>
+                <td>{{ solicitacao.hora_final }}</td>
+            </tr>
+            <tr>
+                <td>Total de horas</td>
+                <td>{{ solicitacao.hora_total }}</td>
+            </tr>
+            <tr>
+                <td>Motivo</td>
+                <td>{{ solicitacao.motivo }}</td>
+            </tr>
+            <tr>
+                <td>Finalizado</td>
+                <td>{{ solicitacao.finalizado }}</td>
+            </tr>
+            <tr>
+                <td>Pagamento</td>
+                <td>{{ solicitacao.forma_de_pagamento.nome }}</td>
+            </tr>
+            <tr>
+                <td>Status</td>
+                <td>{{ solicitacao.status.nome }}</td>
+            </tr>
+            <tr>
+                <td>Colaborador</td>
+                <td>{{ solicitacao.colaborador.nome }}</td>
+            </tr>
+        </tbody>
+    </table>
+    {% endif %}
+
+    <div class="card-footer">
+        <button class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-xl">
+            Mostrar log
+        </button>
+    </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-xl" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content px-3">
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger font-weight-bold" data-dismiss="modal">X</button>
+            </div>
+
+            <div class="card my-2 py-1 shadow p-3 bg-white rounded">
+                <div class="card-body py-1">
+                    <p>Pedro Henrique - 30/07/2019</p>
+                    <p>
+                        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio vel vero aspernatur quam fugit.
+                        Vero iste
+                        optio voluptate provident culpa, aliquam dolore ducimus, autem fuga quam illo dolorem, nihil
+                        aut.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

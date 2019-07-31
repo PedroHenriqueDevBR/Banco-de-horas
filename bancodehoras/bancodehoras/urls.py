@@ -15,14 +15,19 @@ urlpatterns = [
     path('administrador/setor/cadastro', views_core.SetorView, name='cadastrar_setor'),
     path('administrador/setor/delete/<int:id>', views_core.SetorDeleteView, name='setor_deletar'),
     path('administrador/setor/atualiza/<int:id>', views_core.SetorAtualizaView, name='setor_atualiza'),
-    path('administrador/extra', views_core.AdministradorExtraView, name='administrador_extra'),
     path('administrador/usuario/<str:id>', views_core.AdministradorMostraUsuarioView, name='administrador_usuario_id'),
+
+    path('administrador/extra', views_core.AdministradorExtraView, name='administrador_extra'),
     path('administrador/status/cadastro', views_core.StatusView, name='cadastrar_status'),
+    path('administrador/status/tornarpadrao/<int:id>', views_core.StatusTornaPadraoView, name='status_tornar_padrao'),
+    path('administrador/status/deletar/<int:id>', views_core.StatusDeleteView, name='status_deletar'),
     path('administrador/formadepagamento/cadastro', views_core.FormaDePagamentoView, name='forma_de_pagamento'),
+    path('administrador/formadepagamento/deletar/<int:id>', views_core.FormaDePagamentoDeletarView, name='forma_de_pagamento_deletar'),
     
     # Painel de controle
     path('paineldecontrole/', views_core.DashboardView, name='dashboard'),
     path('paineldecontrole/solicitacoes/', views_core.SolicitacaoView, name='solicitacoes'),
+    path('paineldecontrole/solicitacoes/mostrar/<int:id>', views_core.SolicitacaoMostrarView, name='solicitacoes_mostrar'),
     path('paineldecontrole/solicitacoes/pendentes', login_required(views_core.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
     path('paineldecontrole/solicitacoes/bancodehoras', login_required(views_core.SolicitacaoBancoDeHorasView.as_view() ,login_url='login'), name='solicitacoes_banco_de_horas'),
     path('paineldecontrole/solicitacoes/baixas', login_required(views_core.SolicitacaoBaixaView.as_view() ,login_url='login'), name='solicitacoes_baixas'),

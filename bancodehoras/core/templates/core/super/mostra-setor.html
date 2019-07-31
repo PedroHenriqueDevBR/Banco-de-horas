@@ -19,7 +19,9 @@
             <div class="card col-sm-12 px-0">
                 <div class="card-footer d-flex justify-content-center">
                     <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#editar-setor">Editar
-                        dados</button>
+                        setor</button>
+                        <button class="btn btn-primary mx-1" data-toggle="modal"
+                                data-target="#cadastrar-colaborador">Cadastrar colaborador</button>
                     <a href="{% url 'setor_deletar' setor.id %}" class="btn btn-danger mx-1">Deletar setor</a>
                 </div>
             </div>
@@ -66,7 +68,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Cadastrar setor</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Editar dados do setor</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -88,5 +90,7 @@
         </div>
     </div>
 </div>
+
+{% include 'core/componentes/modal-cadastrar-colaborador.html' %}
 
 {% endblock %}

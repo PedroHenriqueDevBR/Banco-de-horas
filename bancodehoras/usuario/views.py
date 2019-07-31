@@ -55,11 +55,13 @@ def CadastrarUsuarioView(request):
             # cadastra perfil vinculando ao usuario e ao setor
             perfil = Perfil(nome=dados_form['nome'], 
                             usuario=usuario,
-                            setor=setor)
+                            setor=setor,
+                            ch_primeira=dados_form['ch_primeira'],
+                            ch_segunda=dados_form['ch_segunda'])
             perfil.save()
 
             messages.add_message(request, messages.INFO, 'Colaborador cadastrado com sucesso')
-            return redirect('administrador_setor')
+            return redirect('administrador_setor_id', id=setor.id)
 
     return redirect('administrador_setor')
 
@@ -72,13 +74,19 @@ def AtualizarUsuarioView(request, id):
         id_setor = request.POST.get('setor')
         email = request.POST.get('email')
         senha = request.POST.get('senha')
+        ch_primeira = request.POST.get('ch_primeira')
+        ch_segunda = request.POST.get('ch_segunda')
+
+        setor = Setor.objects.get(id=id_setor)
 
         user = User.objects.get(username=id)
         user.username = matricula
         user.email = email
         perfil = user.perfil
         perfil.nome = nome
-        perfil.setor = Setor.objects.get(id=id_setor)
+        perfil.setor = setor
+        perfil.ch_primeira = ch_primeira
+        perfil.ch_segunda = ch_segunda
 
         if senha != '':
             user.set_password(senha)
@@ -86,7 +94,7 @@ def AtualizarUsuarioView(request, id):
         perfil.save()
         user.save()
 
-    return redirect('administrador_setor')
+    return redirect('administrador_usuario_id', id=id)
 
 
 @login_required(login_url='login')
@@ -103,7 +111,7 @@ def UsuarioGerenteView(request, id):
     else:
         perfil.gerente = True
     perfil.save()
-    return redirect('administrador_setor')
+    return redirect('administrador_usuario_id', id=perfil.usuario.username)
 
 
 @login_required(login_url='login')
@@ -114,7 +122,7 @@ def UsuarioAdministradorView(request, id):
     else:
         user.is_superuser = True
     user.save()
-    return redirect('administrador_setor')
+    return redirect('administrador_usuario_id', id=user.username)
 
 
 @login_required(login_url='login')
@@ -125,4 +133,4 @@ def UsuarioAtivoView(request, id):
     else:
         user.is_active = True
     user.save()
-    return redirect('administrador_setor')
+    return redirect('administrador_usuario_id', id=user.username)

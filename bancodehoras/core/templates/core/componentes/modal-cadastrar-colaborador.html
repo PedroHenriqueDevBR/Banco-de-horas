@@ -1,0 +1,58 @@
+<div class="modal fade" id="cadastrar-colaborador" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar colaborador</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-cadastrar-colaborador" action="{% url 'cadastrar_usuario' %}" method="post">
+                    {% csrf_token %}
+                    <div style="display: none;">
+                        <input type="text" name="setor" value="{{ setor.id }}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome" class="col-form-label">Nome (*):</label>
+                        <input class="form-control" name="nome" id="nome" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matricula" class="col-form-label">Matricula (*):</label>
+                        <input class="form-control" name="matricula" id="matricula" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email (*):</label>
+                        <input class="form-control" name="email" id="email" type="text">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha" class="col-form-label">Senha (*):</label>
+                        <input class="form-control" name="senha" id="senha" type="password">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label for="senha" class="col-form-label">Primeira carga horária:</label>
+                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time">
+                            </div>
+                            <div class="col">
+                                <label for="senha" class="col-form-label">Segunda carga horária:</label>
+                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btn-cadastrar-colaborador">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
