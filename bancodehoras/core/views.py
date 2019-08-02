@@ -30,6 +30,28 @@ class PainelDeControleSolicitacoesView(View):
         return movimentacoes
 
 
+class PainelDeControleFolgasView(View):
+    template_name = 'core/dashboard/dashboard-folgas.html'
+
+    def get(self, request):
+        dados = {}
+        dados['perfil_logado'] = request.user
+        dados['solciitacoes_pendentes'] = self.seleciona_todas_movimentacoes(request.user.perfil.setor.perfis_do_setor.all())
+        return render(request, self.template_name, dados)
+
+    def seleciona_todas_movimentacoes(self, perfis):
+        movimentacoes = []
+        analise = Status.objects.all()[0]
+        for perfil in perfis:
+            movimentacoes.extend(
+                perfil.movimentacoes.all().filter(
+                    Q(finalizado=False),
+                    Q(entrada=False)
+                )
+            )
+        return movimentacoes
+
+
 class SolicitacaoBancoDeHorasView(View):
     template_name = 'core/usuario/usuario-bancodehoras.html'
 
@@ -202,11 +224,39 @@ def SolicitacaoView(request):
 def SolicitacaoMostrarView(request, id):
     template_name = 'core/dashboard/dashboard-mostra-solicitacao.html'
 
+    if request.method == 'POST':
+        id_status = int(request.POST.get('id_status'))
+        id_movimentacao = int(request.POST.get('id_movimentacao'))
+        descricao = request.POST.get('descricao')
+
+        status = Status.objects.get(id=id_status)
+        movimentacao = Movimentacao.objects.get(id=id_movimentacao)
+        perfil = request.user.perfil
+
+        msg_padrao = 'Status alterado para: {}. {}'.format(status.nome, descricao)
+        movimentacao.status = status
+        movimentacao.save()
+
+        LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
+
     dados = {}
     dados['perfil_logado'] = request.user
     dados['solicitacao'] = Movimentacao.objects.get(id=id)
+    dados['status'] = Status.objects.all()
 
     return render(request, template_name, dados)
+
+
+@login_required(login_url='login')
+def SolicitacaoFinalizarView(request, id):
+    movimentacao = Movimentacao.objects.get(id=id)
+    movimentacao.finalizado = True
+    movimentacao.save()
+    perfil = request.user.perfil
+    msg_padrao = 'Solicitação finalizada'
+    LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
+
+    return redirect('solicitacoes_mostrar', id=id)
 
 
 # Setor

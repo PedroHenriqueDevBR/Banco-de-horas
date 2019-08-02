@@ -29,7 +29,9 @@ urlpatterns = [
     path('paineldecontrole/', views_core.DashboardView, name='dashboard'),
     path('paineldecontrole/solicitacoes/', views_core.SolicitacaoView, name='solicitacoes'),
     path('paineldecontrole/solicitacoes/mostrar/<int:id>', views_core.SolicitacaoMostrarView, name='solicitacoes_mostrar'),
+    path('paineldecontrole/solicitacoes/finalizar/<int:id>', views_core.SolicitacaoFinalizarView, name='solicitacoes_finalizar'),
     path('paineldecontrole/solicitacoes/pendentes', login_required(views_core.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
+    path('paineldecontrole/baixas/pendentes', login_required(views_core.PainelDeControleFolgasView.as_view() ,login_url='login'), name='dashboard_baixas'),
     path('paineldecontrole/solicitacoes/bancodehoras', login_required(views_core.SolicitacaoBancoDeHorasView.as_view() ,login_url='login'), name='solicitacoes_banco_de_horas'),
     path('paineldecontrole/solicitacoes/baixas', login_required(views_core.SolicitacaoBaixaView.as_view() ,login_url='login'), name='solicitacoes_baixas'),
 

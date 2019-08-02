@@ -24,30 +24,52 @@
                 <td>Data referente</td>
                 <td>{{ solicitacao.data_movimentacao }}</td>
             </tr>
+            {% if solicitacao.hora_inicial %}
             <tr>
                 <td>Hora inicial</td>
                 <td>{{ solicitacao.hora_inicial }}</td>
             </tr>
+            {% endif %}
+            {% if solicitacao.hora_final %}
             <tr>
                 <td>Hora final</td>
                 <td>{{ solicitacao.hora_final }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <td>Total de horas</td>
                 <td>{{ solicitacao.hora_total }}</td>
             </tr>
+            {% if solicitacao.motivo %}
             <tr>
                 <td>Motivo</td>
                 <td>{{ solicitacao.motivo }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <td>Finalizado</td>
-                <td>{{ solicitacao.finalizado }}</td>
+                <td>
+                    {% if perfil_logado.is_superuser or perfil_logado.perfil.gerente %}
+                        {% if solicitacao.finalizado == True %}
+                        <span class="badge badge-danger">Solicitacao finalizada</span>
+                        {% else %}
+                        <a href="{% url 'solicitacoes_finalizar' solicitacao.id %}" class="badge badge-primary">Finalizar agora</a>
+                        {% endif %}
+                    {% else %}
+                        {% if solicitacao.finalizado == True %}
+                        <span class="badge badge-danger">Solicitacao finalizada</span>
+                        {% else %}
+                        <span class="badge badge-primary">Solicitação em aberto</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
             </tr>
+            {% if solicitacao.forma_de_pagamento %}
             <tr>
                 <td>Pagamento</td>
                 <td>{{ solicitacao.forma_de_pagamento.nome }}</td>
             </tr>
+            {% endif %}
             <tr>
                 <td>Status</td>
                 <td>{{ solicitacao.status.nome }}</td>
@@ -64,9 +86,13 @@
         <button class="btn btn-primary" data-toggle="modal" data-target="#modal-log">
             Mostrar log
         </button>
+        {% if solicitacao.finalizado == False %}
+        {% if perfil_logado.is_superuser or perfil_logado.perfil.gerente %}
         <button class="btn btn-primary" data-toggle="modal" data-target="#modal-modifica-log">
             Modificar solicitação
         </button>
+        {% endif %}
+        {% endif %}
     </div>
 </div>
 
@@ -115,31 +141,35 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST">
+                <form action="" method="POST"> {% csrf_token %}
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Options</label>
+                            <label class="input-group-text" for="inputGroupSelect01">Status</label>
                         </div>
-                        <select class="custom-select" id="inputGroupSelect01">
-                            <option selected>Choose...</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
+                        <select class="custom-select" id="inputGroupSelect01" name="id_status">
+                            {% if status %}
+                            {% for statu in status %}
+                            <option value="{{ statu.id }}">{{ statu.nome }}</option>
+                            {% endfor %}
+                            {% endif %}
                         </select>
                     </div>
 
                     <div class="input-group">
                         <div class="input-group-prepend">
-                            <span class="input-group-text">With textarea</span>
+                            <span class="input-group-text">Descrição</span>
                         </div>
-                        <textarea class="form-control" aria-label="With textarea"></textarea>
+                        <textarea class="form-control" name="descricao" placeholder="Descreva o motivo da alteração"></textarea>
                     </div>
 
+                    <input type="text" value="{{ solicitacao.id }}" style="display: none;" name="id_movimentacao">
+
+                    <div class="modal-footer bg-light">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                    </div>
                 </form>
-            </div>
-            <div class="modal-footer bg-light">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
             </div>
         </div>
     </div>
