@@ -316,11 +316,6 @@ def StatusTornaPadraoView(request, id):
     salvar_novo_padrao(id)
     return redirect('administrador_extra')
 
-@login_required(login_url='login')
-def StatusTornaAutorizadoView(request, id):
-    salvar_novo_padrao_finalizado(id)
-    return redirect('administrador_extra')
-
 
 @login_required(login_url='login')
 def StatusDeleteView(request, id):
@@ -353,24 +348,6 @@ def salvar_novo_padrao(id=None):
                 continue
 
             statu.analise = False
-            statu.save()
-
-
-def salvar_novo_padrao_finalizado(id=None):
-    if not id:
-        status = Status.objects.all()
-        for statu in status:
-            statu.finalizado = False
-            statu.save()
-    else:
-        status = Status.objects.all()
-        for statu in status:
-            if statu.id == id:
-                statu.finalizado = True
-                statu.save()
-                continue
-
-            statu.finalizado = False
             statu.save()
 
 

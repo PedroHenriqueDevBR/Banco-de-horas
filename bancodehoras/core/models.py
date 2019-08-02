@@ -18,7 +18,6 @@ class Perfil(models.Model):
 class Status(models.Model):
     nome = models.CharField(max_length=50)
     analise = models.BooleanField(default=False)
-    finalizado = models.BooleanField(default=False)
 
 
 class FormaDePagamento(models.Model):
