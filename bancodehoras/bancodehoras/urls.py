@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views_core.EscolhaDashboardView, name='escolha_dashboard'),
+    path('', views_core.DashboardView, name='escolha_dashboard'),
 
     # Painel de controle do super administrador
     path('administrador/', views_core.AdministradorView, name='administrador'),
