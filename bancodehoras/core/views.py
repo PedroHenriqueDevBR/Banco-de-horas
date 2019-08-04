@@ -296,24 +296,40 @@ def SetorDeleteView(request, id):
 ##
 @login_required(login_url='login')
 def StatusView(request):
-    nome_status = request.POST.get('nome_status')
-    analise = request.POST.get('padrao')
-    analise = False if analise is None else True
-    
-    busca_status = Status.objects.filter(nome=nome_status)
-    if len(busca_status) > 0:
-        messages.add_message(request, messages.INFO, 'Status já cadastrado')
-    else:
-        if analise:
-            salvar_novo_padrao()
-        Status.objects.create(nome=nome_status, analise=analise)
-        messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
+    if request.method == 'POST':
+        nome_status = request.POST.get('nome_status')
+        # analise = request.POST.get('padrao')
+        # analise = False if analise is None else True
+        status = request.POST.get('status')
+        
+        busca_status = Status.objects.filter(nome=nome_status)
+        if len(busca_status) > 0:
+            messages.add_message(request, messages.INFO, 'Status já cadastrado')
+        else:
+            analise = False
+            autorizado = False
+            if status == 'analise':
+                salvar_novo_padrao_analise()
+                analise = True
+            elif status == 'autorizado':
+                salvar_novo_padrao_autorizado()
+                autorizado = True
+
+            Status.objects.create(nome=nome_status, analise=analise, autorizado=autorizado)
+            messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
+            
     return redirect('administrador_extra')
 
 
 @login_required(login_url='login')
-def StatusTornaPadraoView(request, id):
-    salvar_novo_padrao(id)
+def StatusTornaPadraoAnaliseView(request, id):
+    salvar_novo_padrao_analise(id)
+    return redirect('administrador_extra')
+
+
+@login_required(login_url='login')
+def StatusTornaPadraoAutorizadoView(request, id):
+    salvar_novo_padrao_autorizado(id)
     return redirect('administrador_extra')
 
 
@@ -333,7 +349,7 @@ def StatusDeleteView(request, id):
     return redirect('administrador_extra')
 
 
-def salvar_novo_padrao(id=None):
+def salvar_novo_padrao_analise(id=None):
     if not id:
         status = Status.objects.all()
         for statu in status:
@@ -348,6 +364,24 @@ def salvar_novo_padrao(id=None):
                 continue
 
             statu.analise = False
+            statu.save()
+
+
+def salvar_novo_padrao_autorizado(id=None):
+    if not id:
+        status = Status.objects.all()
+        for statu in status:
+            statu.autorizado = False
+            statu.save()
+    else:
+        status = Status.objects.all()
+        for statu in status:
+            if statu.id == id:
+                statu.autorizado = True
+                statu.save()
+                continue
+
+            statu.autorizado = False
             statu.save()
 
 

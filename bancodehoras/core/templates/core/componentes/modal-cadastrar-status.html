@@ -21,10 +21,22 @@
                             solicitações.</small>
                     </div>
                     <div class="form-check mb-3">
-                        <input type="checkbox" class="form-check-input" id="padrao" name="padrao">
-                        <label class="form-check-label" for="padrao">Definir finalizado</label>
+                        <input type="checkbox" class="form-check-input" id="autorizado" name="autorizado">
+                        <label class="form-check-label" for="autorizado">Definir finalizado</label>
                         <small id="ajuda-descritiva" class="form-text text-muted">Quando este status é selecionado a solicitação é finalizada.</small>
                     </div>
+                    <div class="form-group">
+                        <div class="radio">
+                            <label><input type="radio" name="status" value="no" checked>Não selecionado</label>
+                          </div>
+                          <div class="radio">
+                            <label><input type="radio" name="status" value="analise">Análise</label>
+                          </div>
+                          <div class="radio disabled">
+                            <label><input type="radio" name="status" value="autorizado">Autorizado</label>
+                          </div>
+                    </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
                         <button type="submit" class="btn btn-primary">Cadastrar</button>

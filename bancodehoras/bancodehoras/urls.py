@@ -19,7 +19,8 @@ urlpatterns = [
 
     path('administrador/extra', views_core.AdministradorExtraView, name='administrador_extra'),
     path('administrador/status/cadastro', views_core.StatusView, name='cadastrar_status'),
-    path('administrador/status/tornarpadrao/<int:id>', views_core.StatusTornaPadraoView, name='status_tornar_padrao'),
+    path('administrador/status/tornarpadrao/analise/<int:id>', views_core.StatusTornaPadraoAnaliseView, name='status_tornar_padrao_analise'),
+    path('administrador/status/tornarpadrao/autorizado/<int:id>', views_core.StatusTornaPadraoAutorizadoView, name='status_tornar_padrao_autorizado'),
     path('administrador/status/deletar/<int:id>', views_core.StatusDeleteView, name='status_deletar'),
     path('administrador/formadepagamento/cadastro', views_core.FormaDePagamentoView, name='forma_de_pagamento'),
     path('administrador/formadepagamento/deletar/<int:id>', views_core.FormaDePagamentoDeletarView, name='forma_de_pagamento_deletar'),

@@ -13,33 +13,44 @@
                 <div class="card-body text-center px-0">
                     {% if status %}
                     <h2>Status</h2>
-                    <table class="table table-tableless">
-                        <thead>
-                            <tr>
-                                <th>Nome</th>
-                                <th>Analise</th>
-                                <th>Tornar análise</th>
-                                <th>Deletar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for statu in status %}
-                            <tr>
-                                <td>{{ statu.nome }}</td>
-                                <td>
-                                    {% if statu.analise %}
-                                    <span class="badge badge-warning text-white">X</span>
-                                    {% else %}
-                                    <span> </span>
-                                    {% endif %}
-                                </td>
-                                <td><a href="{% url 'status_tornar_padrao' statu.id %}">Selecionar</a></td>
-                                <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
-                            </tr>
-                            {% endfor %}
+                    <div class="table-responsive">
+                        <table class="table table-tableless">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Analise</th>
+                                    <th>Autorizado</th>
+                                    <th>Tornar análise</th>
+                                    <th>Tornar autorizado</th>
+                                    <th>Deletar</th>
+                                    <th>Modificar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for statu in status %}
+                                <tr>
+                                    <td>{{ statu.nome }}</td>
+                                    <td>
+                                        {% if statu.analise %}
+                                        <span class="badge badge-warning text-white">X</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if statu.autorizado %}
+                                        <span class="badge badge-success text-white">X</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><a href="{% url 'status_tornar_padrao_analise' statu.id %}">Selecionar</a></td>
+                                    <td><a href="{% url 'status_tornar_padrao_autorizado' statu.id %}">Selecionar</a>
+                                    </td>
+                                    <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
+                                    <td><a href="#"> Modificar </a></td>
+                                </tr>
+                                {% endfor %}
 
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -48,30 +59,32 @@
                 <div class="card-body text-center px-0">
                     {% if formasdepagamentos %}
                     <h2>Forma de pagamento</h2>
-                    <table class="table table-tableless">
-                        <thead>
-                            <tr>
-                                <th>Tipo</th>
-                                <th>Hora dupla</th>
-                                <th>Opção</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for pagamento in formasdepagamentos %}
-                            <tr>
-                                <td>{{ pagamento.nome }}</td>
-                                <td>
-                                    {% if pagamento.valor_duplo %}
-                                    Sim
-                                    {% else %}
-                                    Não
-                                    {% endif %}
-                                </td>
-                                <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}">Deletar</a></td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+                    <div class="table-responsive">
+                        <table class="table table-tableless">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Hora dupla</th>
+                                    <th>Opção</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for pagamento in formasdepagamentos %}
+                                <tr>
+                                    <td>{{ pagamento.nome }}</td>
+                                    <td>
+                                        {% if pagamento.valor_duplo %}
+                                        Sim
+                                        {% else %}
+                                        Não
+                                        {% endif %}
+                                    </td>
+                                    <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}">Deletar</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     {% endif %}
                 </div>
             </div>
