@@ -9,20 +9,47 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="" method="POST"> {% csrf_token %}
+                <form method="POST"> {% csrf_token %}
 
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Status</label>
+                            <label class="input-group-text" for="status">Status</label>
                         </div>
-                        <select class="custom-select" id="inputGroupSelect01" name="id_status">
+                        <select class="custom-select" id="status" name="id_status">
                             {% if status %}
                             {% for statu in status %}
                             <option value="{{ statu.id }}">{{ statu.nome }}</option>
                             {% endfor %}
                             {% endif %}
                         </select>
+
+                        {% if solicitacao.forma_de_pagamento %}
+                        <select class="custom-select" name="id_pagamento">
+                            {% if forma_de_pagamento %}
+                            {% for pagamento in forma_de_pagamento %}
+                            <option value="{{ pagamento.id }}">{{ pagamento.nome }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                        {% endif %}
                     </div>
+
+
+                    {% if solicitacao.entrada == False %}
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="pagamento">Pagamento</label>
+                        </div>
+
+                        <select class="custom-select" id="pagamento" name="id_pagamento">
+                            {% if forma_de_pagamento %}
+                            {% for pagamento in forma_de_pagamento %}
+                            <option value="{{ pagamento.id }}">{{ pagamento.nome }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                    {% endif %}
 
                     <div class="input-group">
                         <div class="input-group-prepend">

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import datetime
-from core.controller import FormataDados
+from core.controller import FormataDados, FuncionalidadesMovimentacao
 
 
 class PainelDeControleSolicitacoesView(View):
@@ -108,7 +108,7 @@ class SolicitacaoBaixaView(View):
     def post(self, request):
         data_folga = request.POST.get('data_folga')
         total_horas = request.POST.get('horas_total')
-        status = Status.objects.all()[0]
+        status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
         total_horas = '0{}:00'.format(total_horas) if int(total_horas) < 10 else '{}:00'.format(total_horas)
 
@@ -140,9 +140,7 @@ def EscolhaDashboardView(request):
 def DashboardView(request):
     tamplate_name = 'core/dashboard/dashboard.html'
     dados = {}
-
     setor = request.user.perfil.setor
-
     dados['perfil_logado'] = request.user
     dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
     return render(request, tamplate_name, dados)
@@ -180,9 +178,6 @@ def AdministradorMostraUsuarioView(request, id):
     dados['colaborador'] = User.objects.get(username=id)
     dados['setores'] = Setor.objects.all()
     dados['perfil_logado'] = request.user
-
-    # import pdb; pdb.set_trace()
-
     return render(request, tamplate_name, dados)
 
 
@@ -201,12 +196,10 @@ def AdministradorExtraView(request):
 ###
 @login_required(login_url='login')
 def SolicitacaoView(request):
-    template_name = 'core/usuario/solicitacao.html'
     dados = {}
+    template_name = 'core/usuario/solicitacao.html'
     analise = Status.objects.filter(analise=True)[0]
-    format_data = FormataDados()
-
-    # import pdb; pdb.set_trace()
+    autorizado = Status.objects.filter(autorizado=True)[0]
     
     dados['perfil_logado'] = request.user
     dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
@@ -219,9 +212,37 @@ def SolicitacaoView(request):
         Q(entrada=False),
         Q(status=analise)
     )
-    dados['total_de_banco_solicitado'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
-    dados['total_de_baixa_solicitado'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
+    bancos = request.user.perfil.movimentacoes.all().filter(
+        Q(finalizado=True),
+        Q(entrada=True),
+        Q(status=autorizado)
+    )
+    baixas = request.user.perfil.movimentacoes.all().filter(
+        Q(finalizado=True),
+        Q(entrada=False),
+        Q(status=autorizado)
+    )
+    todos_os_bancos = Movimentacao.objects.filter(entrada=True, status=autorizado)
+    todos_as_baixas = Movimentacao.objects.filter(entrada=False, status=autorizado)
+    
+    format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
+    dados['horas_disponiveis'] = format_data.total_de_horas_disponivel(autorizado)
+
+    dados['horas_solicitadas'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
+    dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
+    dados['horas_autorizadas'] = format_data.calcular_total_de_horas(bancos)
+    dados['baixas_autorizadas'] = format_data.calcular_total_de_horas(baixas)
     return render(request, template_name, dados)
+
+
+@login_required(login_url='login')
+def listar_solicitacoes(request, id):
+    tamplate_name = 'core/usuario/listagem-solicitacoes.html'
+    dados = {}
+    dados['perfil_logado'] = request.user
+    dados['solicitacoes'] = User.objects.get(username=id).perfil.movimentacoes.all()
+
+    return render(request, tamplate_name, dados)
 
 
 @login_required(login_url='login')
@@ -233,6 +254,11 @@ def SolicitacaoMostrarView(request, id):
         id_movimentacao = int(request.POST.get('id_movimentacao'))
         descricao = request.POST.get('descricao')
 
+        forma_de_pagamento = None
+        if request.POST.get('id_pagamento'):
+            id_pagamento = int(request.POST.get('id_pagamento'))
+            forma_de_pagamento = FormaDePagamento.objects.get(id=id_pagamento)
+        
         status = Status.objects.get(id=id_status)
         movimentacao = Movimentacao.objects.get(id=id_movimentacao)
         perfil = request.user.perfil
@@ -244,6 +270,7 @@ def SolicitacaoMostrarView(request, id):
 
         msg_padrao = '{}'.format(descricao)
         movimentacao.status = status
+        movimentacao.forma_de_pagamento = forma_de_pagamento
         movimentacao.save()
 
         LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
@@ -252,6 +279,7 @@ def SolicitacaoMostrarView(request, id):
     dados['perfil_logado'] = request.user
     dados['solicitacao'] = Movimentacao.objects.get(id=id)
     dados['status'] = Status.objects.all()
+    dados['forma_de_pagamento'] = FormaDePagamento.objects.all()
 
     return render(request, template_name, dados)
 

@@ -40,9 +40,37 @@ class FormataDados:
 
         return '{}:{}'.format(hora_str, min_str)
 
+
+class FuncionalidadesMovimentacao:
+    bancos = []
+    baixas = []
+    formatar = object
+    
+    def __init__(self, bancos, baixas):
+        self.bancos = bancos
+        self.baixas = baixas
+        self.formatar = FormataDados()
+
+    def total_de_horas_disponivel(self, base):
+        total_entrada = 0
+        total_saida = 0
+        
+        for banco in self.bancos:
+            if banco.status == base:
+               total_entrada += self.formatar.converte_hora_em_minutos(banco.hora_total)
+
+        for baixa in self.baixas:
+            if baixa.status == base:
+               total_saida += self.formatar.converte_hora_em_minutos(baixa.hora_total)
+
+        # import pdb; pdb.set_trace()
+
+        return self.formatar.converter_minutos_em_horas(total_entrada - total_saida)
+
+
     def calcular_total_de_horas(self, obj):
         total_min = 0
         # import pdb; pdb.set_trace()
         for movimentacao in obj:
-            total_min += self.converte_hora_em_minutos(movimentacao.hora_total)
-        return self.converter_minutos_em_horas(total_min)
+            total_min += self.formatar.converte_hora_em_minutos(movimentacao.hora_total)
+        return self.formatar.converter_minutos_em_horas(total_min)

@@ -1,0 +1,55 @@
+{% extends 'core/componentes/base-dashboard.html' %}
+{% load static %}
+
+{% block content %}
+
+
+{% if solicitacoes %}
+<div class="container bg-light mt-3 card px-0">
+
+    <div class="card-body px-0 py-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">evento</th>
+                        <th scope="col">Total</th>
+                        <th scope="col">Tipo</th>
+                        <th scope="col">Colaborador</th>
+                        <th scope="col">status</th>
+                        <th scope="col">Mais</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for solicitacao in solicitacoes %}
+                    <tr>
+                        <td>{{ solicitacao.data_movimentacao }}</td>
+                        <td>{{ solicitacao.hora_total }}</td>
+                        <td>
+                            {% if solicitacao.entrada == True %}
+                            <span>Banco de horas</span>
+                            {% else %}
+                            <span>Baixa</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ solicitacao.colaborador.nome }}</td>
+                        <td>
+                            {% if solicitacao.status.analise == True %}
+                            <span class="badge badge-warning text-white"> {{ solicitacao.status.nome }}</span>
+                            {% elif solicitacao.status.autorizado == True %}
+                            <span class="badge badge-success"> {{ solicitacao.status.nome }}</span>
+                            {% else %}
+                            <span class="badge badge-danger"> {{ solicitacao.status.nome }}</span>
+                            {% endif %}
+                        </td>
+                        <td><a href="{% url 'solicitacoes_mostrar' solicitacao.id %}">Acessar</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

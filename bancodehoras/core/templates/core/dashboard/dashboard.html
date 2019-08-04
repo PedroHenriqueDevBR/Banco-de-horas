@@ -26,7 +26,7 @@
                         <li class="list-group-item list-group-item-action">
                             <div class="list-item-colaborador">
                                 <img src="{% static 'img/icon-user.png' %}" width="50" alt="Colaborador">
-                                <h4 class="pl-3">{{ colaborador.nome }}</h4>
+                                <h4 class="pl-3"><a href="{% url 'listar_solicitacoes' colaborador.usuario.username %}">{{ colaborador.nome }}</a></h4>
                             </div>
                         </li>
                         {% endfor %}

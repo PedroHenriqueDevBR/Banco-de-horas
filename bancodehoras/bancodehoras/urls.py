@@ -28,6 +28,7 @@ urlpatterns = [
     # Painel de controle
     path('paineldecontrole/', views_core.DashboardView, name='dashboard'),
     path('paineldecontrole/solicitacoes/', views_core.SolicitacaoView, name='solicitacoes'),
+    path('paineldecontrole/solicitacoes/listartodos/<str:id>', views_core.listar_solicitacoes, name='listar_solicitacoes'),
     path('paineldecontrole/solicitacoes/mostrar/<int:id>', views_core.SolicitacaoMostrarView, name='solicitacoes_mostrar'),
     path('paineldecontrole/solicitacoes/finalizar/<int:id>', views_core.SolicitacaoFinalizarView, name='solicitacoes_finalizar'),
     path('paineldecontrole/solicitacoes/pendentes', login_required(views_core.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
