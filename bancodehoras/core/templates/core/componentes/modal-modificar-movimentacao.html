@@ -1,0 +1,45 @@
+<div class="modal fade" id="modal-modifica-log" tabindex="-1" role="dialog" aria-labelledby="modal-modifica-log-title"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="font-size: 11pt;">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="modal-modifica-log-title">Log</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST"> {% csrf_token %}
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Status</label>
+                        </div>
+                        <select class="custom-select" id="inputGroupSelect01" name="id_status">
+                            {% if status %}
+                            {% for statu in status %}
+                            <option value="{{ statu.id }}">{{ statu.nome }}</option>
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Descrição</span>
+                        </div>
+                        <textarea class="form-control" name="descricao"
+                            placeholder="Descreva o motivo da alteração"></textarea>
+                    </div>
+
+                    <input type="text" value="{{ solicitacao.id }}" style="display: none;" name="id_movimentacao">
+
+                    <div class="modal-footer bg-light">
+                        <button type="submit" class="btn btn-success">Salvar</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

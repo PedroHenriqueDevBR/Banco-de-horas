@@ -205,15 +205,19 @@ def SolicitacaoView(request):
     dados = {}
     analise = Status.objects.filter(analise=True)[0]
     format_data = FormataDados()
+
+    # import pdb; pdb.set_trace()
     
     dados['perfil_logado'] = request.user
     dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
         Q(finalizado=False),
-        Q(entrada=True)
+        Q(entrada=True),
+        Q(status=analise)
     )
     dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(
         Q(finalizado=False),
-        Q(entrada=False)
+        Q(entrada=False),
+        Q(status=analise)
     )
     dados['total_de_banco_solicitado'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
     dados['total_de_baixa_solicitado'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
@@ -233,7 +237,12 @@ def SolicitacaoMostrarView(request, id):
         movimentacao = Movimentacao.objects.get(id=id_movimentacao)
         perfil = request.user.perfil
 
-        msg_padrao = 'Status alterado para: {}. {}'.format(status.nome, descricao)
+        if status.autorizado:
+            movimentacao.finalizado = True
+        else:
+            movimentacao.finalizado = False
+
+        msg_padrao = '{}'.format(descricao)
         movimentacao.status = status
         movimentacao.save()
 
@@ -250,11 +259,16 @@ def SolicitacaoMostrarView(request, id):
 @login_required(login_url='login')
 def SolicitacaoFinalizarView(request, id):
     movimentacao = Movimentacao.objects.get(id=id)
-    movimentacao.finalizado = True
-    movimentacao.save()
-    perfil = request.user.perfil
-    msg_padrao = 'Solicitação finalizada'
-    LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
+    analise = Status.objects.filter(analise=True)[0]
+
+    if movimentacao.status == analise:
+        messages.add_message(request, messages.INFO, 'Impossível finalizar uma movimentação em análise, por favor verifique o status antes de finalizar.')
+    else:
+        movimentacao.finalizado = True
+        movimentacao.save()
+        perfil = request.user.perfil
+        msg_padrao = 'Solicitação finalizada'
+        LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
 
     return redirect('solicitacoes_mostrar', id=id)
 

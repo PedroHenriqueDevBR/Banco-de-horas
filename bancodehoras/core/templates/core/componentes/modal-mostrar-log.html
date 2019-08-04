@@ -1,0 +1,30 @@
+<div class="modal fade" id="modal-log" tabindex="-1" role="dialog" aria-labelledby="modal-log-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="font-size: 11pt;">
+            <div class="modal-header bg-light">
+                <h5 class="modal-title" id="modal-log-title">Log</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body px-1">
+                <ul class="list-group">
+                    {% if solicitacao.log_movimentacoes.all %}
+                    {% for log in solicitacao.log_movimentacoes.all %}
+                    <li class="list-group-item mb-1 shadow">
+                        {{ log.perfil_emissor.nome }} - {{ log.data }} <br>
+                        <hr>
+                        {{ log.log }}
+                    </li>
+                    {% endfor %}
+                    {% else %}
+                    <li class="list-group-item mb-2 shadow"> Não há log para a solicitação selecionada! </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
