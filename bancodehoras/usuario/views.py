@@ -39,7 +39,7 @@ class LoginUsuarioView(View):
 
 
 @login_required(login_url='login')
-def CadastrarUsuarioView(request):
+def cadastrar_usuario(request):
     if request.method == 'POST':
         form = RegistrarUsuarioForm(request.POST)
         if form.is_valid():
@@ -67,7 +67,7 @@ def CadastrarUsuarioView(request):
 
 
 @login_required(login_url='login')
-def AtualizarUsuarioView(request, id):
+def atualiza_usuario(request, id):
     if request.method == 'POST':
         nome = request.POST.get('nome')
         matricula = request.POST.get('matricula')
@@ -94,17 +94,17 @@ def AtualizarUsuarioView(request, id):
         perfil.save()
         user.save()
 
-    return redirect('administrador_usuario_id', id=id)
+    return redirect('administrador_usuario_id', id=matricula)
 
 
 @login_required(login_url='login')
-def LogoutUsuarioView(request):
+def logout_usuario(request):
     logout(request)
     return redirect('login')
 
 
 @login_required(login_url='login')
-def UsuarioGerenteView(request, id):
+def usuario_gerente(request, id):
     perfil = Perfil.objects.get(id=id)
     if perfil.gerente:
         perfil.gerente = False
@@ -115,7 +115,7 @@ def UsuarioGerenteView(request, id):
 
 
 @login_required(login_url='login')
-def UsuarioAdministradorView(request, id):
+def usuario_administrador(request, id):
     user = User.objects.get(id=id)
     if user.is_superuser:
         user.is_superuser = False
@@ -126,7 +126,7 @@ def UsuarioAdministradorView(request, id):
 
 
 @login_required(login_url='login')
-def UsuarioAtivoView(request, id):
+def usuario_ativo(request, id):
     user = User.objects.get(id=id)
     if user.is_active:
         user.is_active = False
