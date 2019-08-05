@@ -74,3 +74,12 @@ class FuncionalidadesMovimentacao:
         for movimentacao in obj:
             total_min += self.formatar.converte_hora_em_minutos(movimentacao.hora_total)
         return self.formatar.converter_minutos_em_horas(total_min)
+
+
+class Utilidades:
+    
+    def seleciona_todas_movimentacoes(self, perfis, entrada):
+        movimentacoes = []
+        for perfil in perfis:
+            movimentacoes.extend(perfil.movimentacoes.all().filter(finalizado=False, entrada=entrada))
+        return movimentacoes

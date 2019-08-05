@@ -10,7 +10,7 @@
 
         <div class="card full-w">
             <div class="card-body">
-                <canvas id="general-vision" width="100%" height="30px"></canvas>
+                <canvas id="general-vision" width="100%" height="50px"></canvas>
             </div>
         </div>
 
@@ -37,9 +37,6 @@
 
 
             <aside class="card col my-3 mx-3 px-0 py-0 auto-h">
-                <div class="card-header">
-                    <h3 class="text-center">@Colaborador 01</h3>
-                </div>
                 <div class="card-body px-0 py-0">
                     <div class="table-responsive">
                         <table class="table table-striped">
@@ -52,15 +49,15 @@
                             <tbody>
                                 <tr>
                                     <th scope="row">Banco de horas pendentes</td>
-                                    <td>0</td>
+                                    <td>{{ bancospendentes.count }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Baixas pendentes</td>
-                                    <td>0</td>
+                                    <td>{{ baixaspendentes.count }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row">Total de solicitações</td>
-                                    <td>0</td>
+                                    <td>{{ totalpendente }}</td>
                                 </tr>
                             </tbody>
                         </table>

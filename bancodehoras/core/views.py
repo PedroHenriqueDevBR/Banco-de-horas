@@ -5,16 +5,16 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import datetime
-from core.controller import FormataDados, FuncionalidadesMovimentacao
+from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao 
+from movimentacao.views import seleciona_dados
 
 
 # Colaborador
 @login_required(login_url='login')
 def dashboard(request):
     tamplate_name = 'core/dashboard/dashboard.html'
-    dados = {}
     setor = request.user.perfil.setor
-    dados['perfil_logado'] = request.user
+    dados = seleciona_dados(request)
     dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
     return render(request, tamplate_name, dados)
 
@@ -28,39 +28,34 @@ def administrador(request):
 @login_required(login_url='login')
 def administrador_setor(request):
     tamplate_name = 'core/super/super-setor.html'
-    dados = {}
+    dados = seleciona_dados(request)
     dados['setores'] = Setor.objects.all()
     dados['colaboradores'] = Perfil.objects.all()
-    dados['perfil_logado'] = request.user
     return render(request, tamplate_name, dados)
 
 
 @login_required(login_url='login')
 def administrador_mostra_setor(request, id):
     tamplate_name = 'core/super/mostra-setor.html'
-    dados = {}
+    dados = seleciona_dados(request)
     dados['setor'] = Setor.objects.get(id=id)
-    dados['perfil_logado'] = request.user
     return render(request, tamplate_name, dados)
 
 
 @login_required(login_url='login')
 def administrador_mostra_usuario(request, id):
     tamplate_name = 'core/super/mostra-usuario.html'
-    dados = {}
+    dados = seleciona_dados(request)
     dados['colaborador'] = User.objects.get(username=id)
     dados['setores'] = Setor.objects.all()
-    dados['perfil_logado'] = request.user
     return render(request, tamplate_name, dados)
 
 
 @login_required(login_url='login')
 def administrador_extra(request):
     tamplate_name = 'core/super/super-dados-extras.html'
-    dados = {}
-    dados['perfil_logado'] = request.user
+    dados = seleciona_dados(request)
     dados['formasdepagamentos'] = FormaDePagamento.objects.all()
-    dados['status'] = Status.objects.all()
     return render(request, tamplate_name, dados)
 
 

@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import datetime
-from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao
+from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
 from core.models import *
 
 
@@ -13,52 +13,27 @@ class PainelDeControleSolicitacoesView(View):
     template_name = 'core/dashboard/dashboard-solicitacoes.html'
 
     def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
-        dados['solciitacoes_pendentes'] = self.seleciona_todas_movimentacoes(request.user.perfil.setor.perfis_do_setor.all())
+        func = Utilidades()
+        dados = seleciona_dados(request)
+        dados['solciitacoes_pendentes'] = func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=True)
         return render(request, self.template_name, dados)
-
-    def seleciona_todas_movimentacoes(self, perfis):
-        movimentacoes = []
-        analise = Status.objects.all()[0]
-        for perfil in perfis:
-            movimentacoes.extend(
-                perfil.movimentacoes.all().filter(
-                    Q(finalizado=False),
-                    Q(entrada=True)
-                )
-            )
-        return movimentacoes
 
 
 class PainelDeControleFolgasView(View):
     template_name = 'core/dashboard/dashboard-folgas.html'
 
     def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
-        dados['solciitacoes_pendentes'] = self.seleciona_todas_movimentacoes(request.user.perfil.setor.perfis_do_setor.all())
+        func = Utilidades()
+        dados = seleciona_dados(request)
+        dados['solciitacoes_pendentes'] = func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=False)
         return render(request, self.template_name, dados)
-
-    def seleciona_todas_movimentacoes(self, perfis):
-        movimentacoes = []
-        analise = Status.objects.all()[0]
-        for perfil in perfis:
-            movimentacoes.extend(
-                perfil.movimentacoes.all().filter(
-                    Q(finalizado=False),
-                    Q(entrada=False)
-                )
-            )
-        return movimentacoes
 
 
 class SolicitacaoBancoDeHorasView(View):
     template_name = 'movimentacao/usuario-bancodehoras.html'
 
     def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
+        dados = seleciona_dados(request)
         dados['solicitacoes'] = request.user.perfil.movimentacoes.all().filter(entrada=True).order_by('data_cadastro')[::-1]
         return render(request, self.template_name, dados)
 
@@ -101,8 +76,7 @@ class SolicitacaoBaixaView(View):
     template_name = 'movimentacao/usuario-folga.html'
 
     def get(self, request):
-        dados = {}
-        dados['perfil_logado'] = request.user
+        dados = seleciona_dados(request)
         dados['solicitacoes'] = request.user.perfil.movimentacoes.all().filter(entrada=False).order_by('data_cadastro')[::-1]
         return render(request, self.template_name, dados)
 
@@ -130,50 +104,15 @@ class SolicitacaoBaixaView(View):
 ###
 @login_required(login_url='login')
 def solicitacao(request):
-    dados = {}
     template_name = 'movimentacao/solicitacao.html'
-    analise = Status.objects.filter(analise=True)[0]
-    autorizado = Status.objects.filter(autorizado=True)[0]
-    
-    dados['perfil_logado'] = request.user
-    dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
-        Q(finalizado=False),
-        Q(entrada=True),
-        Q(status=analise)
-    )
-    dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(
-        Q(finalizado=False),
-        Q(entrada=False),
-        Q(status=analise)
-    )
-    bancos = request.user.perfil.movimentacoes.all().filter(
-        Q(finalizado=True),
-        Q(entrada=True),
-        Q(status=autorizado)
-    )
-    baixas = request.user.perfil.movimentacoes.all().filter(
-        Q(finalizado=True),
-        Q(entrada=False),
-        Q(status=autorizado)
-    )
-    todos_os_bancos = Movimentacao.objects.filter(entrada=True, status=autorizado)
-    todos_as_baixas = Movimentacao.objects.filter(entrada=False, status=autorizado)
-    
-    format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
-    dados['horas_disponiveis'] = format_data.total_de_horas_disponivel(autorizado)
-
-    dados['horas_solicitadas'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
-    dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
-    dados['horas_autorizadas'] = format_data.calcular_total_de_horas(bancos)
-    dados['baixas_autorizadas'] = format_data.calcular_total_de_horas(baixas)
+    dados = seleciona_dados(request)
     return render(request, template_name, dados)
 
 
 @login_required(login_url='login')
 def listar_solicitacoes(request, id):
     tamplate_name = 'movimentacao/listagem-solicitacoes.html'
-    dados = {}
-    dados['perfil_logado'] = request.user
+    dados = seleciona_dados(request)
     dados['solicitacoes'] = User.objects.get(username=id).perfil.movimentacoes.all()
 
     return render(request, tamplate_name, dados)
@@ -209,12 +148,8 @@ def solicitacao_mostra_view(request, id):
 
         LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
 
-    dados = {}
-    dados['perfil_logado'] = request.user
+    dados = seleciona_dados(request)
     dados['solicitacao'] = Movimentacao.objects.get(id=id)
-    dados['status'] = Status.objects.all()
-    dados['forma_de_pagamento'] = FormaDePagamento.objects.all()
-
     return render(request, template_name, dados)
 
 
@@ -233,3 +168,30 @@ def solciitacao_finaliza(request, id):
         LogMovimentacao.objects.create(log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao)
 
     return redirect('solicitacoes_mostrar', id=id)
+
+
+def seleciona_dados(request):
+    dados = {}
+    analise = Status.objects.filter(analise=True)[0]
+    autorizado = Status.objects.filter(autorizado=True)[0]
+    bancos = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=True), Q(status=autorizado))
+    baixas = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=False), Q(status=autorizado))
+    todos_os_bancos = Movimentacao.objects.filter(entrada=True, status=autorizado)
+    todos_as_baixas = Movimentacao.objects.filter(entrada=False, status=autorizado)
+    
+    format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
+    
+    dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=True), Q(status=analise))
+    dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=False), Q(status=analise))
+    dados['totalpendente'] = len(dados['bancospendentes']) + len(dados['baixaspendentes'])
+    dados['horas_disponiveis'] = format_data.total_de_horas_disponivel(autorizado)
+    dados['perfil_logado'] = request.user
+    dados['horas_solicitadas'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
+    dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
+    dados['horas_autorizadas'] = format_data.calcular_total_de_horas(bancos)
+    dados['baixas_autorizadas'] = format_data.calcular_total_de_horas(baixas)
+    dados['status'] = Status.objects.all()
+    dados['forma_de_pagamento'] = FormaDePagamento.objects.all()
+
+
+    return dados
