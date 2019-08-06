@@ -172,14 +172,23 @@ def solciitacao_finaliza(request, id):
 
 def seleciona_dados(request):
     dados = {}
-    analise = Status.objects.filter(analise=True)[0]
-    autorizado = Status.objects.filter(autorizado=True)[0]
+
+    try:
+        analise = Status.objects.filter(analise=True)[0]
+    except Exception:
+        analise = None
+    try:
+        autorizado = Status.objects.filter(autorizado=True)[0]
+    except Exception:
+        autorizado = None
+
     bancos = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=True), Q(status=autorizado))
     baixas = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=False), Q(status=autorizado))
     todos_os_bancos = Movimentacao.objects.filter(entrada=True, status=autorizado)
     todos_as_baixas = Movimentacao.objects.filter(entrada=False, status=autorizado)
     
     format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
+    func = Utilidades()
     
     dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=True), Q(status=analise))
     dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=False), Q(status=analise))
