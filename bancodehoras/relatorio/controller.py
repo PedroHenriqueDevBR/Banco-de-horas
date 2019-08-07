@@ -11,6 +11,7 @@ def main():
     print('Finalizou')
 
 
+# Arquivos Excel
 def relatorio_de_usuarios_por_setor(perfis=None):
     pasta = 'relatorio/arquivos/'
     nome_arquivo = 'relatorio.xls'
@@ -53,6 +54,84 @@ def relatorio_de_usuarios_por_setor(perfis=None):
     wb.save(pasta + nome_arquivo)
 
 
+def relatorio_solicitacoes_pendentes_do_perfil(perfil):
+    solicitacoes = perfil.movimentacoes.all()
+    resultado = []
+    pasta = 'relatorio/arquivos/'
+    nome_arquivo = 'solicitacoes.xls'
+    
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('Resultado')
+    
+    for solicitacao in solicitacoes:
+        resultado.append([
+            str(solicitacao.data_cadastro),
+            str(solicitacao.data_movimentacao),
+            str(solicitacao.hora_inicial),
+            str(solicitacao.hora_final),
+            str(solicitacao.hora_total),
+            solicitacao.motivo,
+            solicitacao.status.nome
+        ])
+    
+    titulo = ['Data da solicitacao', 'Data do evento', 'hora inicio', 'hora termino', 'total de horas', 'motivo', 'status']
+    for i in range(len(titulo)):
+        ws.write(0,i,titulo[i])
+
+    for i in range(len(resultado)):
+        j = i + 1
+        ws.write(j,0,resultado[i][0])
+        ws.write(j,1,resultado[i][1])
+        ws.write(j,2,resultado[i][2])
+        ws.write(j,3,resultado[i][3])
+        ws.write(j,4,resultado[i][4])
+        ws.write(j,5,resultado[i][5])
+        ws.write(j,6,resultado[i][6])
+    
+    wb.save(pasta + nome_arquivo)
+
+
+def relatorio_solicitacoes_do_meu_setor(perfis):
+    resultado = []
+    pasta = 'relatorio/arquivos/'
+    nome_arquivo = 'solicitacoes_pendentes.xls'
+    
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('Resultado')
+
+    titulo = ['Colaborador', 'Data da solicitacao', 'Data do evento', 'hora inicio', 'hora termino', 'total de horas', 'motivo', 'status']
+    for i in range(len(titulo)):
+        ws.write(0,i,titulo[i])
+
+    # formatando resultado
+    for perfil in perfis:
+        for movimentacao in perfil.movimentacoes.all():
+            resultado.append([
+                perfil.nome,
+                str(movimentacao.data_cadastro),
+                str(movimentacao.data_movimentacao),
+                str(movimentacao.hora_inicial),
+                str(movimentacao.hora_final),
+                str(movimentacao.hora_total),
+                movimentacao.motivo,
+                movimentacao.status.nome
+            ])
+
+    for i in range(len(resultado)):
+        j = i + 1
+        ws.write(j,0,resultado[i][0])
+        ws.write(j,1,resultado[i][1])
+        ws.write(j,2,resultado[i][2])
+        ws.write(j,3,resultado[i][3])
+        ws.write(j,4,resultado[i][4])
+        ws.write(j,5,resultado[i][5])
+        ws.write(j,6,resultado[i][6])
+        ws.write(j,7,resultado[i][7])
+    
+    wb.save(pasta + nome_arquivo)
+
+
+# Arquivos PDF
 def relatorio_de_usuarios_por_setor_pdf():
     pasta = 'arquivos/'
     nome_arquivo = 'relatorio.pdf'

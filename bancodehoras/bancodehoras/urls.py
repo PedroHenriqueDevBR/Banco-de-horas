@@ -10,8 +10,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views_core.dashboard, name='escolha_dashboard'),
     
-    # Testes
+    # Geração de relatório
+    path('teste/', views_rel.relarorio_de_perfis, name='teste'),
     path('teste/<str:arquivo>', views_rel.relarorio_de_perfis_baixa, name='teste_baixa'),
+    path('relatorio/', views_rel.relatorio, name='relatorio'),
+    path('relatorio/solicitacoesdoperfil/<int:id>', views_rel.solicitacoes_pendentes_do_perfil, name='rel_solicitacoes_do_perfil'),
+    path('relatorio/solicitacoesdosetor/', views_rel.solicitacoes_pendentes_do_meu_setor, name='rel_solicitacoes_do_setor'),
 
     # Painel de controle do super administrador
     path('administrador/', views_core.administrador, name='administrador'),

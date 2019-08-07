@@ -1,0 +1,15 @@
+{% extends 'core/componentes/base-dashboard.html' %}
+{% load static %}
+
+{% block content %}
+<div class="bg-light card">
+    <div class="card-body">
+        <ul class="list-group">
+            {% if perfil_logado.perfil.gerente == True %}
+            <li class="list-group-item"><a href="{% url 'rel_solicitacoes_do_setor' %}">Relatório de solicitações do meu setor</a></li>
+            {% endif %}
+            <li class="list-group-item"><a href="{% url 'rel_solicitacoes_do_perfil' perfil_logado.perfil.id %}">Relatório de movimentacoes do perfil</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
