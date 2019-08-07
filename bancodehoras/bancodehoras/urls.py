@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from core import views as views_core
+from relatorio import views as views_rel
 from usuario import views as views_usuario
 from movimentacao import views as views_mov
 from django.contrib.auth.decorators import login_required
@@ -8,6 +9,9 @@ from django.contrib.auth.decorators import login_required
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views_core.dashboard, name='escolha_dashboard'),
+    
+    # Testes
+    path('teste/<str:arquivo>', views_rel.relarorio_de_perfis_baixa, name='teste_baixa'),
 
     # Painel de controle do super administrador
     path('administrador/', views_core.administrador, name='administrador'),
