@@ -34,7 +34,6 @@ def relarorio_de_perfis_baixa(request, arquivo):
             response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
             response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
             return response
-
             
     return HttpResponse('Arquivo não encontrado.')
 

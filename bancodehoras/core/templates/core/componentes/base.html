@@ -1,24 +1,35 @@
 {% load static %}
 <!doctype html>
 <html lang="pt-br">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Banco de horas - {% block title %}{% endblock %}</title>
-    <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/>
-    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
-  </head>
-  <body>
 
-    {% block main %}
-    <h1>Ooops página não encontrada -_-</h1>
-    {% endblock %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Banco de horas - {% block title %}{% endblock %}</title>
+  <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+  <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+</head>
 
-    <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
-    <script src="{% static 'js/popper.min.js' %}"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/Chart.min.js' %}"></script>
-    <script src="{% static 'js/script.js' %}"></script>
-  </body>
+<body>
+
+  {% block main %}
+  <h1>Ooops página não encontrada -_-</h1>
+  {% endblock %}
+
+  <script src="{% static 'js/jquery-3.4.1.min.js' %}"></script>
+  <script src="{% static 'js/popper.min.js' %}"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}"></script>
+  <script src="{% static 'js/Chart.min.js' %}"></script>
+  <!-- <script src="{% static 'js/script.js' %}"></script> -->
+  <script>
+    $(document).ready(function () {
+      var endpoint = 'api/usuarios';
+
+      {% block jquery %}
+      {% endblock %}
+    })
+  </script>
+</body>
+
 </html>

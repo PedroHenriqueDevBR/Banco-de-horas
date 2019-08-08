@@ -23,15 +23,7 @@
                             {% endif %}
                         </select>
 
-                        {% if solicitacao.forma_de_pagamento %}
-                        <select class="custom-select" name="id_pagamento">
-                            {% if forma_de_pagamento %}
-                            {% for pagamento in forma_de_pagamento %}
-                            <option value="{{ pagamento.id }}">{{ pagamento.nome }}</option>
-                            {% endfor %}
-                            {% endif %}
-                        </select>
-                        {% endif %}
+                        
                     </div>
 
 

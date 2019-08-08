@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 from django.contrib import messages
@@ -186,14 +185,17 @@ def seleciona_dados(request):
     baixas = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=False), Q(status=autorizado))
     todos_os_bancos = Movimentacao.objects.filter(entrada=True, status=autorizado)
     todos_as_baixas = Movimentacao.objects.filter(entrada=False, status=autorizado)
+    meus_bancos = request.user.perfil.movimentacoes.filter(entrada=True, status=autorizado)
+    minhas_baixas = request.user.perfil.movimentacoes.filter(entrada=False, status=autorizado)
     
     format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
+    my_format = FuncionalidadesMovimentacao(meus_bancos, minhas_baixas)
     func = Utilidades()
     
     dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=True), Q(status=analise))
     dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=False), Q(status=analise))
     dados['totalpendente'] = len(dados['bancospendentes']) + len(dados['baixaspendentes'])
-    dados['horas_disponiveis'] = format_data.total_de_horas_disponivel(autorizado)
+    dados['horas_disponiveis'] = my_format.total_de_horas_disponivel(autorizado)
     dados['perfil_logado'] = request.user
     dados['horas_solicitadas'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
     dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])

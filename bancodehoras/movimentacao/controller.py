@@ -68,6 +68,23 @@ class FuncionalidadesMovimentacao:
         return self.formatar.converter_minutos_em_horas(total_entrada - total_saida)
 
 
+    def total_de_horas_disponivel_do_perfil(self, base, bancos, baixas):
+        total_entrada = 0
+        total_saida = 0
+        
+        for banco in bancos:
+            if banco.status == base:
+               total_entrada += self.formatar.converte_hora_em_minutos(banco.hora_total)
+
+        for baixa in baixas:
+            if baixa.status == base:
+               total_saida += self.formatar.converte_hora_em_minutos(baixa.hora_total)
+
+        # import pdb; pdb.set_trace()
+
+        return self.formatar.converter_minutos_em_horas(total_entrada - total_saida)
+
+
     def calcular_total_de_horas(self, obj):
         total_min = 0
         # import pdb; pdb.set_trace()
