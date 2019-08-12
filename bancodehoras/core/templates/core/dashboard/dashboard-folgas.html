@@ -6,19 +6,11 @@
 <div class="container bg-light card px-0">
     {% include 'core/componentes/barra-menu-dashboard.html' %}
 
-    <div class="container">
-        <div class="row">
-            <div class="card col">
-                <div class="card-body">
-                    <canvas id="general-vision" width="100%" height="60px"></canvas>
-                </div>
-            </div>
+    <h2 class="container"> Painel de gestão </h2>
 
-            <div class="card col">
-                <div class="card-body">
-                    <canvas id="chart-colaborador-extras-cadastrados" width="100%" height="50px"></canvas>
-                </div>
-            </div>
+    <div class="card full-w">
+        <div class="card-body">
+            <canvas id="general-vision" width="100%" height="50px"></canvas>
         </div>
     </div>
 </div>
@@ -43,31 +35,117 @@
                 </thead>
                 <tbody>
         </div>
-                    {% for baixa in solciitacoes_pendentes %}
-                    <tr>
-                        <th scope="row">{{ baixa.data_cadastro }}</th>
-                        <th scope="row">{{ baixa.data_movimentacao }}</th>
-                        <td>{{ baixa.hora_total }}</td>
-                        <td class="text-warning">{{ baixa.status.nome }}</td>
-                        <td><a href="{% url 'solicitacoes_mostrar' baixa.id %}">Acessar</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        {% for baixa in solciitacoes_pendentes %}
+        <tr>
+            <th scope="row">{{ baixa.data_cadastro }}</th>
+            <th scope="row">{{ baixa.data_movimentacao }}</th>
+            <td>{{ baixa.hora_total }}</td>
+            <td class="text-warning">{{ baixa.status.nome }}</td>
+            <td><a href="{% url 'solicitacoes_mostrar' baixa.id %}">Acessar</a></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        </table>
 
-            <nav class="full-w d-flex justify-content-center">
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Próxima</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+        <nav class="full-w d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="#">Próxima</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
+</div>
 {% endif %}
+
+<script>
+
+    function chart() {
+        var ctx = document.getElementById('general-vision').getContext('2d');
+        var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: [
+            {% if dados_grafico %}
+              {% for colaborador in dados_grafico %}
+                '{{ colaborador.nome }}',
+              {% endfor %}
+            {% endif %}
+            ],
+            datasets: [{
+              label: 'Total de horas disponíveis',
+              data: [
+                {% if dados_grafico %}
+                    {% for colaborador in dados_grafico %}
+                        {{ colaborador.total_horas }},
+                    {% endfor %}
+                {% endif %}
+              ],
+              backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)',
+                'rgba(153, 102, 255, 0.2)',
+                'rgba(255, 159, 64, 0.2)'
+              ],
+              borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)',
+                'rgba(153, 102, 255, 1)',
+                'rgba(255, 159, 64, 1)'
+              ],
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              yAxes: [{
+                ticks: {
+                  beginAtZero: true
+                }
+              }]
+            }
+          }
+        });
+      };
+
+    addEventListener('load', chart);
+
+</script>
 
 {% endblock %}

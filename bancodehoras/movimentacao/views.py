@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import datetime
 from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
+from core.controller import FuncionalidadesCore
 from core.models import *
 
 
@@ -14,8 +15,27 @@ class PainelDeControleSolicitacoesView(View):
     def get(self, request):
         func = Utilidades()
         dados = seleciona_dados(request)
+        setor = request.user.perfil.setor
+        dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
+        dados['dados_grafico'] = self.formata_dados_do_grafico(request)
         dados['solciitacoes_pendentes'] = func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=True)
         return render(request, self.template_name, dados)
+
+    def formata_dados_do_grafico(self, request):
+        funcionalidade = FuncionalidadesMovimentacao([], [])
+        autorizado = Status.objects.filter(autorizado=True)[0]
+        perfis = request.user.perfil.setor.perfis_do_setor.all()
+        resultado = []
+    
+        for perfil in perfis:
+            bancos = perfil.movimentacoes.filter(entrada=True, status=autorizado)
+            baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
+            resultado.append({
+                'nome': perfil.nome,
+                'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+            })
+        
+        return resultado
 
 
 class PainelDeControleFolgasView(View):
@@ -24,8 +44,27 @@ class PainelDeControleFolgasView(View):
     def get(self, request):
         func = Utilidades()
         dados = seleciona_dados(request)
+        setor = request.user.perfil.setor
+        dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
+        dados['dados_grafico'] = self.formata_dados_do_grafico(request)
         dados['solciitacoes_pendentes'] = func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=False)
         return render(request, self.template_name, dados)
+
+    def formata_dados_do_grafico(self, request):
+        funcionalidade = FuncionalidadesMovimentacao([], [])
+        autorizado = Status.objects.filter(autorizado=True)[0]
+        perfis = request.user.perfil.setor.perfis_do_setor.all()
+        resultado = []
+    
+        for perfil in perfis:
+            bancos = perfil.movimentacoes.filter(entrada=True, status=autorizado)
+            baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
+            resultado.append({
+                'nome': perfil.nome,
+                'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+            })
+        
+        return resultado
 
 
 class SolicitacaoBancoDeHorasView(View):
