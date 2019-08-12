@@ -7,6 +7,7 @@ from datetime import datetime
 from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
 from core.controller import FuncionalidadesCore
 from core.models import *
+from django.core.paginator import Paginator
 
 
 class PainelDeControleSolicitacoesView(View):
@@ -151,7 +152,19 @@ def solicitacao(request):
 def listar_solicitacoes(request, id):
     tamplate_name = 'movimentacao/listagem-solicitacoes.html'
     dados = seleciona_dados(request)
-    dados['solicitacoes'] = User.objects.get(username=id).perfil.movimentacoes.all()
+    
+    # Sistema de paginação
+    paginacao = Paginator(User.objects.get(username=id).perfil.movimentacoes.all()[::-1], 15)
+    page = request.GET.get('pagina')
+    dados['username'] = id
+
+    try:
+        dados['solicitacoes'] = paginacao.get_page(page)
+    except Exception:
+        dados['solicitacoes'] = paginacao.page(1)
+        if page is not None:
+            messages.add_message(request, messages.INFO, 'A página {} não existe'.format(page))
+
 
     return render(request, tamplate_name, dados)
 

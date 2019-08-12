@@ -22,7 +22,7 @@
                 </thead>
                 <tbody>
                     {% for solicitacao in solicitacoes %}
-                    <tr>
+                    <tr {% if solicitacao.entrada %} class="table-success" {% else %} class="table-danger" {% endif %}>
                         <td>{{ solicitacao.data_movimentacao }}</td>
                         <td>{{ solicitacao.hora_total }}</td>
                         <td>
@@ -42,14 +42,50 @@
                             <span class="badge badge-danger"> {{ solicitacao.status.nome }}</span>
                             {% endif %}
                         </td>
-                        <td><a href="{% url 'solicitacoes_mostrar' solicitacao.id %}">Acessar</a></td>
+                        <td><a href="{% url 'solicitacoes_mostrar' solicitacao.id %}" class="text-dark">Acessar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    <div class="d-flex justify-content-center bg-secondary pt-3">
+        <nav aria-label="Paginacao">
+            <ul class="pagination">
+                {% if solicitacoes.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?pagina={{ solicitacoes.previous_page_number }}">Voltar</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1" aria-disabled="true">Voltar</a>
+                </li>
+                {% endif %}
+
+
+                {% if solicitacoes.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?pagina={{ solicitacoes.next_page_number }}">Próximo</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" tabindex="-1" aria-disabled="true">Próximo</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
 </div>
+{% else %}
+
+<div class="card">
+    <div class="card-body">
+        Nenhuma solicitação realizada pelo perfil selecionado
+    </div>
+</div>
+
 {% endif %}
 
 {% endblock %}
