@@ -45,3 +45,7 @@ class LogMovimentacao(models.Model):
     log = models.TextField()
     perfil_emissor = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='logs_movimentacao_emitidos')
     movimentacao = models.ForeignKey(Movimentacao, on_delete=models.CASCADE, related_name='log_movimentacoes')
+
+class Hash(models.Model):
+    chave = models.CharField(max_length=50)
+    valor = models.CharField(max_length=50)
