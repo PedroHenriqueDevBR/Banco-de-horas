@@ -38,10 +38,10 @@ urlpatterns = [
     path('paineldecontrole/solicitacoes/listartodos/<str:id>/', views_mov.listar_solicitacoes, name='listar_solicitacoes'),
     path('paineldecontrole/solicitacoes/mostrar/<int:id>', views_mov.solicitacao_mostra_view, name='solicitacoes_mostrar'),
     path('paineldecontrole/solicitacoes/finalizar/<int:id>', views_mov.solciitacao_finaliza, name='solicitacoes_finalizar'),
-    path('paineldecontrole/solicitacoes/pendentes', login_required(views_mov.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
-    path('paineldecontrole/baixas/pendentes', login_required(views_mov.PainelDeControleFolgasView.as_view() ,login_url='login'), name='dashboard_baixas'),
-    path('paineldecontrole/solicitacoes/bancodehoras', login_required(views_mov.SolicitacaoBancoDeHorasView.as_view() ,login_url='login'), name='solicitacoes_banco_de_horas'),
-    path('paineldecontrole/solicitacoes/baixas', login_required(views_mov.SolicitacaoBaixaView.as_view() ,login_url='login'), name='solicitacoes_baixas'),
+    path('paineldecontrole/solicitacoes/bancodehoras/pendentes/', login_required(views_mov.PainelDeControleSolicitacoesView.as_view() ,login_url='login'), name='dashboard_solicitacoes'),
+    path('paineldecontrole/solicitacoes/baixas/pendentes/', login_required(views_mov.PainelDeControleFolgasView.as_view() ,login_url='login'), name='dashboard_baixas'),
+    path('paineldecontrole/solicitacoes/bancodehoras/', login_required(views_mov.SolicitacaoBancoDeHorasView.as_view() ,login_url='login'), name='solicitacoes_banco_de_horas'),
+    path('paineldecontrole/solicitacoes/baixas/', login_required(views_mov.SolicitacaoBaixaView.as_view() ,login_url='login'), name='solicitacoes_baixas'),
 
     # usuario
     path('login/', views_usuario.LoginUsuarioView.as_view(), name='login'),
