@@ -25,6 +25,8 @@ urlpatterns = [
     path('administrador/usuario/<str:id>', views_core.administrador_mostra_usuario, name='administrador_usuario_id'),
 
     path('administrador/extra', views_core.administrador_extra, name='administrador_extra'),
+    path('administrador/extra/modificarconfiguracao/<int:id>', views_core.hash_edit, name='hash'),
+
     path('administrador/status/cadastro', views_core.status, name='cadastrar_status'),
     path('administrador/status/tornarpadrao/analise/<int:id>', views_core.status_torna_padrao_analise, name='status_tornar_padrao_analise'),
     path('administrador/status/tornarpadrao/autorizado/<int:id>', views_core.status_torna_padrao_autorizado, name='status_tornar_padrao_autorizado'),

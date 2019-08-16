@@ -35,16 +35,22 @@ class FuncionalidadesCore:
             print('Chave inválida')
         return valor
 
-    def hash_edit(chave, valor):
-        if hash_valid(chave, valor):
-            try:
-                hash = Hash.objects.filter(chave=chave)[0]
-                hash.valor = valor
-                return True
-            except Exception:
-                return False
+    def hash_edit(objeto=None, chave=None, valor=None):
+        if objeto is not None:
+            objeto.valor = valor
+            import pdb; pdb.set_trace()
+            objeto.save()
+            return True
+        else:
+            if hash_valid(chave, valor):
+                try:
+                    hash_obj = Hash.objects.filter(chave=chave)[0]
+                    hash_obj.valor = valor
+                    return True
+                except Exception:
+                    return False
 
-        return False
+            return False
 
     def hash_valid(chave, valor):
         return len(chave) > 0 and len(valor) > 0

@@ -7,15 +7,26 @@
         <h1>Controle de dados</h1>
     </div>
 
+    <div class="card col-sm-12 px-0">
+        <div class="card-footer d-flex justify-content-center">
+            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-pagamento">cadastrar
+                pagamento</button>
+            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-status">cadastrar
+                status</button>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
-            <div class="card col col-sm-12">
+            <div class="card col col-sm-12 pb-3">
                 <div class="card-body text-center px-0">
                     {% if status %}
-                    <h2>Status</h2>
+                    <div class="card-header bg-secondary text-white">
+                        <h2>Status</h2>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table table-tableless">
-                            <thead>
+                        <table class="table table-tableless table-striped border">
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>Nome</th>
                                     <th>Analise</th>
@@ -47,7 +58,6 @@
                                     <td><a href="#"> Modificar </a></td>
                                 </tr>
                                 {% endfor %}
-
                             </tbody>
                         </table>
                     </div>
@@ -55,13 +65,15 @@
                 </div>
             </div>
 
-            <div class="card col col-sm-12">
+            <div class="card col col-sm-12 pb-3">
                 <div class="card-body text-center px-0">
                     {% if formasdepagamentos %}
-                    <h2>Forma de pagamento</h2>
+                    <div class="card-header bg-secondary text-white">
+                        <h2>Forma de pagamento</h2>
+                    </div>
                     <div class="table-responsive">
-                        <table class="table table-tableless">
-                            <thead>
+                        <table class="table table-tableless table-striped border">
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>Tipo</th>
                                     <th>Hora dupla</th>
@@ -89,15 +101,34 @@
                 </div>
             </div>
 
-            <div class="card col-sm-12 px-0">
-                <div class="card-footer d-flex justify-content-center">
-                    <button class="btn btn-primary mx-1" data-toggle="modal"
-                        data-target="#cadastrar-pagamento">cadastrar
-                        pagamento</button>
-                    <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-status">cadastrar
-                        status</button>
+            <div class="card col col-sm-12 pb-3">
+                <div class="card-header bg-secondary text-white mt-4">
+                    <h2>Configuração</h2>
+                </div>
+                <div class="card-body px-0 py-0">
+                    <div class="table-responsive">
+                        <table class="table table-tableless table-striped border">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Configuração</th>
+                                    <th>valor</th>
+                                    <th>Alterar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for configuracao in configuracoes %}
+                                <tr>
+                                    <td>{{ configuracao.nome }}</td>
+                                    <td>{{ configuracao.valor }}</td>
+                                    <td><a href="{% url 'hash' configuracao.id %}">Alterar</a></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

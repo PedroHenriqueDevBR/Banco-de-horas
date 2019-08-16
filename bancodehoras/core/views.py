@@ -75,6 +75,7 @@ def administrador_extra(request):
     tamplate_name = 'core/super/super-dados-extras.html'
     dados = seleciona_dados(request)
     dados['formasdepagamentos'] = FormaDePagamento.objects.all()
+    dados['configuracoes'] = Hash.objects.all()
     return render(request, tamplate_name, dados)
 
 
@@ -233,10 +234,21 @@ def hash_edit(request, chave):
     return redirect('administrador_extra')
 
 
-def hash_edit(chave, valor):
-    funcionalidades = FuncionalidadesCore()
-    if funcionalidades.hash_edit(chave, valor):
-        messages.add_message(request, messages.INFO, 'Configuração modificada com sucesso.')
+@login_required(login_url='login')
+def hash_edit(request, id):
+    if request.method == 'POST':
+        valor = request.POST.get('valor')
+        if len(valor) > 0:
+            funcionalidades = FuncionalidadesCore()
+            hash_obj = Hash.objects.get(id=id)
+            hash_obj.valor = valor
+            hash_obj.save()
+            
+            messages.add_message(request, messages.INFO, 'Configuração modificada com sucesso.')
+            return redirect('administrador_extra')
+        messages.add_message(request, messages.INFO, 'Digite algo na configuração')
+        return redirect('administrador_extra')
     else:
-        messages.add_message(request, messages.INFO, 'Problema na modificação dos dados.')
-    return redirect('administrador_extra')
+        dados = seleciona_dados(request)
+        dados['configuracao'] = Hash.objects.get(id=id)
+        return render(request, 'core/super/alterar-configuracao.html', dados)
