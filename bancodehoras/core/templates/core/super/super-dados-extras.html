@@ -55,7 +55,7 @@
                                     <td><a href="{% url 'status_tornar_padrao_autorizado' statu.id %}">Selecionar</a>
                                     </td>
                                     <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
-                                    <td><a href="#"> Modificar </a></td>
+                                    <td><a href="{% url 'status_editar' statu.id %}"> Modificar </a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -78,6 +78,7 @@
                                     <th>Tipo</th>
                                     <th>Hora dupla</th>
                                     <th>Opção</th>
+                                    <th>Modificar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,6 +93,7 @@
                                         {% endif %}
                                     </td>
                                     <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}">Deletar</a></td>
+                                    <td><a href="{% url 'forma_de_pagamento_editar' pagamento.id %}">Modificar</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>

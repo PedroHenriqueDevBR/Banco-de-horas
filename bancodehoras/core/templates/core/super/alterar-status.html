@@ -1,0 +1,23 @@
+{% extends 'core/componentes/base-dashboard.html' %}
+
+{% block content %}
+<div class="container bg-light card px-0 text-center">
+    <div class="card-header px-0">
+        <h1>Alterar Status</h1>
+    </div>
+    <div class="card-body">
+        <p>Alteração do status: <span class="font-weight-bold">{{ status.nome }}</span></p>
+
+        <div class="row">
+            <div class="col col-sm-12 col-md-6 offset-md-3">
+                <form method="POST">{% csrf_token %}
+                    <div class="form-group">
+                        <input name="nome" type="text" class="form-control" placeholder="Digite novo valor" value="{{ status.nome }}">
+                        <button class="btn btn-success full-w">Alterar valor</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -169,6 +169,24 @@ def status_delete(request, id):
     return redirect('administrador_extra')
 
 
+@login_required(login_url='login')
+def status_editar(request, id):
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        if len(nome) > 0:
+            status = Status.objects.get(id=id)
+            status.nome = nome
+            status.save()
+            messages.add_message(request, messages.INFO, 'Status modificado com sucesso.')
+        else:
+            messages.add_message(request, messages.INFO, 'Digite algo para editar')
+        return redirect('administrador_extra')
+    else:
+        dados = seleciona_dados(request)
+        dados['status'] = Status.objects.get(id=id)
+        return render(request, 'core/super/alterar-status.html', dados)
+
+
 def salvar_novo_padrao_analise(id=None):
     if not id:
         status = Status.objects.all()
@@ -225,6 +243,24 @@ def forma_de_pagamento_delete(request, id):
     pagamento = FormaDePagamento.objects.get(id=id)
     pagamento.delete()
     return redirect('administrador_extra')
+
+
+@login_required(login_url='login')
+def forma_de_pagamento_editar(request, id):
+    if request.method == 'POST':
+        nome = request.POST.get('nome')
+        if len(nome) > 0:
+            pagamento = FormaDePagamento.objects.get(id=id)
+            pagamento.nome = nome
+            pagamento.save()
+            messages.add_message(request, messages.INFO, 'Forma de pagamento modificado com sucesso.')
+        else:
+            messages.add_message(request, messages.INFO, 'Digite algo para editar')
+        return redirect('administrador_extra')
+    else:
+        dados = seleciona_dados(request)
+        dados['pagamento'] = FormaDePagamento.objects.get(id=id)
+        return render(request, 'core/super/alterar-formadepagamento.html', dados)
 
 
 @login_required(login_url='login')

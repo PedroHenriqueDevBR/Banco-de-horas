@@ -30,8 +30,10 @@ urlpatterns = [
     path('administrador/status/cadastro', views_core.status, name='cadastrar_status'),
     path('administrador/status/tornarpadrao/analise/<int:id>', views_core.status_torna_padrao_analise, name='status_tornar_padrao_analise'),
     path('administrador/status/tornarpadrao/autorizado/<int:id>', views_core.status_torna_padrao_autorizado, name='status_tornar_padrao_autorizado'),
+    path('administrador/status/editar/<int:id>', views_core.status_editar, name='status_editar'),
     path('administrador/status/deletar/<int:id>', views_core.status_delete, name='status_deletar'),
     path('administrador/formadepagamento/cadastro', views_core.forma_de_pagamento, name='forma_de_pagamento'),
+    path('administrador/formadepagamento/editar/<int:id>', views_core.forma_de_pagamento_editar, name='forma_de_pagamento_editar'),
     path('administrador/formadepagamento/deletar/<int:id>', views_core.forma_de_pagamento_delete, name='forma_de_pagamento_deletar'),
     
     # Painel de controle
