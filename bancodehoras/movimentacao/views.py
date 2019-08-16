@@ -18,7 +18,7 @@ class PainelDeControleSolicitacoesView(View):
         dados = seleciona_dados(request)
         setor = request.user.perfil.setor
         dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
-        dados['dados_grafico'] = self.formata_dados_do_grafico(request)  # TODO: Verificar solicitacoes pendentes
+        dados['dados_grafico'] = self.formata_dados_do_grafico(request)
 
         # Sistema de paginação
         paginacao = Paginator(func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=True), 5)
@@ -61,7 +61,7 @@ class PainelDeControleFolgasView(View):
         dados = seleciona_dados(request)
         setor = request.user.perfil.setor
         dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
-        dados['dados_grafico'] = self.formata_dados_do_grafico(request)  # TODO: Verificar baixas pendentes
+        dados['dados_grafico'] = self.formata_dados_do_grafico(request)
 
         # Sistema de paginação
         paginacao = Paginator(func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=False), 5)

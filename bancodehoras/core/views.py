@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from datetime import datetime
+from core.controller import FuncionalidadesCore
 from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao 
 from movimentacao.views import seleciona_dados
 
@@ -17,7 +18,6 @@ def dashboard(request):
     dados = seleciona_dados(request)
     dados['colaboradores_do_setor'] = setor.perfis_do_setor.all()
     dados['dados_grafico'] = formata_dados_do_grafico(request)
-    # import pdb; pdb.set_trace()
     return render(request, tamplate_name, dados)
 
 
@@ -35,10 +35,7 @@ def formata_dados_do_grafico(request):
             'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
         })
 
-        # import pdb; pdb.set_trace()
-
     return resultado
-
 
 
 # Administrador
@@ -226,4 +223,20 @@ def forma_de_pagamento(request):
 def forma_de_pagamento_delete(request, id):
     pagamento = FormaDePagamento.objects.get(id=id)
     pagamento.delete()
+    return redirect('administrador_extra')
+
+
+@login_required(login_url='login')
+def hash_edit(request, chave):
+    pagamento = FormaDePagamento.objects.get(id=id)
+    pagamento.delete()
+    return redirect('administrador_extra')
+
+
+def hash_edit(chave, valor):
+    funcionalidades = FuncionalidadesCore()
+    if funcionalidades.hash_edit(chave, valor):
+        messages.add_message(request, messages.INFO, 'Configuração modificada com sucesso.')
+    else:
+        messages.add_message(request, messages.INFO, 'Problema na modificação dos dados.')
     return redirect('administrador_extra')
