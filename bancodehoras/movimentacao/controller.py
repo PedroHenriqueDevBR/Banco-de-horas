@@ -1,5 +1,5 @@
 class FormataDados:
-    def calcular_hora(self, inicio, fim):
+    def calcular_hora(self, inicio, fim, multiplo):
         if ':' not in inicio or ':' not in fim:
             return 0
 
@@ -9,13 +9,15 @@ class FormataDados:
         if hora_inicio > hora_final:
             return 0
         else:
-            return self.converter_minutos_em_horas(hora_final - hora_inicio)
+            total = int((hora_final - hora_inicio) * multiplo)
+            # import pdb; pdb.set_trace()
+            return self.converter_minutos_em_horas(total)
 
 
     def converte_hora_em_minutos(self, hora_completa):
         if ':' not in hora_completa:
             return 0
-        
+        import pdb; pdb.set_trace()
         horas = int(hora_completa.split(':')[0]) * 60
         minutos = int(hora_completa.split(':')[1])
 

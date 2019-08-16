@@ -35,22 +35,25 @@ class PainelDeControleSolicitacoesView(View):
         return render(request, self.template_name, dados)
 
     def formata_dados_do_grafico(self, request):
-        funcionalidade = FuncionalidadesMovimentacao([], [])
-        autorizado = Status.objects.filter(autorizado=True)[0]
-        perfis = request.user.perfil.setor.perfis_do_setor.all()
-        resultado = []
+        try:
+            funcionalidade = FuncionalidadesMovimentacao([], [])
+            autorizado = Status.objects.filter(autorizado=True)[0]
+            perfis = request.user.perfil.setor.perfis_do_setor.all()
+            resultado = []
 
-        for perfil in perfis:
-            bancos = perfil.movimentacoes.filter(
-                entrada=True, status=autorizado)
-            baixas = perfil.movimentacoes.filter(
-                entrada=False, status=autorizado)
-            resultado.append({
-                'nome': perfil.nome,
-                'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
-            })
+            for perfil in perfis:
+                bancos = perfil.movimentacoes.filter(
+                    entrada=True, status=autorizado)
+                baixas = perfil.movimentacoes.filter(
+                    entrada=False, status=autorizado)
+                resultado.append({
+                    'nome': perfil.nome,
+                    'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+                })
 
-        return resultado
+            return resultado
+        except Exception:
+            return []
 
 
 class PainelDeControleFolgasView(View):
@@ -78,22 +81,26 @@ class PainelDeControleFolgasView(View):
         return render(request, self.template_name, dados)
 
     def formata_dados_do_grafico(self, request):
-        funcionalidade = FuncionalidadesMovimentacao([], [])
-        autorizado = Status.objects.filter(autorizado=True)[0]
-        perfis = request.user.perfil.setor.perfis_do_setor.all()
-        resultado = []
+        try:
+            funcionalidade = FuncionalidadesMovimentacao([], [])
+            autorizado = Status.objects.filter(autorizado=True)[0]
+            perfis = request.user.perfil.setor.perfis_do_setor.all()
+            resultado = []
 
-        for perfil in perfis:
-            bancos = perfil.movimentacoes.filter(
-                entrada=True, status=autorizado)
-            baixas = perfil.movimentacoes.filter(
-                entrada=False, status=autorizado)
-            resultado.append({
-                'nome': perfil.nome,
-                'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
-            })
+            for perfil in perfis:
+                bancos = perfil.movimentacoes.filter(
+                    entrada=True, status=autorizado)
+                baixas = perfil.movimentacoes.filter(
+                    entrada=False, status=autorizado)
+                resultado.append({
+                    'nome': perfil.nome,
+                    'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+                })
 
-        return resultado
+            return resultado
+            
+        except Exception:
+            return []
 
 
 class SolicitacaoBancoDeHorasView(View):
@@ -123,7 +130,8 @@ class SolicitacaoBancoDeHorasView(View):
         status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
         format_data = FormataDados()
-        hora_total = format_data.calcular_hora(hora_inicial, hora_final)
+        multiplo = float(Hash.objects.filter(chave='multiplo_banco')[0].valor)
+        hora_total = format_data.calcular_hora(hora_inicial, hora_final, multiplo)
         data_movimentacao_formatada = datetime.strptime(
             data_movimentacao, '%Y-%m-%d').date()
 

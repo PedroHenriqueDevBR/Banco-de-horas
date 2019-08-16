@@ -22,20 +22,24 @@ def dashboard(request):
 
 
 def formata_dados_do_grafico(request):
-    funcionalidade = FuncionalidadesMovimentacao([], [])
-    autorizado = Status.objects.filter(autorizado=True)[0]
-    perfis = request.user.perfil.setor.perfis_do_setor.all()
-    resultado = []
+    try:
+        funcionalidade = FuncionalidadesMovimentacao([], [])
+        autorizado = Status.objects.filter(autorizado=True)[0]
+        perfis = request.user.perfil.setor.perfis_do_setor.all()
+        resultado = []
 
-    for perfil in perfis:
-        bancos = perfil.movimentacoes.filter(entrada=True, status=autorizado)
-        baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
-        resultado.append({
-            'nome': perfil.nome,
-            'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
-        })
+        for perfil in perfis:
+            bancos = perfil.movimentacoes.filter(entrada=True, status=autorizado)
+            baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
+            resultado.append({
+                'nome': perfil.nome,
+                'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+            })
 
-    return resultado
+        return resultado
+        
+    except Exception:
+        return []
 
 
 # Administrador
