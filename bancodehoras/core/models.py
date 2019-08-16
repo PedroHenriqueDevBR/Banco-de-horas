@@ -47,5 +47,6 @@ class LogMovimentacao(models.Model):
     movimentacao = models.ForeignKey(Movimentacao, on_delete=models.CASCADE, related_name='log_movimentacoes')
 
 class Hash(models.Model):
+    nome = models.CharField(max_length=50)
     chave = models.CharField(max_length=50)
     valor = models.CharField(max_length=50)
