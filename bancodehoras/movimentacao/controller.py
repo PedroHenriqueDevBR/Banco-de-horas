@@ -17,7 +17,6 @@ class FormataDados:
     def converte_hora_em_minutos(self, hora_completa):
         if ':' not in hora_completa:
             return 0
-        import pdb; pdb.set_trace()
         horas = int(hora_completa.split(':')[0]) * 60
         minutos = int(hora_completa.split(':')[1])
 

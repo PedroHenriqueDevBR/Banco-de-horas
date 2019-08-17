@@ -184,19 +184,27 @@ class SolicitacaoBaixaView(View):
         total_horas = request.POST.get('horas_total')
         status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
-        total_horas = '0{}:00'.format(total_horas) if int(
-            total_horas) < 10 else '{}:00'.format(total_horas)
+        total_horas = '0{}:00'.format(total_horas) if int(total_horas) < 10 else '{}:00'.format(total_horas)
 
-        Movimentacao.objects.create(
-            data_movimentacao=data_folga,
-            entrada=False,
-            hora_total=total_horas,
-            status=status,
-            colaborador=solicitante
-        )
+        # Verifica saldo de horas
+        funcionalidade = FormataDados()
+        dados = seleciona_dados(request)
 
-        messages.add_message(request, messages.INFO,
-                             'Baixa solicitada com sucesso.')
+        horas_solicitadas = funcionalidade.converte_hora_em_minutos(total_horas)
+        horas_disponiveis = funcionalidade.converte_hora_em_minutos(dados['horas_disponiveis'])
+
+        if horas_solicitadas > horas_disponiveis:
+            messages.add_message(request, messages.INFO, 'Horas disponívies não suficiente.')
+        else:
+            Movimentacao.objects.create(
+                data_movimentacao=data_folga,
+                entrada=False,
+                hora_total=total_horas,
+                status=status,
+                colaborador=solicitante
+            )
+
+            messages.add_message(request, messages.INFO,'Baixa solicitada com sucesso.')
         return redirect('solicitacoes')
 
 
@@ -299,36 +307,24 @@ def seleciona_dados(request):
     except Exception:
         autorizado = None
 
-    bancos = request.user.perfil.movimentacoes.all().filter(
-        Q(finalizado=True), Q(entrada=True), Q(status=autorizado))
-    baixas = request.user.perfil.movimentacoes.all().filter(
-        Q(finalizado=True), Q(entrada=False), Q(status=autorizado))
-    todos_os_bancos = Movimentacao.objects.filter(
-        entrada=True, status=autorizado)
-    todos_as_baixas = Movimentacao.objects.filter(
-        entrada=False, status=autorizado)
-    meus_bancos = request.user.perfil.movimentacoes.filter(
-        entrada=True, status=autorizado)
-    minhas_baixas = request.user.perfil.movimentacoes.filter(
-        entrada=False, status=autorizado)
+    bancos = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=True), Q(status=autorizado))
+    baixas = request.user.perfil.movimentacoes.all().filter(Q(finalizado=True), Q(entrada=False), Q(status=autorizado))
+    todos_os_bancos = Movimentacao.objects.filter(entrada=True, status=autorizado)
+    todos_as_baixas = Movimentacao.objects.filter(entrada=False, status=autorizado)
+    meus_bancos = request.user.perfil.movimentacoes.filter(entrada=True, status=autorizado)
+    minhas_baixas = request.user.perfil.movimentacoes.filter(entrada=False, status=autorizado)
 
     format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
     my_format = FuncionalidadesMovimentacao(meus_bancos, minhas_baixas)
     func = Utilidades()
 
-    dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(
-        Q(entrada=True), Q(status=analise))
-    dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(
-        Q(entrada=False), Q(status=analise))
-    dados['totalpendente'] = len(
-        dados['bancospendentes']) + len(dados['baixaspendentes'])
-    dados['horas_disponiveis'] = my_format.total_de_horas_disponivel(
-        autorizado)
+    dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=True), Q(status=analise))
+    dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=False), Q(status=analise))
+    dados['totalpendente'] = len(dados['bancospendentes']) + len(dados['baixaspendentes'])
+    dados['horas_disponiveis'] = my_format.total_de_horas_disponivel(autorizado)
     dados['perfil_logado'] = request.user
-    dados['horas_solicitadas'] = format_data.calcular_total_de_horas(
-        dados['bancospendentes'])
-    dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(
-        dados['baixaspendentes'])
+    dados['horas_solicitadas'] = format_data.calcular_total_de_horas(dados['bancospendentes'])
+    dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
     dados['horas_autorizadas'] = format_data.calcular_total_de_horas(bancos)
     dados['baixas_autorizadas'] = format_data.calcular_total_de_horas(baixas)
     dados['status'] = Status.objects.all()
