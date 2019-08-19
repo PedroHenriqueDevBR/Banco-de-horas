@@ -18,7 +18,7 @@
         <div class="col col-md-3 bg-light px-0 sticky-top" style="height: 100vh;">
             <ul class="list-group">
                 {% if perfil_logado.is_superuser %}
-                <a href="{% url 'administrador_setor' %}"
+                <a href="{% url 'setor' %}"
                     class="list-group-item list-group-item-action list-group-item-light">Controle de setor</a>
                 <a href="{% url 'administrador_extra' %}"
                     class="list-group-item list-group-item-action list-group-item-light">Dados para cadastro</a>

@@ -77,7 +77,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-cadastrar-setor" action="{% url 'cadastrar_setor' %}" method="POST">{% csrf_token %}
+                <form id="form-cadastrar-setor" action="{% url 'setor' %}" method="POST">{% csrf_token %}
                     <div class="form-group">
                         <label for="form-input-motivo" class="col-form-label">Nome do setor:</label>
                         <input class="form-control" name="nome_setor" type="text"

@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from core.models import *
 from django.contrib import messages 
 from usuario.forms import RegistrarUsuarioForm
+from movimentacao.views import seleciona_dados
 
 
 class LoginUsuarioView(View):
@@ -63,7 +64,7 @@ def cadastrar_usuario(request):
             messages.add_message(request, messages.INFO, 'Colaborador cadastrado com sucesso')
             return redirect('administrador_setor_id', id=setor.id)
 
-    return redirect('administrador_setor')
+    return redirect('setor')
 
 
 @login_required(login_url='login')
@@ -76,9 +77,7 @@ def atualiza_usuario(request, id):
         senha = request.POST.get('senha')
         ch_primeira = request.POST.get('ch_primeira')
         ch_segunda = request.POST.get('ch_segunda')
-
         setor = Setor.objects.get(id=id_setor)
-
         user = User.objects.get(username=id)
         user.username = matricula
         user.email = email
@@ -90,11 +89,15 @@ def atualiza_usuario(request, id):
 
         if senha != '':
             user.set_password(senha)
-        
         perfil.save()
         user.save()
 
-    return redirect('administrador_usuario_id', id=matricula)
+        return redirect('usuario_atualiza', id=matricula)
+    else:
+        dados = seleciona_dados(request)
+        dados['colaborador'] = User.objects.get(username=id)
+        dados['setores'] = Setor.objects.all()
+        return render(request, 'core/super/mostra-usuario.html', dados)
 
 
 @login_required(login_url='login')
@@ -111,7 +114,7 @@ def usuario_gerente(request, id):
     else:
         perfil.gerente = True
     perfil.save()
-    return redirect('administrador_usuario_id', id=perfil.usuario.username)
+    return redirect('usuario_atualiza', id=perfil.usuario.username)
 
 
 @login_required(login_url='login')
@@ -122,7 +125,7 @@ def usuario_administrador(request, id):
     else:
         user.is_superuser = True
     user.save()
-    return redirect('administrador_usuario_id', id=user.username)
+    return redirect('usuario_atualiza', id=user.username)
 
 
 @login_required(login_url='login')
@@ -133,4 +136,4 @@ def usuario_ativo(request, id):
     else:
         user.is_active = True
     user.save()
-    return redirect('administrador_usuario_id', id=user.username)
+    return redirect('usuario_atualiza', id=user.username)

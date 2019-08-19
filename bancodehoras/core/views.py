@@ -45,16 +45,7 @@ def formata_dados_do_grafico(request):
 # Administrador
 @login_required(login_url='login')
 def administrador(request):
-    return redirect('administrador_setor')
-
-
-@login_required(login_url='login')
-def administrador_setor(request):
-    tamplate_name = 'core/super/super-setor.html'
-    dados = seleciona_dados(request)
-    dados['setores'] = Setor.objects.all()
-    dados['colaboradores'] = Perfil.objects.all()
-    return render(request, tamplate_name, dados)
+    return redirect('setor')
 
 
 @login_required(login_url='login')
@@ -62,15 +53,6 @@ def administrador_mostra_setor(request, id):
     tamplate_name = 'core/super/mostra-setor.html'
     dados = seleciona_dados(request)
     dados['setor'] = Setor.objects.get(id=id)
-    return render(request, tamplate_name, dados)
-
-
-@login_required(login_url='login')
-def administrador_mostra_usuario(request, id):
-    tamplate_name = 'core/super/mostra-usuario.html'
-    dados = seleciona_dados(request)
-    dados['colaborador'] = User.objects.get(username=id)
-    dados['setores'] = Setor.objects.all()
     return render(request, tamplate_name, dados)
 
 
@@ -86,10 +68,16 @@ def administrador_extra(request):
 # Setor
 @login_required(login_url='login')
 def setor(request):
-    nome_setor = request.POST.get('nome_setor')
-    Setor.objects.create(nome=nome_setor)
-    messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
-    return redirect('administrador_setor')
+    if request.method == 'POST':
+        nome_setor = request.POST.get('nome_setor')
+        Setor.objects.create(nome=nome_setor)
+        messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
+        return redirect('setor')
+    else:
+        dados = seleciona_dados(request)
+        dados['setores'] = Setor.objects.all()
+        dados['colaboradores'] = Perfil.objects.all()
+        return render(request, 'core/super/super-setor.html', dados)
 
 
 @login_required(login_url='login')
@@ -98,7 +86,7 @@ def setor_atualiza(request, id):
     setor = Setor.objects.get(id=id)
     setor.nome = nome
     setor.save()
-    return redirect('administrador_setor')
+    return redirect('setor')
 
 
 @login_required(login_url='login')
@@ -112,7 +100,7 @@ def setor_delete(request, id):
         messages.add_message(request, messages.INFO, 'Setor deletado com sucesso.')
         setor.delete()
 
-    return redirect('administrador_setor')
+    return redirect('setor')
 
 
 ##

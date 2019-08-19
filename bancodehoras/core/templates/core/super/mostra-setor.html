@@ -52,7 +52,7 @@
                         <td>{{ colaborador.nome }}</td>
                         <td>{{ colaborador.usuario.username }}</td>
                         <td>{{ colaborador.usuario.email }}</td>
-                        <td><a href="{% url 'administrador_usuario_id' colaborador.usuario.username %}">Acessar</a>
+                        <td><a href="{% url 'usuario_atualiza' colaborador.usuario.username %}">Acessar</a>
                         </td>
                     </tr>
                     {% endfor %}
