@@ -1,0 +1,36 @@
+<div class="modal fade" id="solicitar-folga" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Solicitar nova folga</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'solicitacoes_baixas' %}">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="form-input-data-cadastro" class="col-form-label">Data da folga:</label>
+                        <input name="data_folga" type="date" class="form-control" id="form-input-data-cadastro">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">Carga horária</label>
+                        </div>
+                        <select class="custom-select" name="horas_total">
+                            <option selected value="total">Dia completo</option>
+                            <option value="{{ perfil_logado.perfil.ch_primeira }}">Primeira: {{ perfil_logado.perfil.ch_primeira }} horas</option>
+                            <option value="{{ perfil_logado.perfil.ch_segunda }}">Segunda: {{ perfil_logado.perfil.ch_segunda }} horas</option>
+                        </select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

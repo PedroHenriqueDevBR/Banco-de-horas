@@ -184,22 +184,28 @@ class SolicitacaoBaixaView(View):
         total_horas = request.POST.get('horas_total')
         status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
-        total_horas = '0{}:00'.format(total_horas) if int(total_horas) < 10 else '{}:00'.format(total_horas)
+        # total_horas = '0{}:00'.format(total_horas) if int(total_horas) < 10 else '{}:00'.format(total_horas)
 
         # Verifica saldo de horas
         funcionalidade = FormataDados()
         dados = seleciona_dados(request)
 
-        horas_solicitadas = funcionalidade.converte_hora_em_minutos(total_horas)
+        # import pdb; pdb.set_trace()
+
+        if total_horas == 'total':
+            horas_solicitadas = funcionalidade.converte_hora_em_minutos(str(request.user.perfil.ch_primeira)) + funcionalidade.converte_hora_em_minutos(str(request.user.perfil.ch_segunda))
+        else:
+            horas_solicitadas = funcionalidade.converte_hora_em_minutos(total_horas)
+        
         horas_disponiveis = funcionalidade.converte_hora_em_minutos(dados['horas_disponiveis'])
 
         if horas_solicitadas > horas_disponiveis:
-            messages.add_message(request, messages.INFO, 'Horas disponívies não suficiente.')
+            messages.add_message(request, messages.INFO, 'Você não possui horas disponívies.')
         else:
             Movimentacao.objects.create(
                 data_movimentacao=data_folga,
                 entrada=False,
-                hora_total=total_horas,
+                hora_total=funcionalidade.converter_minutos_em_horas(horas_solicitadas),
                 status=status,
                 colaborador=solicitante
             )

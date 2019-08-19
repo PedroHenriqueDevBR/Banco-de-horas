@@ -1,0 +1,46 @@
+<div class="modal fade" id="cadastrar-banco-de-horas" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar banco de horas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'solicitacoes_banco_de_horas' %}">{% csrf_token %}
+                    <div class="form-group">
+                        <label for="form-input-data-cadastro" class="col-form-label">Data do evento:</label>
+                        <input name="data" type="date" class="form-control" id="form-input-data-cadastro">
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="form-input-hora-inicial" class="col-form-label">Hora inicial:</label>
+                                <input name="hora_inicial" type="time" class="form-control"
+                                    id="form-input-hora-inicial">
+                            </div>
+                        </div>
+
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="form-input-hora-final" class="col-form-label">Hora final:</label>
+                                <input name="hora_final" type="time" class="form-control" id="form-input-hora-final">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="form-input-motivo" class="col-form-label">motivo:</label>
+                        <textarea name="motivo" id="form-input-motivo" rows="5" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -76,7 +76,6 @@
                             <thead class="thead-dark">
                                 <tr>
                                     <th>Tipo</th>
-                                    <th>Hora dupla</th>
                                     <th>Opção</th>
                                     <th>Modificar</th>
                                 </tr>
@@ -85,13 +84,6 @@
                                 {% for pagamento in formasdepagamentos %}
                                 <tr>
                                     <td>{{ pagamento.nome }}</td>
-                                    <td>
-                                        {% if pagamento.valor_duplo %}
-                                        Sim
-                                        {% else %}
-                                        Não
-                                        {% endif %}
-                                    </td>
                                     <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}">Deletar</a></td>
                                     <td><a href="{% url 'forma_de_pagamento_editar' pagamento.id %}">Modificar</a></td>
                                 </tr>
@@ -122,7 +114,7 @@
                                 <tr>
                                     <td>{{ configuracao.nome }}</td>
                                     <td>{{ configuracao.valor }}</td>
-                                    <td><a href="{% url 'hash' configuracao.id %}">Alterar</a></td>
+                                    <td><a href="{% url 'hash' configuracao.id %}">Modificar</a></td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
