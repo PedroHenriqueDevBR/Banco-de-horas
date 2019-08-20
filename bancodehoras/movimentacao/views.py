@@ -8,6 +8,7 @@ from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, U
 from core.controller import FuncionalidadesCore
 from core.models import *
 from django.core.paginator import Paginator
+from datetime import datetime
 import core.constants as constant
 
 
@@ -319,6 +320,7 @@ def seleciona_dados(request):
     format_data = FuncionalidadesMovimentacao(todos_os_bancos, todos_as_baixas)
     my_format = FuncionalidadesMovimentacao(meus_bancos, minhas_baixas)
     func = Utilidades()
+    now = datetime.now()
 
     dados['bancospendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=True), Q(status=analise))
     dados['baixaspendentes'] = request.user.perfil.movimentacoes.all().filter(Q(entrada=False), Q(status=analise))
@@ -329,6 +331,8 @@ def seleciona_dados(request):
     dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
     dados['horas_autorizadas'] = format_data.calcular_total_de_horas(bancos)
     dados['baixas_autorizadas'] = format_data.calcular_total_de_horas(baixas)
+    dados['horas_autorizadas_mes'] = format_data.calcular_total_de_horas(bancos.filter(data_movimentacao__month=now.month))
+    dados['baixas_autorizadas_mes'] = format_data.calcular_total_de_horas(baixas.filter(data_movimentacao__month=now.month))
     dados['status'] = Status.objects.all()
     dados['forma_de_pagamento'] = FormaDePagamento.objects.all()
 

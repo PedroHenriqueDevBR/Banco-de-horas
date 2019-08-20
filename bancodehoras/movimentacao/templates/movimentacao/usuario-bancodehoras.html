@@ -31,7 +31,15 @@
                         <td>{{ banco.hora_final }}</td>
                         <td>{{ banco.hora_total }}</td>
                         <td>{{ banco.motivo }}</td>
-                        <td class="text-warning">{{ banco.status.nome }}</td>
+                        <td>
+                            {% if banco.status.analise == True %}
+                            <span class="badge badge-warning text-white"> {{ banco.status.nome }}</span>
+                            {% elif banco.status.autorizado == True %}
+                            <span class="badge badge-success"> {{ banco.status.nome }}</span>
+                            {% else %}
+                            <span class="badge badge-danger"> {{ banco.status.nome }}</span>
+                            {% endif %}
+                        </td>
                         <td><a href="{% url 'solicitacoes_mostrar' banco.id %}">Acessar</a></td>
                     </tr>
                     {% endfor %}

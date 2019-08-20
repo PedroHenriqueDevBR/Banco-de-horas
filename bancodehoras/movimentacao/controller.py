@@ -24,6 +24,11 @@ class FormataDados:
 
 
     def converter_minutos_em_horas(self, minutos):
+        negativo = False
+        if minutos < 0:
+            minutos = minutos * -1
+            negativo = True
+
         if minutos >= 60:
             horas = minutos // 60
             minutos = minutos - (horas * 60)
@@ -39,7 +44,12 @@ class FormataDados:
         if minutos < 10:
             min_str = '0{}'.format(minutos)
 
-        return '{}:{}'.format(hora_str, min_str)
+        if negativo:
+            resultado = '- {}:{}'.format(hora_str, min_str)
+        else:
+            resultado = '{}:{}'.format(hora_str, min_str)
+
+        return resultado
 
 
 class FuncionalidadesMovimentacao:
