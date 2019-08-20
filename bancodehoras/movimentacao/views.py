@@ -8,6 +8,7 @@ from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, U
 from core.controller import FuncionalidadesCore
 from core.models import *
 from django.core.paginator import Paginator
+import core.constants as constant
 
 
 class PainelDeControleSolicitacoesView(View):
@@ -130,7 +131,7 @@ class SolicitacaoBancoDeHorasView(View):
         status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
         format_data = FormataDados()
-        multiplo = float(Hash.objects.filter(chave='multiplo_banco')[0].valor)
+        multiplo = float(Hash.objects.filter(chave=constant.VALOR_HORA)[0].valor)
         hora_total = format_data.calcular_hora(hora_inicial, hora_final, multiplo)
         data_movimentacao_formatada = datetime.strptime(
             data_movimentacao, '%Y-%m-%d').date()
@@ -147,8 +148,7 @@ class SolicitacaoBancoDeHorasView(View):
         )
         movimentacao.save()
 
-        log = 'Solicitação realizada com sucesso, solicitação de número: {}'.format(
-            movimentacao.id)
+        log = 'Solicitação realizada com sucesso, solicitação de número: {}'.format(movimentacao.id)
 
         LogMovimentacao.objects.create(
             log=log,
@@ -156,8 +156,7 @@ class SolicitacaoBancoDeHorasView(View):
             movimentacao=movimentacao
         )
 
-        messages.add_message(request, messages.INFO,
-                             'Banco de horas solicitado com sucesso.')
+        messages.add_message(request, messages.INFO, 'Banco de horas solicitado com sucesso.')
         return redirect('solicitacoes')
 
 
@@ -184,13 +183,10 @@ class SolicitacaoBaixaView(View):
         total_horas = request.POST.get('horas_total')
         status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
-        # total_horas = '0{}:00'.format(total_horas) if int(total_horas) < 10 else '{}:00'.format(total_horas)
-
+        
         # Verifica saldo de horas
         funcionalidade = FormataDados()
         dados = seleciona_dados(request)
-
-        # import pdb; pdb.set_trace()
 
         if total_horas == 'total':
             horas_solicitadas = funcionalidade.converte_hora_em_minutos(str(request.user.perfil.ch_primeira)) + funcionalidade.converte_hora_em_minutos(str(request.user.perfil.ch_segunda))

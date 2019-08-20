@@ -82,10 +82,11 @@ def setor(request):
 
 @login_required(login_url='login')
 def setor_atualiza(request, id):
-    nome = request.POST.get('nome_setor')
-    setor = Setor.objects.get(id=id)
-    setor.nome = nome
-    setor.save()
+    if request.method == 'POST':
+        nome = request.POST.get('nome_setor')
+        setor = Setor.objects.get(id=id)
+        setor.nome = nome
+        setor.save()
     return redirect('setor')
 
 
@@ -217,16 +218,17 @@ def salvar_novo_padrao_autorizado(id=None):
 
 @login_required(login_url='login')
 def forma_de_pagamento(request):
-    forma_de_pagamento = request.POST.get('forma_de_pagamento')
-    valor_duplo = request.POST.get('valor_duplo')
-    valor_duplo = False if valor_duplo is None else True
+    if request.method == 'POST':
+        forma_de_pagamento = request.POST.get('forma_de_pagamento')
+        valor_duplo = request.POST.get('valor_duplo')
+        valor_duplo = False if valor_duplo is None else True
 
-    pagamentos = FormaDePagamento.objects.filter(nome=forma_de_pagamento)
-    if len(pagamentos) > 0:
-        messages.add_message(request, messages.INFO, 'Forma de pagamento já cadastrada.')
-    else:
-        FormaDePagamento.objects.create(nome=forma_de_pagamento, valor_duplo=valor_duplo)
-        messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
+        pagamentos = FormaDePagamento.objects.filter(nome=forma_de_pagamento)
+        if len(pagamentos) > 0:
+            messages.add_message(request, messages.INFO, 'Forma de pagamento já cadastrada.')
+        else:
+            FormaDePagamento.objects.create(nome=forma_de_pagamento, valor_duplo=valor_duplo)
+            messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
     return redirect('administrador_extra')
 
 
