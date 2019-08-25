@@ -1,10 +1,11 @@
 from django.contrib import admin
+from django.contrib.auth.decorators import login_required
 from django.urls import path
+
 from core import views as views_core
+from movimentacao import views as views_mov
 from relatorio import views as views_rel
 from usuario import views as views_usuario
-from movimentacao import views as views_mov
-from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('admin/', admin.site.urls),

@@ -1,15 +1,15 @@
-from django.shortcuts import render, redirect
-from django.views.generic.base import View
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from datetime import datetime
-from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
-from core.controller import FuncionalidadesCore
-from core.models import *
 from django.core.paginator import Paginator
-from datetime import datetime
+from django.db.models import Q
+from django.shortcuts import render, redirect
+from django.views.generic.base import View
+
 import core.constants as constant
+from core.models import *
+from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
 
 
 class PainelDeControleSolicitacoesView(View):
@@ -23,7 +23,8 @@ class PainelDeControleSolicitacoesView(View):
         dados['dados_grafico'] = self.formata_dados_do_grafico(request)
 
         # Sistema de paginação
-        paginacao = Paginator(func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=True), 5)
+        paginacao = Paginator(
+            func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=True), 5)
         page = request.GET.get('pagina')
         dados['username'] = id
 
@@ -50,7 +51,8 @@ class PainelDeControleSolicitacoesView(View):
                     entrada=False, status=autorizado)
                 resultado.append({
                     'nome': perfil.nome,
-                    'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+                    'total_horas': int(
+                        funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
                 })
 
             return resultado
@@ -69,7 +71,9 @@ class PainelDeControleFolgasView(View):
         dados['dados_grafico'] = self.formata_dados_do_grafico(request)
 
         # Sistema de paginação
-        paginacao = Paginator(func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=False), 5)
+        paginacao = Paginator(
+            func.seleciona_todas_movimentacoes(perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=False),
+            5)
         page = request.GET.get('pagina')
         dados['username'] = id
 
@@ -96,11 +100,12 @@ class PainelDeControleFolgasView(View):
                     entrada=False, status=autorizado)
                 resultado.append({
                     'nome': perfil.nome,
-                    'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+                    'total_horas': int(
+                        funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
                 })
 
             return resultado
-            
+
         except Exception:
             return []
 
@@ -112,7 +117,8 @@ class SolicitacaoBancoDeHorasView(View):
         dados = seleciona_dados(request)
 
         # Sistema de paginação
-        paginacao = Paginator(request.user.perfil.movimentacoes.all().filter(entrada=True).order_by('data_cadastro')[::-1], 5)
+        paginacao = Paginator(
+            request.user.perfil.movimentacoes.all().filter(entrada=True).order_by('data_cadastro')[::-1], 5)
         page = request.GET.get('pagina')
 
         try:
@@ -168,7 +174,8 @@ class SolicitacaoBaixaView(View):
         dados = seleciona_dados(request)
 
         # Sistema de paginação
-        paginacao = Paginator(request.user.perfil.movimentacoes.all().filter(entrada=False).order_by('data_cadastro')[::-1], 5)
+        paginacao = Paginator(
+            request.user.perfil.movimentacoes.all().filter(entrada=False).order_by('data_cadastro')[::-1], 5)
         page = request.GET.get('pagina')
 
         try:
@@ -184,16 +191,18 @@ class SolicitacaoBaixaView(View):
         total_horas = request.POST.get('horas_total')
         status = Status.objects.filter(analise=True)[0]
         solicitante = request.user.perfil
-        
+
         # Verifica saldo de horas
         funcionalidade = FormataDados()
         dados = seleciona_dados(request)
 
         if total_horas == 'total':
-            horas_solicitadas = funcionalidade.converte_hora_em_minutos(str(request.user.perfil.ch_primeira)) + funcionalidade.converte_hora_em_minutos(str(request.user.perfil.ch_segunda))
+            horas_solicitadas = funcionalidade.converte_hora_em_minutos(
+                str(request.user.perfil.ch_primeira)) + funcionalidade.converte_hora_em_minutos(
+                str(request.user.perfil.ch_segunda))
         else:
             horas_solicitadas = funcionalidade.converte_hora_em_minutos(total_horas)
-        
+
         horas_disponiveis = funcionalidade.converte_hora_em_minutos(dados['horas_disponiveis'])
 
         if horas_solicitadas > horas_disponiveis:
@@ -207,7 +216,7 @@ class SolicitacaoBaixaView(View):
                 colaborador=solicitante
             )
 
-            messages.add_message(request, messages.INFO,'Baixa solicitada com sucesso.')
+            messages.add_message(request, messages.INFO, 'Baixa solicitada com sucesso.')
         return redirect('solicitacoes')
 
 
@@ -286,7 +295,8 @@ def solciitacao_finaliza(request, id):
 
     if movimentacao.status == analise:
         messages.add_message(
-            request, messages.INFO, 'Impossível finalizar uma movimentação em análise, por favor verifique o status antes de finalizar.')
+            request, messages.INFO,
+            'Impossível finalizar uma movimentação em análise, por favor verifique o status antes de finalizar.')
     else:
         movimentacao.finalizado = True
         movimentacao.save()
@@ -331,8 +341,10 @@ def seleciona_dados(request):
     dados['baixas_solicitadas'] = format_data.calcular_total_de_horas(dados['baixaspendentes'])
     dados['horas_autorizadas'] = format_data.calcular_total_de_horas(bancos)
     dados['baixas_autorizadas'] = format_data.calcular_total_de_horas(baixas)
-    dados['horas_autorizadas_mes'] = format_data.calcular_total_de_horas(bancos.filter(data_movimentacao__month=now.month))
-    dados['baixas_autorizadas_mes'] = format_data.calcular_total_de_horas(baixas.filter(data_movimentacao__month=now.month))
+    dados['horas_autorizadas_mes'] = format_data.calcular_total_de_horas(
+        bancos.filter(data_movimentacao__month=now.month))
+    dados['baixas_autorizadas_mes'] = format_data.calcular_total_de_horas(
+        baixas.filter(data_movimentacao__month=now.month))
     dados['status'] = Status.objects.all()
     dados['forma_de_pagamento'] = FormaDePagamento.objects.all()
 

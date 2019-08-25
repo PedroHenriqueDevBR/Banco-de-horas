@@ -1,12 +1,10 @@
-from django.shortcuts import render, redirect
-from django.views.generic.base import View
-from core.models import *
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from datetime import datetime
+from django.shortcuts import render, redirect
+
 from core.controller import FuncionalidadesCore
-from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao 
+from core.models import *
+from movimentacao.controller import FuncionalidadesMovimentacao
 from movimentacao.views import seleciona_dados
 
 
@@ -33,11 +31,12 @@ def formata_dados_do_grafico(request):
             baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
             resultado.append({
                 'nome': perfil.nome,
-                'total_horas': int(funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
+                'total_horas': int(
+                    funcionalidade.total_de_horas_disponivel_do_perfil(autorizado, bancos, baixas).split(':')[0])
             })
 
         return resultado
-        
+
     except Exception:
         return []
 
@@ -96,7 +95,8 @@ def setor_delete(request, id):
     colaboradores = setor.perfis_do_setor.all()
 
     if colaboradores.count() > 0:
-        messages.add_message(request, messages.INFO, 'Impossível deletar, há colaboradores cadastrados no setor selecionado.')
+        messages.add_message(request, messages.INFO, 'Impossível deletar, há colaboradores cadastrados no setor '
+                                                     'selecionado.')
     else:
         messages.add_message(request, messages.INFO, 'Setor deletado com sucesso.')
         setor.delete()
@@ -114,7 +114,7 @@ def status(request):
         # analise = request.POST.get('padrao')
         # analise = False if analise is None else True
         status = request.POST.get('status')
-        
+
         busca_status = Status.objects.filter(nome=nome_status)
         if len(busca_status) > 0:
             messages.add_message(request, messages.INFO, 'Status já cadastrado')
@@ -130,7 +130,7 @@ def status(request):
 
             Status.objects.create(nome=nome_status, analise=analise, autorizado=autorizado)
             messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
-            
+
     return redirect('administrador_extra')
 
 
@@ -273,7 +273,7 @@ def hash_edit(request, id):
             hash_obj = Hash.objects.get(id=id)
             hash_obj.valor = valor
             hash_obj.save()
-            
+
             messages.add_message(request, messages.INFO, 'Configuração modificada com sucesso.')
             return redirect('administrador_extra')
         messages.add_message(request, messages.INFO, 'Digite algo na configuração')

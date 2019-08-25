@@ -15,7 +15,7 @@ class Perfil(models.Model):
     ch_primeira = models.TimeField()
     ch_segunda = models.TimeField()
     setor = models.ForeignKey(Setor, on_delete=models.CASCADE, related_name='perfis_do_setor')
-    usuario = models.OneToOneField(User, on_delete = models.CASCADE, related_name='perfil')
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='perfil')
 
     def __str__(self):
         return self.usuario.username
@@ -47,7 +47,8 @@ class Movimentacao(models.Model):
     motivo = models.TextField(null=True, blank=True)
     entrada = models.BooleanField()
     finalizado = models.BooleanField(default=False)
-    forma_de_pagamento = models.ForeignKey(FormaDePagamento, on_delete=models.CASCADE, related_name='pagamento_movimentacoes', null=True, blank=True)
+    forma_de_pagamento = models.ForeignKey(FormaDePagamento, on_delete=models.CASCADE,
+                                           related_name='pagamento_movimentacoes', null=True, blank=True)
     status = models.ForeignKey(Status, on_delete=models.CASCADE, related_name='status_movimentacoes')
     colaborador = models.ForeignKey(Perfil, on_delete=models.CASCADE, related_name='movimentacoes')
 
@@ -62,7 +63,8 @@ class LogMovimentacao(models.Model):
     movimentacao = models.ForeignKey(Movimentacao, on_delete=models.CASCADE, related_name='log_movimentacoes')
 
     def __str__(self):
-        return str(self.data) + ' - ' + perfil_emissor.nome
+        return str(self.data) + ' - ' + self.perfil_emissor.nome
+
 
 class Hash(models.Model):
     nome = models.CharField(max_length=50)
@@ -70,4 +72,4 @@ class Hash(models.Model):
     valor = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.nome + ' - ' + self.chave + ' - ' + self.valor 
+        return self.nome + ' - ' + self.chave + ' - ' + self.valor

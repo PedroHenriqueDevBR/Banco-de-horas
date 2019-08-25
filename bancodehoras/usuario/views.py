@@ -1,12 +1,12 @@
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
+
 from core.models import *
-from django.contrib import messages 
-from usuario.forms import RegistrarUsuarioForm
 from movimentacao.views import seleciona_dados
+from usuario.forms import RegistrarUsuarioForm
 
 
 class LoginUsuarioView(View):
@@ -47,14 +47,14 @@ def cadastrar_usuario(request):
             dados_form = form.cleaned_data
             # cadastra usuario
             usuario = User.objects.create_user(username=dados_form['matricula'],
-                                                email=dados_form['email'],
-                                                password=dados_form['senha'])
+                                               email=dados_form['email'],
+                                               password=dados_form['senha'])
 
             # seleciona o setor de acordo com o id passado no post
             setor = Setor.objects.get(id=dados_form['setor'])
 
             # cadastra perfil vinculando ao usuario e ao setor
-            perfil = Perfil(nome=dados_form['nome'], 
+            perfil = Perfil(nome=dados_form['nome'],
                             usuario=usuario,
                             setor=setor,
                             ch_primeira=dados_form['ch_primeira'],

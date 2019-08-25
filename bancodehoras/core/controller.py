@@ -1,5 +1,5 @@
-from movimentacao.controller import FuncionalidadesMovimentacao, FormataDados
 from core.models import *
+from movimentacao.controller import FuncionalidadesMovimentacao
 
 
 class FuncionalidadesCore:
@@ -20,14 +20,14 @@ class FuncionalidadesCore:
         
         return resultado
     
-    def hash_add(chave, valor):
-        if hash_valid(chave, valor):
+    def hash_add(self, chave, valor):
+        if self.hash_valid(chave, valor):
             return False
         else:
             Hash.objects.create(chave=chave, valor=valor)
             return True
 
-    def hash_get(chave):
+    def hash_get(self, chave):
         valor = None
         try:
             valor = Hash.objects.filter(chave=chave)[0].valor
@@ -35,14 +35,13 @@ class FuncionalidadesCore:
             print('Chave inválida')
         return valor
 
-    def hash_edit(objeto=None, chave=None, valor=None):
+    def hash_edit(self, objeto=None, chave=None, valor=None):
         if objeto is not None:
             objeto.valor = valor
-            import pdb; pdb.set_trace()
             objeto.save()
             return True
         else:
-            if hash_valid(chave, valor):
+            if self.hash_valid(chave, valor):
                 try:
                     hash_obj = Hash.objects.filter(chave=chave)[0]
                     hash_obj.valor = valor
@@ -52,5 +51,5 @@ class FuncionalidadesCore:
 
             return False
 
-    def hash_valid(chave, valor):
+    def hash_valid(self, chave, valor):
         return len(chave) > 0 and len(valor) > 0
