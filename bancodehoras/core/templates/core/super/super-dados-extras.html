@@ -4,25 +4,25 @@
 
 <div class="container bg-light card px-0 text-center">
     <div class="card-header px-0">
-        <h1>Controle de dados</h1>
+        <h2>Controle de dados</h2>
     </div>
 
     <div class="card col-sm-12 px-0">
         <div class="card-footer d-flex justify-content-center">
-            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-pagamento">cadastrar
+            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-pagamento">Novo
                 pagamento</button>
-            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-status">cadastrar
+            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-status">Novo
                 status</button>
         </div>
     </div>
 
     <div class="container">
         <div class="row">
-            <div class="card col col-sm-12 pb-3">
+            <div class="card col col-12 col-sm-12 pb-3">
                 <div class="card-body text-center px-0">
                     {% if status %}
                     <div class="card-header bg-secondary text-white">
-                        <h2>Status</h2>
+                        <p class="lead">Status</p>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-tableless table-striped border">
@@ -65,11 +65,11 @@
                 </div>
             </div>
 
-            <div class="card col col-sm-12 pb-3">
+            <div class="card col col-12 col-sm-12 pb-3">
                 <div class="card-body text-center px-0">
                     {% if formasdepagamentos %}
                     <div class="card-header bg-secondary text-white">
-                        <h2>Forma de pagamento</h2>
+                        <p class="lead">Forma de pagamento</p>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-tableless table-striped border">
@@ -95,9 +95,9 @@
                 </div>
             </div>
 
-            <div class="card col col-sm-12 pb-3">
+            <div class="card col col-12 col-sm-12 pb-3">
                 <div class="card-header bg-secondary text-white mt-4">
-                    <h2>Configuração</h2>
+                    <p class="lead">Configuração</p>
                 </div>
                 <div class="card-body px-0 py-0">
                     <div class="table-responsive">

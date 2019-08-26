@@ -6,9 +6,9 @@
 <div class="container bg-light card px-0">
     {% include 'core/componentes/barra-menu-dashboard.html' %}
 
-    <h2 class="container"> Painel de gestão </h2>
+    <p class="lead text-center pt-3"> Painel de gestão </p>
 
-    <div class="card full-w">
+    <div class="card full-w d-none d-sm-block">
         <div class="card-body">
             <canvas id="general-vision" width="100%" height="50px"></canvas>
         </div>
@@ -18,7 +18,7 @@
 {% if solciitacoes_pendentes %}
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
-        <h3>Solicitações de banco de horas em análise</h3>
+        <p class="lead">Solicitações de banco de horas em análise</p>
     </div>
 
     <div class="card-body">

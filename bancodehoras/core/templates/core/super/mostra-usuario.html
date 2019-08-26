@@ -9,51 +9,99 @@
 
     <div class="container">
         <div class="row">
-            <div class="card col">
-                <div class="card-body text-left">
-                    <p>Nome: {{ colaborador.perfil.nome }}</p>
-                    <p>Matricula: {{ colaborador.username }}</p>
-                    <p>Email: {{ colaborador.email }}</p>
-                    <p>Setor: {{ colaborador.perfil.setor.nome }}</p>
-                    <p>Primeira carga horária: {{ colaborador.perfil.ch_primeira }}</p>
-                    <p>Segunda carga horária: {{ colaborador.perfil.ch_segunda }}</p>
-                    <p>Gerencia o setor:
-                        {% if colaborador.perfil.gerente %}
-                        <span class="badge badge-success">Sim</span>
-                        {% else %}
-                        <span class="badge badge-danger">Não</span>
-                        {% endif %}
-                    </p>
-                    <p>Administrador:
-                        {% if colaborador.is_superuser %}
-                        <span class="badge badge-success">Sim</span>
-                        {% else %}
-                        <span class="badge badge-danger">Não</span>
-                        {% endif %}
-                    </p>
-                    <p>Ativo:
-                        {% if colaborador.is_active %}
-                        <span class="badge badge-success">Sim</span>
-                        {% else %}
-                        <span class="badge badge-danger">Não</span>
-                        {% endif %}
-                    </p>
-                    <p>Data de cadastro: <span class="badge badge-warning">{{ colaborador.date_joined }}</span></p>
-                    <p>Ultimo acesso: <span class="badge badge-warning">{{ colaborador.last_login }}</span></p>
+            <div class="card col-12 col-sm-12 col-md-6 px-0">
+                <div class="card-header">
+                    <h4>Informações</h4>
+                </div>
+                <div class="card-body text-left table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <tbody>
+                            <tr>
+                                <td>Nome</td>
+                                <td>{{ colaborador.perfil.nome }}</td>
+                            </tr>
+                            <tr>
+                                <td>Matricula</td>
+                                <td>{{ colaborador.username }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ colaborador.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>Setor</td>
+                                <td>{{ colaborador.perfil.setor.nome }}</td>
+                            </tr>
+                            <tr>
+                                <td>Primeira carga horária</td>
+                                <td>{{ colaborador.perfil.ch_primeira }}</td>
+                            </tr>
+                            <tr>
+                                <td>Segunda carga horária</td>
+                                <td>{{ colaborador.perfil.ch_segunda }}</td>
+                            </tr>
+                            <tr>
+                                <td>Gestor de setor</td>
+                                <td>
+                                    {% if colaborador.perfil.gerente %}
+                                    <span class="badge badge-success">Sim</span>
+                                    {% else %}
+                                    <span class="badge badge-danger">Não</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Administrador</td>
+                                <td>
+                                    {% if colaborador.is_superuser %}
+                                    <span class="badge badge-success">Sim</span>
+                                    {% else %}
+                                    <span class="badge badge-danger">Não</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ativo</td>
+                                <td>
+                                    {% if colaborador.is_active %}
+                                    <span class="badge badge-success">Sim</span>
+                                    {% else %}
+                                    <span class="badge badge-danger">Não</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Data de cadastro</td>
+                                <td><span class="badge badge-warning">{{ colaborador.date_joined }}</span></td>
+                            </tr>
+                            <tr>
+                                <td>Último acesso</td>
+                                <td>
+                                    {% if colaborador.last_login %}
+                                    <span class="badge badge-warning">{{ colaborador.last_login }}</span>
+                                    {% else %}
+                                    <span class="badge badge-danger">Nenhum dado cadastrado</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="card col">
+            <div class="card col col-12 col-sm-12 col-md-6 px-0">
+                <div class="card-header">
+                    <h4 class="">Opções</h4>
+                </div>
                 <div class="card-body text-left">
-                    <h2>Opções</h2>
-                    <button class="btn btn-secondary mx-2 my-2" data-toggle="modal"
+                    <button class="btn btn-secondary mx-2 my-2 full-w" data-toggle="modal"
                         data-target="#editar-colaborador">Editar dados</button><br>
                     <a href="{% url 'usuario_administrador' colaborador.id %}"
-                        class="btn btn-secondary mx-2 my-2">Administrador</a><br>
+                        class="btn btn-secondary mx-2 my-2 full-w">Administrador</a><br>
                     <a href="{% url 'usuario_gerente' colaborador.perfil.id %}"
-                        class="btn btn-secondary mx-2 my-2">Responsável por setor</a><br>
-                    <a href="{% url 'usuario_ativo' colaborador.id %}" class="btn btn-secondary mx-2 my-2">ativar /
-                        inativar</a><br>
+                        class="btn btn-secondary mx-2 my-2 full-w">Responsável por setor</a><br>
+                    <a href="{% url 'usuario_ativo' colaborador.id %}" class="btn btn-secondary mx-2 my-2 full-w">ativar
+                        / inativar</a><br>
                 </div>
             </div>
         </div>
@@ -118,11 +166,13 @@
                         <div class="row">
                             <div class="col">
                                 <label for="senha" class="col-form-label">Primeira carga horária:</label>
-                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time" value="{{ colaborador.perfil.ch_primeira }}">
+                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time"
+                                    value="{{ colaborador.perfil.ch_primeira }}">
                             </div>
                             <div class="col">
                                 <label for="senha" class="col-form-label">Segunda carga horária:</label>
-                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time" value="{{ colaborador.perfil.ch_segunda }}">
+                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time"
+                                    value="{{ colaborador.perfil.ch_segunda }}">
                             </div>
                         </div>
                     </div>

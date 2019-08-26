@@ -15,6 +15,9 @@ class FormataDados:
 
 
     def converte_hora_em_minutos(self, hora_completa):
+        if '-' in hora_completa:
+            return 0
+            
         if ':' not in hora_completa:
             return 0
         horas = int(hora_completa.split(':')[0]) * 60
