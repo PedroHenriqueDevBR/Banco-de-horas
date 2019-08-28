@@ -32,7 +32,6 @@ class Status(models.Model):
 
 class FormaDePagamento(models.Model):
     nome = models.CharField(max_length=50)
-    valor_duplo = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nome

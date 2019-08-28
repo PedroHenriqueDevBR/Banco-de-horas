@@ -45,20 +45,38 @@
             <ul class="list-group">
                 {% if perfil_logado.is_superuser %}
                 <a href="{% url 'setor' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Controle de setor</a>
+                    class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
+                    <i class="material-icons mx-2">group_work</i>
+                    Controle de setor
+                    </a>
                 <a href="{% url 'administrador_extra' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Dados para cadastro</a>
+                    class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
+                    <i class="material-icons mx-2">settings_applications</i>
+                    Dados para cadastro
+                    </a>
                 {% endif %}
                 {% if perfil_logado.perfil.gerente %}
                 <a href="{% url 'dashboard' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Painel de controle</a>
+                    class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
+                    <i class="material-icons mx-2">dashboard</i>
+                    Painel de controle
+                    </a>
                 {% endif %}
                 <a href="{% url 'solicitacoes' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Minhas solicitações</a>
+                    class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
+                    <i class="material-icons mx-2">compare_arrows</i>
+                    Minhas solicitações
+                    </a>
                 <a href="{% url 'relatorio' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Relatórios</a>
+                    class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
+                    <i class="material-icons mx-2">pie_chart</i>
+                    Relatórios
+                    </a>
                 <a href="{% url 'logout' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Encerrar sessão</a>
+                    class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
+                    <i class="material-icons mx-2">exit_to_app</i>
+                    Encerrar sessão
+                    </a>
             </ul>
         </div>
 

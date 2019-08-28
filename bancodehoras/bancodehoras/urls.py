@@ -10,6 +10,7 @@ from usuario import views as views_usuario
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views_core.dashboard, name='escolha_dashboard'),
+    path('installsystem', views_core.isntalar_sistema, name='install_system'),
 
     # Relatórios
     path('relatorio/', views_rel.relatorio, name='relatorio'),
@@ -49,7 +50,7 @@ urlpatterns = [
     path('login/', views_usuario.LoginUsuarioView.as_view(), name='login'),
     path('logout/', views_usuario.logout_usuario, name='logout'),
     path('usuario/cadastrar/', views_usuario.cadastrar_usuario, name='cadastrar_usuario'),
-    path('usuario/atualiza/<str:id>', views_usuario.atualiza_usuario, name='usuario_atualiza'),
+    path('usuario/seleciona/<str:id>', views_usuario.atualiza_usuario, name='usuario_atualiza'),
     path('usuario/atualiza/ativo/<int:id>', views_usuario.usuario_ativo, name='usuario_ativo'),
     path('usuario/atualiza/gerente/<int:id>', views_usuario.usuario_gerente, name='usuario_gerente'),
     path('usuario/atualiza/administrador/<int:id>', views_usuario.usuario_administrador, name='usuario_administrador'),

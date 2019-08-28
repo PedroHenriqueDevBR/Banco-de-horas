@@ -6,6 +6,29 @@ from core.controller import FuncionalidadesCore
 from core.models import *
 from movimentacao.controller import FuncionalidadesMovimentacao
 from movimentacao.views import seleciona_dados
+from core import constants
+
+
+def isntalar_sistema(request):
+    if len(Hash.objects.all()) == 0:
+        print('Instalando sistema, criando chave valor')
+        nome = 'Valor das horas'
+        chave = constants.VALOR_HORA
+        valor = 1
+        Hash.objects.create(nome=nome, chave=chave, valor=valor)
+
+    if len(FormaDePagamento.objects.all()) == 0:
+        print('Instalando sistema, criando forma de pagamento')
+        FormaDePagamento.objects.create(nome='Dinheiro')
+
+    if len(Status.objects.all()) == 0:
+        print('Instalando sistema, criando status')
+        Status.objects.create(nome='Análise', analise=True)
+        Status.objects.create(nome='Autorizado', autorizado=True)
+        Status.objects.create(nome='Cancelado')
+
+    print('Sistema instalado')
+    return redirect('logout')
 
 
 # Colaborador
@@ -220,14 +243,12 @@ def salvar_novo_padrao_autorizado(id=None):
 def forma_de_pagamento(request):
     if request.method == 'POST':
         forma_de_pagamento = request.POST.get('forma_de_pagamento')
-        valor_duplo = request.POST.get('valor_duplo')
-        valor_duplo = False if valor_duplo is None else True
 
         pagamentos = FormaDePagamento.objects.filter(nome=forma_de_pagamento)
         if len(pagamentos) > 0:
             messages.add_message(request, messages.INFO, 'Forma de pagamento já cadastrada.')
         else:
-            FormaDePagamento.objects.create(nome=forma_de_pagamento, valor_duplo=valor_duplo)
+            FormaDePagamento.objects.create(nome=forma_de_pagamento)
             messages.add_message(request, messages.INFO, 'Forma de pagamento cadastrada com sucesso.')
     return redirect('administrador_extra')
 
