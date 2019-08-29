@@ -10,6 +10,46 @@ def main():
     relatorio_de_usuarios_por_setor()
     print('Finalizou')
 
+'''
+dados = {
+    titulos: ['nome', 'idade'],
+    linhas: [
+        [
+            'pedro', 21
+        ],
+        [
+            'Henrique', 21
+        ],
+        [
+            'Carla', 17
+        ]
+    ]
+}
+'''
+
+
+def gera_relatorio(dados, nome):
+    pasta = 'relatorio/arquivos/'
+    nome_arquivo = '{}.xls'.format(nome)
+    
+    wb = xlwt.Workbook()
+    ws = wb.add_sheet('Relatorio')
+
+    titulos = dados['titulos']
+    linhas = dados['linhas']
+
+    # Gerar titulos
+    for i in range(len(titulos)):
+        ws.write(0, i, titulos[i])
+
+    # Gera dados da tabela
+    for i in range(len(linhas)):
+        linha = linhas[i]
+        for j in range(len(linha)):
+            ws.write(i+1, j, linha[j])
+
+    wb.save(pasta + nome_arquivo)
+
 
 # Arquivos Excel
 def relatorio_de_usuarios_por_setor(perfis=None):

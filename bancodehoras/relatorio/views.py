@@ -15,6 +15,31 @@ def relatorio(request):
     return render(request, 'relatorio/relatorio.html', dados)
 
 
+def gera_teste(request):
+    pasta = 'relatorio/arquivos/'
+    nome_arquivo = 'teste_teste.xls'
+    arquivo = '{}{}'.format(pasta, nome_arquivo)
+    filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
+
+    dados = {'titulos': [], 'linhas': []}
+    info = Movimentacao.objects.all()
+    dados['titulos'] = ['Data cadastro', 'motivo', 'colaborador']
+    add = []
+    for i in info:
+        add.append([i.data_cadastro, i.motivo, i.colaborador.nome])
+    dados['linhas'] = add
+    controller.gera_relatorio(dados, 'teste_teste')
+    
+    if os.path.exists(filepath):
+        with open(filepath, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
+            return response
+            
+    return HttpResponse('Arquivo não encontrado.')
+    
+
+
 @login_required(login_url='login')
 def relarorio_de_perfis(request):
     perfis = Perfil.objects.all()
