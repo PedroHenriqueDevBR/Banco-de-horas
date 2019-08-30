@@ -1,0 +1,95 @@
+<div class="modal fade" id="gerar_relatorio_personalizado" tabindex="-1" role="dialog"
+    aria-labelledby="gerar_relatorio_personalizado_titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="gerar_relatorio_personalizado_titulo">Relatório personalizado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body px-0">
+                <form method="POST" class="px-3 pb-4">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-md-6 mt-3">
+                                <label for="">Inicio</label>
+                                <input type="date" class="form-control" id="periodo" placeholder="**/**/****">
+                            </div>
+                            <div class="col-12 col-sm-12 col-md-6 mt-3">
+                                <label for="">Fim</label>
+                                <input type="date" class="form-control" placeholder="**/**/****">
+                            </div>
+                        </div>
+                        <small id="emailHelp" class="form-text text-muted">Digite o período das movimentações.</small>
+                    </div>
+
+
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="tipo_movimentacao">Selec. status</label>
+                        </div>
+                        <select class="custom-select" name="tipo_movimentacao" id="tipo_movimentacao">
+                            <option value="0">Todos</option>
+                            {% for statu in status %}
+                            <option value="{{ status.id }}">{{ statu.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="andamento">Selec. andamento</label>
+                        </div>
+                        <select class="custom-select" name="andamento" id="andamento">
+                            <option value="0">Todos</option>
+                            <option value="1">Selecionar finalizadas</option>
+                            <option value="2">Selecionar não finalizadas</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text" for="colaborador">Selec. Colaborador</label>
+                            </div>
+                            <select class="custom-select" name="colaborador" id="colaborador">
+                                <option value="0">Todos</option>
+                                {% for colaborador in perfil_logado.perfil.setor.perfis_do_setor.all %}
+                                <option value="colaborador.id">{{ colaborador.nome }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="forma_pagamento">Forma de pagamento</label>
+                        </div>
+                        <select class="custom-select" name="forma_pagamento" id="forma_pagamento">
+                            <option value="0">Todos</option>
+                            {% for pagamento in forma_de_pagamento %}
+                            <option value="pagamento.id">{{ pagamento.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="tipo_movimentacao">Tipo de movimentacao</label>
+                        </div>
+                        <select class="custom-select" name="tipo_movimentacao" id="tipo_movimentacao">
+                            <option value="0">Todos</option>
+                            <option value="1">Banco de horas</option>
+                            <option value="2">Baixa</option>
+                        </select>
+                    </div>
+                </form>
+
+                <div class="modal-footer bg-light">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-success">Gerar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

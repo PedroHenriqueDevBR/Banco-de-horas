@@ -4,12 +4,35 @@
 {% block content %}
 <div class="bg-light card">
     <div class="card-body">
-        <ul class="list-group">
-            {% if perfil_logado.perfil.gerente == True %}
-            <li class="list-group-item"><a href="{% url 'rel_solicitacoes_do_setor' %}">Relatório de solicitações do meu setor</a></li>
-            {% endif %}
-            <li class="list-group-item"><a href="{% url 'rel_solicitacoes_do_perfil' perfil_logado.perfil.id %}">Relatório de movimentacoes do perfil</a></li>
-        </ul>
+        
+        {% if perfil_logado.perfil.gerente %}
+        <button class="btn btn-success float-right mb-3" type="button" data-toggle="modal" data-target="#gerar_relatorio_personalizado">Personalizar</button>
+        {% endif %}
+        
+        
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Relatório</th>
+                    <th>Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if perfil_logado.perfil.gerente == True %}
+                <tr>
+                    <td>Relatório de solicitações do meu setor</td>
+                    <td><a href="{% url 'rel_solicitacoes_do_setor' %}">Gerar</a></td>  <!-- TODO: Consertar a url de geração desse arquivo -->
+                </tr>
+                {% endif %}
+                <tr>
+                    <td>Relatório de movimentacoes do perfil</td>
+                    <td>
+                        <a href="{% url 'rel_solicitacoes_do_perfil' perfil_logado.perfil.id %}">Gerar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
+{% include 'core/componentes/modal-relatorio-personalizado.html' %}
 {% endblock %}
