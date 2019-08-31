@@ -24,6 +24,7 @@ def relatorio(request):
         inicio = datetime.strptime(data_inicial, '%Y-%m-%d')
         fim = datetime.strptime(data_final, '%Y-%m-%d')
         dados = Movimentacao.objects.filter(data_movimentacao__range=(inicio, fim))
+        todas = True
 
         if status != '0' and status != '': # Status
             print('=========================================')
@@ -55,7 +56,7 @@ def relatorio(request):
             print('Aplicou o filtro de Forma de pagamento')
             print('=========================================')
             id_aux = int(forma_pagamento)
-            forma_pagamento = Status.objects.get(id=id_aux)
+            forma_pagamento = FormaDePagamento.objects.get(id=id_aux)
             dados = dados.filter(forma_de_pagamento=forma_pagamento)
 
         if tipo_movimentacao != '0' and tipo_movimentacao != '': # Tipo de movimentacao
@@ -66,40 +67,125 @@ def relatorio(request):
             if tipo_movimentacao == '1':
                 id_aux = True
             dados = dados.filter(entrada=id_aux)
+            todas = False
 
-        import pdb; pdb.set_trace()
+        res = {}
+        if todas:
+            res = formata_dados_do_relatorio(dados, todas=todas)
+        else:
+            res = formata_dados_do_relatorio(dados, tipo_movimentacao=tipo_movimentacao)
+
+        filepath = gerador(res)
+        if os.path.exists(filepath):
+            with open(filepath, 'rb') as fh:
+                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
+                return response
+            
+            return HttpResponse('Arquivo não encontrado.')
+        # import pdb; pdb.set_trace()
+
 
     dados = seleciona_dados(request)
     return render(request, 'relatorio/relatorio.html', dados)
 
 
-def formata_dados_do_relatorio(dados, todas_as_movimentacoes=False, tipo_movimentacao=None):
-    pass
-    
+def formata_dados_do_relatorio(dados, tipo_movimentacao=None, todas=False):
+    if len(dados) == 0:
+        res = {
+            'titulos': ['Informação'],
+            'linhas': ['Nenhum resultado localizado']
+        }
 
-def gera_teste(request):
+    res = {
+        'titulos': ['Data do cadastro', 'Data da movimentação'],
+        'linhas': []
+    }
+
+    if todas:
+        print('=========================================')
+        print('Listando todos os dados')
+        print('=========================================')
+        
+        titulos_aux = ['Hora inicial', 'Hora Final', 'Total de horas', 'Motivo', 'Tipo de movimentação', 'Finalizado', 'forma de pagamento', 'Status', 'Colaborador']
+        res['titulos'] += titulos_aux
+        for dado in dados:
+            finalizado = 'Sim' if dado.finalizado else 'Não'
+            tipo = 'Entrada' if dado.entrada else 'Baixa'
+            pagamento = dado.forma_de_pagamento.nome if dado.forma_de_pagamento else ''
+            res['linhas'].append([
+                formatar_data(str(dado.data_cadastro)),
+                formatar_data(str(dado.data_movimentacao)),
+                str(dado.hora_inicial),
+                str(dado.hora_final),
+                dado.hora_total,
+                dado.motivo,
+                tipo,
+                finalizado,
+                pagamento,
+                dado.status.nome,
+                dado.colaborador.nome
+            ])
+    else:
+        if tipo_movimentacao == '1':
+            print('=========================================')
+            print('Listando todos os bancos de horas')
+            print('=========================================')
+
+            titulos_aux = ['Hora inicial', 'Hora Final', 'Total de horas', 'Motivo', 'Finalizado', 'Status', 'Colaborador']
+            res['titulos'] += titulos_aux
+            for dado in dados:
+                finalizado = 'Sim' if dado.finalizado else 'Não'
+                res['linhas'].append([
+                    formatar_data(str(dado.data_cadastro)),
+                    formatar_data(str(dado.data_movimentacao)),
+                    str(dado.hora_inicial),
+                    str(dado.hora_final),
+                    dado.hora_total,
+                    dado.motivo,
+                    finalizado,
+                    dado.status.nome,
+                    dado.colaborador.nome
+                ])
+        else:
+            print('=========================================')
+            print('Listando todos as baixas')
+            print('=========================================')
+
+            titulos_aux = ['Total de horas', 'Forma de pagamento', 'Finalizado', 'Status', 'Colaborador']
+            for dado in dados:
+                finalizado = 'Sim' if dado.finalizado else 'Não'
+                pagamento = dado.forma_de_pagamento.nome if dado.forma_de_pagamento else ''
+                res['linhas'].append([
+                    formatar_data(str(dado.data_cadastro)),
+                    formatar_data(str(dado.data_movimentacao)),
+                    dado.hora_total,
+                    pagamento,
+                    finalizado,
+                    dado.status.nome,
+                    dado.colaborador.nome
+                ])
+    return res
+
+
+def formatar_data(data):
+    resultado = data
+    if '-' in data:
+        data = data.split('-')
+        dia = data[2]
+        mes = data[1]
+        ano = data[0]
+        resultado = '{}/{}/{}'.format(dia, mes, ano)
+    return resultado
+
+
+def gerador(dados):
     pasta = 'relatorio/arquivos/'
     nome_arquivo = 'teste_teste.xls'
     arquivo = '{}{}'.format(pasta, nome_arquivo)
     filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
-
-    dados = {'titulos': [], 'linhas': []}
-    info = Movimentacao.objects.all()
-    dados['titulos'] = ['Data cadastro', 'motivo', 'colaborador']
-    add = []
-    for i in info:
-        add.append([i.data_cadastro, i.motivo, i.colaborador.nome])
-    dados['linhas'] = add
     controller.gera_relatorio(dados, 'teste_teste')
-    
-    if os.path.exists(filepath):
-        with open(filepath, 'rb') as fh:
-            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
-            return response
-            
-    return HttpResponse('Arquivo não encontrado.')
-    
+    return filepath
 
 
 @login_required(login_url='login')
