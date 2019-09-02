@@ -186,5 +186,11 @@ def relatorio_de_usuarios_por_setor_pdf():
     cnv.save()
 
 
+def gera_log(msg):
+    print('\n' + '='*40)
+    print(msg)
+    print('='*40 + '\n')
+
+
 if __name__ == '__main__':
     main()

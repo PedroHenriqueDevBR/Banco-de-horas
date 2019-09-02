@@ -10,30 +10,38 @@ from core import constants
 
 
 def isntalar_sistema(request):
-    if len(Hash.objects.all()) == 0:
-        print('Instalando sistema, criando chave valor')
-        nome = 'Valor das horas'
-        chave = constants.VALOR_HORA
-        valor = 1
-        Hash.objects.create(nome=nome, chave=chave, valor=valor)
+    func = FuncionalidadesCore()
+    if func.superuser(request):
+        if len(Hash.objects.all()) == 0:
+            print('Instalando sistema, criando chave valor')
+            nome = 'Valor das horas'
+            chave = constants.VALOR_HORA
+            valor = 1
+            Hash.objects.create(nome=nome, chave=chave, valor=valor)
 
-    if len(FormaDePagamento.objects.all()) == 0:
-        print('Instalando sistema, criando forma de pagamento')
-        FormaDePagamento.objects.create(nome='Dinheiro')
+        if len(FormaDePagamento.objects.all()) == 0:
+            print('Instalando sistema, criando forma de pagamento')
+            FormaDePagamento.objects.create(nome='Dinheiro')
 
-    if len(Status.objects.all()) == 0:
-        print('Instalando sistema, criando status')
-        Status.objects.create(nome='Análise', analise=True)
-        Status.objects.create(nome='Autorizado', autorizado=True)
-        Status.objects.create(nome='Cancelado')
+        if len(Status.objects.all()) == 0:
+            print('Instalando sistema, criando status')
+            Status.objects.create(nome='Análise', analise=True)
+            Status.objects.create(nome='Autorizado', autorizado=True)
+            Status.objects.create(nome='Cancelado')
 
-    print('Sistema instalado')
+        print('Sistema instalado')
+    else:
+        print('Usuario sem permissao para instalar o sistema')
     return redirect('logout')
 
 
 # Colaborador
 @login_required(login_url='login')
 def dashboard(request):
+    func = FuncionalidadesCore()
+    if not func.administardor(request):
+        return redirect('solicitacoes')
+    
     tamplate_name = 'core/dashboard/dashboard.html'
     setor = request.user.perfil.setor
     dados = seleciona_dados(request)
@@ -67,11 +75,18 @@ def formata_dados_do_grafico(request):
 # Administrador
 @login_required(login_url='login')
 def administrador(request):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
     return redirect('setor')
 
 
 @login_required(login_url='login')
 def administrador_mostra_setor(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     tamplate_name = 'core/super/mostra-setor.html'
     dados = seleciona_dados(request)
     dados['setor'] = Setor.objects.get(id=id)
@@ -80,6 +95,10 @@ def administrador_mostra_setor(request, id):
 
 @login_required(login_url='login')
 def administrador_extra(request):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+    
     tamplate_name = 'core/super/super-dados-extras.html'
     dados = seleciona_dados(request)
     dados['formasdepagamentos'] = FormaDePagamento.objects.all()
@@ -90,6 +109,10 @@ def administrador_extra(request):
 # Setor
 @login_required(login_url='login')
 def setor(request):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         nome_setor = request.POST.get('nome_setor')
         Setor.objects.create(nome=nome_setor)
@@ -104,6 +127,10 @@ def setor(request):
 
 @login_required(login_url='login')
 def setor_atualiza(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         nome = request.POST.get('nome_setor')
         setor = Setor.objects.get(id=id)
@@ -114,6 +141,10 @@ def setor_atualiza(request, id):
 
 @login_required(login_url='login')
 def setor_delete(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     setor = Setor.objects.get(id=id)
     colaboradores = setor.perfis_do_setor.all()
 
@@ -132,10 +163,12 @@ def setor_delete(request, id):
 ##
 @login_required(login_url='login')
 def status(request):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         nome_status = request.POST.get('nome_status')
-        # analise = request.POST.get('padrao')
-        # analise = False if analise is None else True
         status = request.POST.get('status')
 
         busca_status = Status.objects.filter(nome=nome_status)
@@ -159,18 +192,30 @@ def status(request):
 
 @login_required(login_url='login')
 def status_torna_padrao_analise(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     salvar_novo_padrao_analise(id)
     return redirect('administrador_extra')
 
 
 @login_required(login_url='login')
 def status_torna_padrao_autorizado(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     salvar_novo_padrao_autorizado(id)
     return redirect('administrador_extra')
 
 
 @login_required(login_url='login')
 def status_delete(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     status = Status.objects.get(id=id)
     if status.analise:
         if len(Status.objects.all()) != 1:
@@ -187,6 +232,10 @@ def status_delete(request, id):
 
 @login_required(login_url='login')
 def status_editar(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+    
     if request.method == 'POST':
         nome = request.POST.get('nome')
         if len(nome) > 0:
@@ -241,9 +290,12 @@ def salvar_novo_padrao_autorizado(id=None):
 
 @login_required(login_url='login')
 def forma_de_pagamento(request):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         forma_de_pagamento = request.POST.get('forma_de_pagamento')
-
         pagamentos = FormaDePagamento.objects.filter(nome=forma_de_pagamento)
         if len(pagamentos) > 0:
             messages.add_message(request, messages.INFO, 'Forma de pagamento já cadastrada.')
@@ -255,6 +307,10 @@ def forma_de_pagamento(request):
 
 @login_required(login_url='login')
 def forma_de_pagamento_delete(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     pagamento = FormaDePagamento.objects.get(id=id)
     pagamento.delete()
     return redirect('administrador_extra')
@@ -262,6 +318,10 @@ def forma_de_pagamento_delete(request, id):
 
 @login_required(login_url='login')
 def forma_de_pagamento_editar(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         nome = request.POST.get('nome')
         if len(nome) > 0:
@@ -279,14 +339,11 @@ def forma_de_pagamento_editar(request, id):
 
 
 @login_required(login_url='login')
-def hash_edit(request, chave):
-    pagamento = FormaDePagamento.objects.get(id=id)
-    pagamento.delete()
-    return redirect('administrador_extra')
-
-
-@login_required(login_url='login')
 def hash_edit(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+    
     if request.method == 'POST':
         valor = request.POST.get('valor')
         if len(valor) > 0:

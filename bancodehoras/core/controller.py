@@ -53,3 +53,12 @@ class FuncionalidadesCore:
 
     def hash_valid(self, chave, valor):
         return len(chave) > 0 and len(valor) > 0
+
+    def superuser(self, request):
+        return request.user.is_superuser
+
+    def administardor(self, request):
+        return request.user.perfil.gerente
+
+    def superadministrador(self, request):
+        return request.user.is_superuser and request.user.perfil.gerente

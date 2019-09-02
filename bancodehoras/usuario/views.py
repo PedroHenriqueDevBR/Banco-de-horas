@@ -7,6 +7,7 @@ from django.views.generic.base import View
 from core.models import *
 from movimentacao.views import seleciona_dados
 from usuario.forms import RegistrarUsuarioForm
+from core.controller import FuncionalidadesCore
 
 
 class LoginUsuarioView(View):
@@ -41,6 +42,10 @@ class LoginUsuarioView(View):
 
 @login_required(login_url='login')
 def cadastrar_usuario(request):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         form = RegistrarUsuarioForm(request.POST)
         if form.is_valid():
@@ -69,6 +74,10 @@ def cadastrar_usuario(request):
 
 @login_required(login_url='login')
 def atualiza_usuario(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     if request.method == 'POST':
         nome = request.POST.get('nome')
         matricula = request.POST.get('matricula')
@@ -108,6 +117,10 @@ def logout_usuario(request):
 
 @login_required(login_url='login')
 def usuario_gerente(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     perfil = Perfil.objects.get(id=id)
     if perfil.gerente:
         perfil.gerente = False
@@ -119,6 +132,10 @@ def usuario_gerente(request, id):
 
 @login_required(login_url='login')
 def usuario_administrador(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     user = User.objects.get(id=id)
     if user.is_superuser:
         user.is_superuser = False
@@ -130,6 +147,10 @@ def usuario_administrador(request, id):
 
 @login_required(login_url='login')
 def usuario_ativo(request, id):
+    func = FuncionalidadesCore()
+    if not func.superuser(request):
+        return redirect('solicitacoes')
+
     user = User.objects.get(id=id)
     if user.is_active:
         user.is_active = False

@@ -27,42 +27,32 @@ def relatorio(request):
         todas = True
 
         if status != '0' and status != '': # Status
-            print('=========================================')
-            print('Aplicou o filtro de Status')
-            print('=========================================')
+            controller.gera_log('Aplicou o filtro de Status')
             id_aux = int(status)
             status = Status.objects.get(id=id_aux)
             dados = dados.filter(status=status)
 
         if andamento != '0' and andamento != '': # Andamento da solicitação
-            print('=========================================')
-            print('Aplicou o filtro de Andamento da solicitação')
-            print('=========================================')
+            controller.gera_log('Aplicou o filtro de Andamento da solicitação')
             id_aux = False
             if id_aux == '1':
                 id_aux = True
             dados = dados.filter(finalizado=id_aux)
 
         if colaborador != '0' and colaborador != '': # colaborador especifico
-            print('=========================================')
-            print('Aplicou o filtro de Colaborador especifico')
-            print('=========================================')
+            controller.gera_log('Aplicou o filtro de Colaborador especifico')
             id_aux = int(colaborador)
             colaborador = Perfil.objects.get(id=id_aux)
             dados = dados.filter(colaborador=colaborador)
 
         if forma_pagamento != '0' and forma_pagamento != '': # Forma de pagamento
-            print('=========================================')
-            print('Aplicou o filtro de Forma de pagamento')
-            print('=========================================')
+            controller.gera_log('Aplicou o filtro de Forma de pagamento')
             id_aux = int(forma_pagamento)
             forma_pagamento = FormaDePagamento.objects.get(id=id_aux)
             dados = dados.filter(forma_de_pagamento=forma_pagamento)
 
         if tipo_movimentacao != '0' and tipo_movimentacao != '': # Tipo de movimentacao
-            print('=========================================')
-            print('Aplicou o filtro de tipo de movimentacao')
-            print('=========================================')
+            controller.gera_log('Aplicou o filtro de tipo de movimentacao')
             id_aux = False
             if tipo_movimentacao == '1':
                 id_aux = True
@@ -103,10 +93,8 @@ def formata_dados_do_relatorio(dados, tipo_movimentacao=None, todas=False):
     }
 
     if todas:
-        print('=========================================')
-        print('Listando todos os dados')
-        print('=========================================')
-        
+        controller.gera_log('Listando todos os dados')
+
         titulos_aux = ['Hora inicial', 'Hora Final', 'Total de horas', 'Motivo', 'Tipo de movimentação', 'Finalizado', 'forma de pagamento', 'Status', 'Colaborador']
         res['titulos'] += titulos_aux
         for dado in dados:
@@ -128,9 +116,7 @@ def formata_dados_do_relatorio(dados, tipo_movimentacao=None, todas=False):
             ])
     else:
         if tipo_movimentacao == '1':
-            print('=========================================')
-            print('Listando todos os bancos de horas')
-            print('=========================================')
+            controller.gera_log('Listando todos os bancos de horas')
 
             titulos_aux = ['Hora inicial', 'Hora Final', 'Total de horas', 'Motivo', 'Finalizado', 'Status', 'Colaborador']
             res['titulos'] += titulos_aux
@@ -148,9 +134,7 @@ def formata_dados_do_relatorio(dados, tipo_movimentacao=None, todas=False):
                     dado.colaborador.nome
                 ])
         else:
-            print('=========================================')
-            print('Listando todos as baixas')
-            print('=========================================')
+            controller.gera_log('Listando todos as baixas')
 
             titulos_aux = ['Total de horas', 'Forma de pagamento', 'Finalizado', 'Status', 'Colaborador']
             for dado in dados:

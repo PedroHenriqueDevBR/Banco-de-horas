@@ -7,8 +7,9 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-import core.constants as constant
 from core.models import *
+import core.constants as constant
+from core.controller import FuncionalidadesCore
 from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
 
 
@@ -16,6 +17,10 @@ class PainelDeControleSolicitacoesView(View):
     template_name = 'core/dashboard/dashboard-solicitacoes.html'
 
     def get(self, request):
+        func = FuncionalidadesCore()
+        if not func.administardor(request):
+            return redirect('solicitacoes')
+
         func = Utilidades()
         dados = seleciona_dados(request)
         setor = request.user.perfil.setor
@@ -64,6 +69,10 @@ class PainelDeControleFolgasView(View):
     template_name = 'core/dashboard/dashboard-folgas.html'
 
     def get(self, request):
+        func = FuncionalidadesCore()
+        if not func.administardor(request):
+            return redirect('solicitacoes')
+        
         func = Utilidades()
         dados = seleciona_dados(request)
         setor = request.user.perfil.setor
@@ -290,6 +299,10 @@ def solicitacao_mostra_view(request, id):
 
 @login_required(login_url='login')
 def solciitacao_finaliza(request, id):
+    func = FuncionalidadesCore()
+    if not func.administardor(request):
+        return redirect('solicitacoes')
+
     movimentacao = Movimentacao.objects.get(id=id)
     analise = Status.objects.filter(analise=True)[0]
 
