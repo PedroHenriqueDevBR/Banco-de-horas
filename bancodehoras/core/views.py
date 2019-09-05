@@ -114,10 +114,19 @@ def setor(request):
         return redirect('solicitacoes')
 
     if request.method == 'POST':
-        nome_setor = request.POST.get('nome_setor')
-        Setor.objects.create(nome=nome_setor)
-        messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
-        return redirect('setor')
+        try:
+            nome_setor = request.POST.get('nome_setor')
+            if len(nome_setor) == 0:
+                messages.add_message(request, messages.INFO, 'Erro no cadastro, nome inválido.')
+            elif len(Setor.objects.filter(nome=nome_setor)) > 0:
+                messages.add_message(request, messages.INFO, 'Erro no cadastro, setor já cadastrado.')
+            else:
+                Setor.objects.create(nome=nome_setor)
+                messages.add_message(request, messages.INFO, 'Setor cadastrado com sucesso.')
+            return redirect('setor')            
+        except Exception:
+            messages.add_message(request, messages.INFO, 'Erro no cadastro do setor, contate o administrador do sistema.')
+            return redirect('setor')
     else:
         dados = seleciona_dados(request)
         dados['setores'] = Setor.objects.all()
@@ -132,10 +141,19 @@ def setor_atualiza(request, id):
         return redirect('solicitacoes')
 
     if request.method == 'POST':
-        nome = request.POST.get('nome_setor')
-        setor = Setor.objects.get(id=id)
-        setor.nome = nome
-        setor.save()
+        try:
+            nome_setor = request.POST.get('nome_setor')
+            if len(nome_setor) == 0:
+                messages.add_message(request, messages.INFO, 'Erro na atualização, nome inválido.')
+            elif len(Setor.objects.filter(nome=nome_setor)) > 0:
+                messages.add_message(request, messages.INFO, 'Erro na atualização, setor já cadastrado.')
+            else:
+                setor = Setor.objects.get(id=id)
+                setor.nome = nome_setor
+                setor.save()
+            return redirect('setor')
+        except Exception:
+            return redirect('setor')
     return redirect('setor')
 
 
@@ -168,25 +186,28 @@ def status(request):
         return redirect('solicitacoes')
 
     if request.method == 'POST':
-        nome_status = request.POST.get('nome_status')
-        status = request.POST.get('status')
-
-        busca_status = Status.objects.filter(nome=nome_status)
-        if len(busca_status) > 0:
-            messages.add_message(request, messages.INFO, 'Status já cadastrado')
-        else:
-            analise = False
-            autorizado = False
-            if status == 'analise':
-                salvar_novo_padrao_analise()
-                analise = True
-            elif status == 'autorizado':
-                salvar_novo_padrao_autorizado()
-                autorizado = True
-
-            Status.objects.create(nome=nome_status, analise=analise, autorizado=autorizado)
-            messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
-
+        try:
+            nome_status = request.POST.get('nome_status')
+            status = request.POST.get('status')
+            
+            if len(nome_status) == 0 or len(status) == 0:
+                messages.add_message(request, messages.INFO, 'Erro no cadastro, dados inválidos para cadastro')
+            elif len(Status.objects.filter(nome=nome_status)) > 0:
+                messages.add_message(request, messages.INFO, 'Erro no cadastro, status já cadastrado')
+            else:
+                analise = False
+                autorizado = False
+                if status == 'analise':
+                    salvar_novo_padrao_analise(request)
+                    analise = True
+                elif status == 'autorizado':
+                    salvar_novo_padrao_autorizado(request)
+                    autorizado = True
+                Status.objects.create(nome=nome_status, analise=analise, autorizado=autorizado)
+                messages.add_message(request, messages.INFO, 'Status cadastrado com sucesso.')
+        except Exception:
+            messages.add_message(request, messages.INFO, 'Erro no cadastro, verifique se todos os campos estão preenchidos corretamente.')
+            return redirect('administrador_extra')
     return redirect('administrador_extra')
 
 
@@ -196,7 +217,7 @@ def status_torna_padrao_analise(request, id):
     if not func.superuser(request):
         return redirect('solicitacoes')
 
-    salvar_novo_padrao_analise(id)
+    salvar_novo_padrao_analise(request, id)
     return redirect('administrador_extra')
 
 
@@ -206,7 +227,7 @@ def status_torna_padrao_autorizado(request, id):
     if not func.superuser(request):
         return redirect('solicitacoes')
 
-    salvar_novo_padrao_autorizado(id)
+    salvar_novo_padrao_autorizado(request, id)
     return redirect('administrador_extra')
 
 
@@ -252,40 +273,55 @@ def status_editar(request, id):
         return render(request, 'core/super/alterar-status.html', dados)
 
 
-def salvar_novo_padrao_analise(id=None):
+def salvar_novo_padrao_analise(request, id=None):
     if not id:
         status = Status.objects.all()
         for statu in status:
             statu.analise = False
             statu.save()
     else:
-        status = Status.objects.all()
-        for statu in status:
-            if statu.id == id:
-                statu.analise = True
-                statu.save()
-                continue
+        alterar_demais = True
+        status_aux = Status.objects.get(id=id)
 
-            statu.analise = False
-            statu.save()
+        if not status_aux.autorizado:
+            status_aux.analise = True
+            status_aux.save()
+        else:
+            alterar_demais = False
+            messages.add_message(request, messages.INFO, 'Impossível um status ser do tipo análise e autorizado ao mesmo tempo.')
+
+        if alterar_demais:
+            for status in Status.objects.all():
+                if status.id == id:
+                    continue
+                status.analise = False
+                status.save()
 
 
-def salvar_novo_padrao_autorizado(id=None):
+
+def salvar_novo_padrao_autorizado(request, id=None):
     if not id:
         status = Status.objects.all()
         for statu in status:
             statu.autorizado = False
             statu.save()
     else:
-        status = Status.objects.all()
-        for statu in status:
-            if statu.id == id:
-                statu.autorizado = True
-                statu.save()
-                continue
+        alterar_demais = True
+        status_aux = Status.objects.get(id=id)
 
-            statu.autorizado = False
-            statu.save()
+        if not status_aux.analise:
+            status_aux.autorizado = True
+            status_aux.save()
+        else:
+            alterar_demais = False
+            messages.add_message(request, messages.INFO, 'Impossível um status ser do tipo análise e autorizado ao mesmo tempo.')
+
+        if alterar_demais:
+            for status in Status.objects.all():
+                if status.id == id:
+                    continue
+                status.autorizado = False
+                status.save()
 
 
 @login_required(login_url='login')

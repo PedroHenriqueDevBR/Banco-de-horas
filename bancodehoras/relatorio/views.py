@@ -13,68 +13,70 @@ import os
 @login_required(login_url='login')
 def relatorio(request):
     if request.method == 'POST':
-        data_inicial = request.POST.get('data_inicial')
-        data_final = request.POST.get('data_final')
-        status = request.POST.get('status')
-        andamento = request.POST.get('andamento')
-        colaborador = request.POST.get('colaborador')
-        forma_pagamento = request.POST.get('forma_pagamento')
-        tipo_movimentacao = request.POST.get('tipo_movimentacao')
+        try:
+            data_inicial = request.POST.get('data_inicial')
+            data_final = request.POST.get('data_final')
+            status = request.POST.get('status')
+            andamento = request.POST.get('andamento')
+            colaborador = request.POST.get('colaborador')
+            forma_pagamento = request.POST.get('forma_pagamento')
+            tipo_movimentacao = request.POST.get('tipo_movimentacao')
 
-        inicio = datetime.strptime(data_inicial, '%Y-%m-%d')
-        fim = datetime.strptime(data_final, '%Y-%m-%d')
-        dados = Movimentacao.objects.filter(data_movimentacao__range=(inicio, fim))
-        todas = True
+            inicio = datetime.strptime(data_inicial, '%Y-%m-%d')
+            fim = datetime.strptime(data_final, '%Y-%m-%d')
+            dados = Movimentacao.objects.filter(data_movimentacao__range=(inicio, fim))
+            todas = True
 
-        if status != '0' and status != '': # Status
-            controller.gera_log('Aplicou o filtro de Status')
-            id_aux = int(status)
-            status = Status.objects.get(id=id_aux)
-            dados = dados.filter(status=status)
+            if status != '0' and status != '': # Status
+                controller.gera_log('Aplicou o filtro de Status')
+                id_aux = int(status)
+                status = Status.objects.get(id=id_aux)
+                dados = dados.filter(status=status)
 
-        if andamento != '0' and andamento != '': # Andamento da solicitação
-            controller.gera_log('Aplicou o filtro de Andamento da solicitação')
-            id_aux = False
-            if id_aux == '1':
-                id_aux = True
-            dados = dados.filter(finalizado=id_aux)
+            if andamento != '0' and andamento != '': # Andamento da solicitação
+                controller.gera_log('Aplicou o filtro de Andamento da solicitação')
+                id_aux = False
+                if id_aux == '1':
+                    id_aux = True
+                dados = dados.filter(finalizado=id_aux)
 
-        if colaborador != '0' and colaborador != '': # colaborador especifico
-            controller.gera_log('Aplicou o filtro de Colaborador especifico')
-            id_aux = int(colaborador)
-            colaborador = Perfil.objects.get(id=id_aux)
-            dados = dados.filter(colaborador=colaborador)
+            if colaborador != '0' and colaborador != '': # colaborador especifico
+                controller.gera_log('Aplicou o filtro de Colaborador especifico')
+                id_aux = int(colaborador)
+                colaborador = Perfil.objects.get(id=id_aux)
+                dados = dados.filter(colaborador=colaborador)
 
-        if forma_pagamento != '0' and forma_pagamento != '': # Forma de pagamento
-            controller.gera_log('Aplicou o filtro de Forma de pagamento')
-            id_aux = int(forma_pagamento)
-            forma_pagamento = FormaDePagamento.objects.get(id=id_aux)
-            dados = dados.filter(forma_de_pagamento=forma_pagamento)
+            if forma_pagamento != '0' and forma_pagamento != '': # Forma de pagamento
+                controller.gera_log('Aplicou o filtro de Forma de pagamento')
+                id_aux = int(forma_pagamento)
+                forma_pagamento = FormaDePagamento.objects.get(id=id_aux)
+                dados = dados.filter(forma_de_pagamento=forma_pagamento)
 
-        if tipo_movimentacao != '0' and tipo_movimentacao != '': # Tipo de movimentacao
-            controller.gera_log('Aplicou o filtro de tipo de movimentacao')
-            id_aux = False
-            if tipo_movimentacao == '1':
-                id_aux = True
-            dados = dados.filter(entrada=id_aux)
-            todas = False
+            if tipo_movimentacao != '0' and tipo_movimentacao != '': # Tipo de movimentacao
+                controller.gera_log('Aplicou o filtro de tipo de movimentacao')
+                id_aux = False
+                if tipo_movimentacao == '1':
+                    id_aux = True
+                dados = dados.filter(entrada=id_aux)
+                todas = False
 
-        res = {}
-        if todas:
-            res = formata_dados_do_relatorio(dados, todas=todas)
-        else:
-            res = formata_dados_do_relatorio(dados, tipo_movimentacao=tipo_movimentacao)
+            res = {}
+            if todas:
+                res = formata_dados_do_relatorio(dados, todas=todas)
+            else:
+                res = formata_dados_do_relatorio(dados, tipo_movimentacao=tipo_movimentacao)
 
-        filepath = gerador(res)
-        if os.path.exists(filepath):
-            with open(filepath, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
-                return response
-            
-            return HttpResponse('Arquivo não encontrado.')
-        # import pdb; pdb.set_trace()
-
+            filepath = gerador(res)
+            if os.path.exists(filepath):
+                with open(filepath, 'rb') as fh:
+                    response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+                    response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
+                    return response
+                
+                return HttpResponse('Arquivo não encontrado.')
+        except Exception:
+            messages.add_message(request, messages.INFO, 'Erro ao gerar relatório, verifique se todos ' +
+                                                            'os campos estão preenchidos corretamente e tente novamente.')
 
     dados = seleciona_dados(request)
     return render(request, 'relatorio/relatorio.html', dados)
