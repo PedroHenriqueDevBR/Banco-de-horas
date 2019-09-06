@@ -11,7 +11,7 @@
                 <form method="POST" action="{% url 'solicitacoes_baixas' %}">{% csrf_token %}
                     <div class="form-group">
                         <label for="form-input-data-cadastro" class="col-form-label">Data da folga:</label>
-                        <input name="data_folga" type="date" class="form-control" id="form-input-data-cadastro">
+                        <input name="data_folga" type="date" class="form-control" id="form-input-data-cadastro" required>
                     </div>
 
                     <div class="input-group mb-3">

@@ -24,7 +24,10 @@ class LoginUsuarioView(View):
 
         if user is None:
             if User.objects.filter(username=username):
-                messages.add_message(request, messages.INFO, 'Usuário inativo.')
+                if User.objects.get(username=username).is_active == False:
+                    messages.add_message(request, messages.INFO, 'Usuário inativo.')
+                else:
+                    messages.add_message(request, messages.INFO, 'Senha incorreta.')
             else:
                 messages.add_message(request, messages.INFO, 'Colaborador não cadastrado.')
         else:

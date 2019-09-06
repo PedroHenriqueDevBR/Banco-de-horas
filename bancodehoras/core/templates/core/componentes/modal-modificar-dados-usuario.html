@@ -1,0 +1,77 @@
+<div class="modal fade" id="editar-colaborador" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cadastrar colaborador</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-cadastrar-colaborador" action="{% url 'usuario_atualiza' colaborador.username %}"
+                    method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3 mt-2">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text" for="inputGroupSelect01">setor</label>
+                        </div>
+                        <select class="custom-select" name="setor" id="setor">
+                            {% if setores %}
+                            {% for setor in setores %}
+                            {% if setor.id == colaborador.perfil.setor.id %}
+                            <option value="{{ setor.id }}" selected>{{setor.nome}}</option>
+                            {% else %}
+                            <option value="{{ setor.id }}">{{setor.nome}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="nome" class="col-form-label">Nome (*):</label>
+                        <input class="form-control" name="nome" id="nome" type="text"
+                            value="{{ colaborador.perfil.nome }}" required minlength="3">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="matricula" class="col-form-label">Matricula (*):</label>
+                        <input class="form-control" name="matricula" id="matricula" type="text"
+                            value="{{ colaborador.username }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email (*):</label>
+                        <input class="form-control" name="email" id="email" type="text" value="{{ colaborador.email }}" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="senha" class="col-form-label">Senha (*):</label>
+                        <input class="form-control" name="senha" id="senha" type="password"
+                            placeholder="Deixar campo vazio para não alterar a senha">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col">
+                                <label for="senha" class="col-form-label">Primeira carga horária:</label>
+                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time"
+                                    value="{{ colaborador.perfil.ch_primeira }}" required>
+                            </div>
+                            <div class="col">
+                                <label for="senha" class="col-form-label">Segunda carga horária:</label>
+                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time"
+                                    value="{{ colaborador.perfil.ch_segunda }}" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btn-cadastrar-colaborador">Atualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

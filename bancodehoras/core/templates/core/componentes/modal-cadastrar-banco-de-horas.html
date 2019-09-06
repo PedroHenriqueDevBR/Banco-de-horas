@@ -11,7 +11,7 @@
                 <form method="POST" action="{% url 'solicitacoes_banco_de_horas' %}">{% csrf_token %}
                     <div class="form-group">
                         <label for="form-input-data-cadastro" class="col-form-label">Data do evento:</label>
-                        <input name="data" type="date" class="form-control" id="form-input-data-cadastro">
+                        <input name="data" type="date" class="form-control" id="form-input-data-cadastro" required>
                     </div>
 
                     <div class="row">
@@ -19,21 +19,22 @@
                             <div class="form-group">
                                 <label for="form-input-hora-inicial" class="col-form-label">Hora inicial:</label>
                                 <input name="hora_inicial" type="time" class="form-control"
-                                    id="form-input-hora-inicial">
+                                    id="form-input-hora-inicial" required>
                             </div>
                         </div>
 
                         <div class="col">
                             <div class="form-group">
                                 <label for="form-input-hora-final" class="col-form-label">Hora final:</label>
-                                <input name="hora_final" type="time" class="form-control" id="form-input-hora-final">
+                                <input name="hora_final" type="time" class="form-control" id="form-input-hora-final" required>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="form-input-motivo" class="col-form-label">motivo:</label>
-                        <textarea name="motivo" id="form-input-motivo" rows="5" class="form-control"></textarea>
+                        <textarea name="motivo" id="form-input-motivo" rows="5" class="form-control" required 
+                            placeholder="Descreva o motivo da sua solicitação."></textarea>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">cancelar</button>

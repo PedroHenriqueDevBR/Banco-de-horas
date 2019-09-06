@@ -66,7 +66,8 @@ def relatorio(request):
             else:
                 res = formata_dados_do_relatorio(dados, tipo_movimentacao=tipo_movimentacao)
 
-            filepath = gerador(res)
+            username = request.user.username
+            filepath = gerador(res, username)
             if os.path.exists(filepath):
                 with open(filepath, 'rb') as fh:
                     response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
@@ -165,12 +166,12 @@ def formatar_data(data):
     return resultado
 
 
-def gerador(dados):
+def gerador(dados, arquivo_nome='indefinido'):
     pasta = 'relatorio/arquivos/'
-    nome_arquivo = 'teste_teste.xls'
+    nome_arquivo = '{}.xls'.format(arquivo_nome)
     arquivo = '{}{}'.format(pasta, nome_arquivo)
     filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
-    controller.gera_relatorio(dados, 'teste_teste')
+    controller.gera_relatorio(dados, arquivo_nome)
     return filepath
 
 

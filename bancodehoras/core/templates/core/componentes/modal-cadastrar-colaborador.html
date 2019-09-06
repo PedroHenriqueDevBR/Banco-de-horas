@@ -16,33 +16,33 @@
 
                     <div class="form-group">
                         <label for="nome" class="col-form-label">Nome (*):</label>
-                        <input class="form-control" name="nome" id="nome" type="text">
+                        <input class="form-control" name="nome" id="nome" type="text" required minlength="3" placeholder="Nome do colaborador">
                     </div>
 
                     <div class="form-group">
                         <label for="matricula" class="col-form-label">Matricula (*):</label>
-                        <input class="form-control" name="matricula" id="matricula" type="text">
+                        <input class="form-control" name="matricula" id="matricula" type="text" required placeholder="12345">
                     </div>
 
                     <div class="form-group">
                         <label for="email" class="col-form-label">Email (*):</label>
-                        <input class="form-control" name="email" id="email" type="text">
+                        <input class="form-control" name="email" id="email" type="text" required minlength="3" placeholder="colaborador@grupovanguarda.com" value="@grupovanguarda.com">
                     </div>
 
                     <div class="form-group">
                         <label for="senha" class="col-form-label">Senha (*):</label>
-                        <input class="form-control" name="senha" id="senha" type="password">
+                        <input class="form-control" name="senha" id="senha" type="password" required minlength="6" placeholder="mínimo 6 caracteres">
                     </div>
 
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
                                 <label for="senha" class="col-form-label">Primeira carga horária:</label>
-                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time">
+                                <input class="form-control" name="ch_primeira" id="ch_primeira" type="time" required>
                             </div>
                             <div class="col">
                                 <label for="senha" class="col-form-label">Segunda carga horária:</label>
-                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time">
+                                <input class="form-control" name="ch_segunda" id="ch_segunda" type="time" required>
                             </div>
                         </div>
                     </div>
