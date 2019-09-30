@@ -27,6 +27,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Data da solicitação</th>
+                        <th scope="col">Colaborador</th>
                         <th scope="col">Data da folga</th>
                         <th scope="col">total de horas</th>
                         <th scope="col">status</th>
@@ -38,6 +39,7 @@
         {% for baixa in solciitacoes_pendentes %}
         <tr>
             <th scope="row">{{ baixa.data_cadastro }}</th>
+            <th scope="row">{{ baixa.colaborador.nome }}</th>
             <th scope="row">{{ baixa.data_movimentacao }}</th>
             <td>{{ baixa.hora_total }}</td>
             <td class="text-warning">{{ baixa.status.nome }}</td>

@@ -27,6 +27,7 @@
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">Data</th>
+                        <th scope="col">Colaborador</th>
                         <th scope="col">Hora inicial</th>
                         <th scope="col">Hora final</th>
                         <th scope="col">Total</th>
@@ -39,6 +40,7 @@
                     {% for banco in solciitacoes_pendentes %}
                     <tr>
                         <th scope="row">{{ banco.data_movimentacao }}</th>
+                        <th scope="row">{{ banco.colaborador.nome }}</th>
                         <td>{{ banco.hora_inicial }}</td>
                         <td>{{ banco.hora_final }}</td>
                         <td>{{ banco.hora_total }}</td>
