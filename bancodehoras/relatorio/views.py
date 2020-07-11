@@ -199,51 +199,52 @@ def relarorio_de_perfis_baixa(request, arquivo):
 
 
 @login_required(login_url='login')
-def solicitacoes_pendentes_do_perfil(request, id):
-    try:
-        perfil = Perfil.objects.get(id=id)
-        controller.relatorio_solicitacoes_pendentes_do_perfil(perfil)
+def solicitacoes_pendentes_do_perfil(request):
+    # try:
+    id = request.user.perfil.id
+    perfil = Perfil.objects.get(id=id)
+    controller.relatorio_solicitacoes_pendentes_do_perfil(perfil)
 
-        pasta = 'relatorio/arquivos/'
-        nome_arquivo = 'solicitacoes.xls'
-        arquivo = '{}{}'.format(pasta, nome_arquivo)
-        filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
-        
-        if os.path.exists(filepath):
-            with open(filepath, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
-                return response
-        else:
-            return HttpResponse('Arquivo não encontrado.')
+    pasta = 'relatorio/arquivos/'
+    nome_arquivo = 'minhas_solicitacoes.xls'
+    arquivo = '{}{}'.format(pasta, nome_arquivo)
+    filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
 
-    except Exception:
-        messages.add_message(request, messages.INFO, 'Usuário não localizado')
-        return redirect('dashboard')
+    if os.path.exists(filepath):
+        with open(filepath, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
+            return response
+    else:
+        return HttpResponse('Arquivo não encontrado.')
+
+    # except Exception:
+    #     messages.add_message(request, messages.INFO, 'Usuário não localizado')
+    #     return redirect('dashboard')
 
 
 @login_required(login_url='login')
 def solicitacoes_pendentes_do_meu_setor(request):
-    try:
-        user = request.user
-        usuarios_do_setor = user.perfil.setor.perfis_do_setor.all()
-        controller.relatorio_solicitacoes_do_meu_setor(usuarios_do_setor)
+    # try:
+    user = request.user
+    usuarios_do_setor = user.perfil.setor.perfis_do_setor.all()
+    controller.relatorio_solicitacoes_do_meu_setor(usuarios_do_setor)
 
-        pasta = 'relatorio/arquivos/'
-        nome_arquivo = 'solicitacoes_pendentes.xls'
-        arquivo = '{}{}'.format(pasta, nome_arquivo)
-        filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
-        
-        if os.path.exists(filepath):
-            with open(filepath, 'rb') as fh:
-                response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
-                response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
-                return response
-        else:
-            return HttpResponse('Arquivo não encontrado.')
+    pasta = 'relatorio/arquivos/'
+    nome_arquivo = 'solicitacoes_do_setor.xls'
+    arquivo = '{}{}'.format(pasta, nome_arquivo)
+    filepath = os.path.join(settings.MEDIA_ROOT, arquivo)
 
-    except Exception:
-        messages.add_message(request, messages.INFO, 'Usuário não localizado')
-        return redirect('dashboard')
+    if os.path.exists(filepath):
+        with open(filepath, 'rb') as fh:
+            response = HttpResponse(fh.read(), content_type="application/vnd.ms-excel")
+            response['Content-Disposition'] = 'inline; filename=' + os.path.basename(filepath)
+            return response
+    else:
+        return HttpResponse('Arquivo não encontrado.')
 
-    return redirect('dashboard')
+    # except Exception:
+    #     messages.add_message(request, messages.INFO, 'Usuário não localizado')
+    #     return redirect('dashboard')
+
+    # return redirect('dashboard')

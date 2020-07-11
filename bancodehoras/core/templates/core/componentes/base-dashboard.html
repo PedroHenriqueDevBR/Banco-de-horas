@@ -24,7 +24,7 @@
                 <a href="{% url 'setor' %}"
                     class="list-group-item list-group-item-action list-group-item-light">Controle de setor</a>
                 <a href="{% url 'administrador_extra' %}"
-                    class="list-group-item list-group-item-action list-group-item-light">Dados para cadastro</a>
+                    class="list-group-item list-group-item-action list-group-item-light">Dados gerenciais</a>
                 {% endif %}
                 {% if perfil_logado.perfil.gerente %}
                 <a href="{% url 'dashboard' %}"
@@ -52,7 +52,7 @@
                 <a href="{% url 'administrador_extra' %}"
                     class="list-group-item list-group-item-action list-group-item-light d-flex align-items-center">
                     <i class="material-icons mx-2">settings_applications</i>
-                    Dados para cadastro
+                    Dados gerenciais
                     </a>
                 {% endif %}
                 {% if perfil_logado.perfil.gerente %}

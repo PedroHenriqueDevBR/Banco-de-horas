@@ -14,7 +14,7 @@ urlpatterns = [
 
     # Relatórios
     path('relatorio/', views_rel.relatorio, name='relatorio'),
-    path('relatorio/solicitacoesdoperfil/<int:id>', views_rel.solicitacoes_pendentes_do_perfil, name='rel_solicitacoes_do_perfil'),
+    path('relatorio/solicitacoesdoperfil/', views_rel.solicitacoes_pendentes_do_perfil, name='rel_solicitacoes_do_perfil'),
     path('relatorio/solicitacoesdosetor/', views_rel.solicitacoes_pendentes_do_meu_setor, name='rel_solicitacoes_do_setor'),
 
     # Painel de controle do super administrador

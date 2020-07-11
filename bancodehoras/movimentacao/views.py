@@ -181,7 +181,7 @@ class SolicitacaoBancoDeHorasView(View):
             messages.add_message(request, messages.INFO, 'Banco de horas solicitado com sucesso.')
             return redirect('solicitacoes')
         except:
-            messages.add_message(request, messages.INFO, 'Preencha todos os campos.')
+            messages.add_message(request, messages.INFO, 'Erro inesperado, contate o administrador e verifique se as configurações do sistema estão corretas.')
             return redirect('solicitacoes')
 
 

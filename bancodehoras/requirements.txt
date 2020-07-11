@@ -1,2 +1,2 @@
-xlwt
-reportlab
+xlwt==1.3.0
+reportlab==3.5.44

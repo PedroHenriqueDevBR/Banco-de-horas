@@ -17,30 +17,36 @@ class LoginUsuarioView(View):
         return render(request, self.template_name)
 
     def post(self, request):
-        username = request.POST.get('login')
-        password = request.POST.get('senha')
+        try:
 
-        user = authenticate(username=username, password=password)
+            username = request.POST.get('login')
+            password = request.POST.get('senha')
 
-        if user is None:
-            if User.objects.filter(username=username):
-                if User.objects.get(username=username).is_active == False:
-                    messages.add_message(request, messages.INFO, 'Usuário inativo.')
+            user = authenticate(username=username, password=password)
+
+            if user is None:
+                if User.objects.filter(username=username):
+                    if User.objects.get(username=username).is_active == False:
+                        messages.add_message(request, messages.INFO, 'Usuário inativo.')
+                    else:
+                        messages.add_message(request, messages.INFO, 'Senha incorreta.')
                 else:
-                    messages.add_message(request, messages.INFO, 'Senha incorreta.')
+                    messages.add_message(request, messages.INFO, 'Colaborador não cadastrado.')
             else:
-                messages.add_message(request, messages.INFO, 'Colaborador não cadastrado.')
-        else:
-            messages.add_message(request, messages.INFO, 'Seja bem vindo {}.'.format(user.perfil.nome))
-            login(request, user)
+                messages.add_message(request, messages.INFO, 'Seja bem vindo {}.'.format(user.perfil.nome))
+                login(request, user)
 
-            if user.is_superuser:
-                return redirect('escolha_dashboard')
-            elif user.perfil.gerente:
-                return redirect('dashboard')
-            return redirect('solicitacoes')
+                if user.is_superuser:
+                    return redirect('escolha_dashboard')
+                elif user.perfil.gerente:
+                    return redirect('dashboard')
+                return redirect('solicitacoes')
 
-        return render(request, self.template_name)
+            return render(request, self.template_name)
+        except:
+            messages.add_message(request, messages.INFO, 'Colaborador não cadastrado.')
+            return self.get(request)
+
 
 
 @login_required(login_url='login')

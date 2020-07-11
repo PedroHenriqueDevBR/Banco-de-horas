@@ -98,7 +98,7 @@ def relatorio_solicitacoes_pendentes_do_perfil(perfil):
     solicitacoes = perfil.movimentacoes.all()
     resultado = []
     pasta = 'relatorio/arquivos/'
-    nome_arquivo = 'solicitacoes.xls'
+    nome_arquivo = 'minhas_solicitacoes.xls'
     
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Resultado')
@@ -134,7 +134,7 @@ def relatorio_solicitacoes_pendentes_do_perfil(perfil):
 def relatorio_solicitacoes_do_meu_setor(perfis):
     resultado = []
     pasta = 'relatorio/arquivos/'
-    nome_arquivo = 'solicitacoes_pendentes.xls'
+    nome_arquivo = 'solicitacoes_do_setor.xls'
     
     wb = xlwt.Workbook()
     ws = wb.add_sheet('Resultado')
