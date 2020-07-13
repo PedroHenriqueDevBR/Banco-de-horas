@@ -1,5 +1,16 @@
 # Banco de horas
 
+## Apresentação em vídeo
+
+<div style="display: flex;">
+    <a href="https://youtu.be/a1n0TdW0jUQ">
+        <img src="https://user-images.githubusercontent.com/36716898/87263069-5fd0a500-c492-11ea-8a7e-112e2f0e144f.png" alt="Assista ao vídeo de apresentação" width="45%">
+    </a>
+    <a href="https://youtu.be/q1l6VZWX94M">
+        <img src="https://user-images.githubusercontent.com/36716898/87262581-d2d91c00-c490-11ea-8b41-729596e48c61.png" alt="Assista ao vídeo de apresentação do sistema" width="45%">
+    </a>
+</div>
+
 ## Screenshots de exemplo
 
 **Todas as screenshots serão apresentadas no final desta documentação.**
@@ -9,6 +20,7 @@
 ![Captura de tela de 2020-01-22 21-06-32](https://user-images.githubusercontent.com/36716898/72945931-24171700-3d5c-11ea-95b6-7921f817c4c2.png)
 
 ![Captura de tela de 2020-01-22 21-08-01](https://user-images.githubusercontent.com/36716898/72945936-25484400-3d5c-11ea-8c51-bbe676c3f5c0.png)
+
 
 ## Descrição
 
