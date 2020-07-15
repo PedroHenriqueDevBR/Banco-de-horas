@@ -1,4 +1,12 @@
-# Banco de horas
+<h1 align="center">
+    :bird: Banco de horas
+</h1>
+<p align="center">
+    :clock10: Organize o banco de horas dos funcionários da sua empresa. <br>
+    Utilização simples.
+</p>
+
+<hr>
 
 ## Apresentação em vídeo
 
