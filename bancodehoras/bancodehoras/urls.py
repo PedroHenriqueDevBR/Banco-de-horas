@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from django.urls import path
+from django.urls import path, include
 
 from core import views as views_core
 from movimentacao import views as views_mov
@@ -8,6 +8,7 @@ from relatorio import views as views_rel
 from usuario import views as views_usuario
 
 urlpatterns = [
+    path('grappelli/', include('grappelli.urls')),
     path('admin/', admin.site.urls),
     path('', views_core.dashboard, name='escolha_dashboard'),
     path('installsystem', views_core.isntalar_sistema, name='install_system'),
