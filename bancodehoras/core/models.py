@@ -20,6 +20,11 @@ class Perfil(models.Model):
     def __str__(self):
         return self.usuario.username
 
+    def display_setor(self):
+        return ''.join(self.setor.nome)
+
+    display_setor.short_description = 'Setor'
+
 
 class Status(models.Model):
     nome = models.CharField(max_length=50)
