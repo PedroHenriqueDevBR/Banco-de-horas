@@ -1,4 +1,4 @@
-{% extends 'core/componentes/base-dashboard.html' %}
+{% extends 'utils/base-dashboard.html' %}
 
 {% block content %}
 
@@ -18,9 +18,9 @@
 
             <div class="card col-sm-12 px-0">
                 <div class="card-footer d-flex justify-content-center">
-                    <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#editar-setor">Editar</button>
-                    <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-colaborador">Cadastrar</button>
-                    <a href="{% url 'setor_deletar' setor.id %}" class="btn btn-danger mx-1">Deletar</a>
+                    <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#editar-setor">Editar setor</button>
+                    <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-colaborador">Cadastrar colaborador</button>
+                    <a href="{% url 'setor_deletar' setor.id %}" class="btn btn-danger mx-1">Deletar colaborador</a>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
 
 <div class="container bg-light mt-5 card px-0">
     <div class="card-header">
-        <h4></h4>colaboradores pertencentes ao setor</h4>
+        <h4></h4>Colaboradores cadastrados no setor</h4>
     </div>
 
     <div class="card-body px-0 py-0">
@@ -89,6 +89,6 @@
     </div>
 </div>
 
-{% include 'core/componentes/modal-cadastrar-colaborador.html' %}
+{% include 'modais/modal-cadastrar-colaborador.html' %}
 
 {% endblock %}

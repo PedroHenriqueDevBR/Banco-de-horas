@@ -1,4 +1,4 @@
-{% extends 'core/componentes/base.html' %}
+{% extends 'utils/base.html' %}
 {% load static %}
 {% block title %}Login{% endblock %}
 
@@ -10,18 +10,18 @@
 </a>
 
 <main class="container-login">
-    <div class="form-login">
+    <div class="form-login color-light-app">
         <img src="{% static 'img/icon-user.png' %}" width="100" alt="icone">
         <form method="POST" action="{% url 'login' %}">{% csrf_token %}
-            <div class="form-group">
-                <label for="login">Login</label>
+            <div class="form-floating mb-3">
                 <input name="login" id="login" type="text" class="form-control" placeholder="Login de acesso">
+                <label for="login">Login</label>
             </div>
-            <div class="form-group">
-                <label for="senha">Senha</label>
+            <div class="form-floating mb-3">
                 <input name="senha" id="senha" type="password" class="form-control" placeholder="Senha">
+                <label for="senha">Senha</label>
             </div>
-            <button type="submit" class="btn btn-dark full-w">Entrar</button>
+            <button type="submit" class="btn primary-color-app color-light-text full-w">Entrar</button>
         </form>
     </div>
 

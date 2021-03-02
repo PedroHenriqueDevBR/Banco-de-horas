@@ -1,3 +1,15 @@
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: chartreuse;
+}
+
+.hover-efect:hover {
+    color: chartreuse;
+}
+
 html, body {
     width: 100%;
     height: 100%;
@@ -10,11 +22,9 @@ html, body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
 }
 
 .form-login {
-    background: #ffffffcc;
     padding: 0 25px 25px 25px;
     border-radius: 5px;
     display: flex;
@@ -47,7 +57,6 @@ html, body {
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
-    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
 }
 .opcao-de-escolha a {
     width: 250px;
@@ -66,7 +75,6 @@ html, body {
 .container-index {
     width: 100%;
     min-height: 100%;
-    background-image: linear-gradient(to top, #bdc2e8 0%, #bdc2e8 1%, #e6dee9 100%);
 }
 
 .list-item-colaborador {

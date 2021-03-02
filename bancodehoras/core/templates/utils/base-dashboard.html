@@ -1,4 +1,4 @@
-{% extends 'core/componentes/base.html' %}
+{% extends 'utils/base.html' %}
 {% load static %}
 
 {% block title %}Painel de controle{% endblock %}
@@ -7,8 +7,8 @@
 
 <main class="container-index">
 
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand">
+    <nav class="navbar navbar-dark primary-color-app">
+        <a class="navbar-brand px-3">
             <!-- <img src="img/icon-user.png" width="75" alt="logo da página"> -->
             {{ perfil_logado.perfil.nome }}
         </a>
@@ -17,8 +17,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="collapse navbar-collapse primary-color-app" id="navbarSupportedContent">
             <ul class="list-group">
                 {% if perfil_logado.is_superuser %}
                 <a href="{% url 'setor' %}"
@@ -41,7 +40,7 @@
     </nav>
 
     <div class="row full-w" style="max-width: 100%;">
-        <div class="col col-md-3 bg-light px-0 sticky-top d-none d-md-block" style="height: 100vh;">
+        <div class="col col-md-3 bg-menu px-0 sticky-top d-none d-md-block" style="height: 100vh;">
             <ul class="list-group">
                 {% if perfil_logado.is_superuser %}
                 <a href="{% url 'setor' %}"
@@ -84,9 +83,9 @@
             {% if messages %}
             <div class="full-w mt-3 mb-0">
                 {% for message in messages %}
-                <div class="alert alert-primary alert-dismissible fade show full-w" role="alert">
+                <div class="alert alert-warning alert-dismissible fade show full-w" role="alert">
                     {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {% endfor  %}
             </div>
