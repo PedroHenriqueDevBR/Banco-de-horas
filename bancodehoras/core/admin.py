@@ -9,6 +9,19 @@ class PerfilInline(admin.TabularInline):
 
 class MovimentacoesInline(admin.TabularInline):
     model = Movimentacao
+    readonly_fields = [
+        'data_cadastro',
+        'data_movimentacao',
+        'hora_inicial',
+        'hora_final',
+        'hora_total',
+        'motivo',
+        'entrada',
+        'finalizado',
+        'forma_de_pagamento',
+        'status',
+        'colaborador'
+    ]
 
 
 class LogMovimentacaoInline(admin.TabularInline):
