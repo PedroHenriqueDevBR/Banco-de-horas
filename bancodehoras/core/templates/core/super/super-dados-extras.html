@@ -2,128 +2,128 @@
 
 {% block content %}
 
-<div class="container bg-light card px-0 text-center">
-    <div class="card-header px-0">
+<div class="container text-center">
+    <div class="card-header primary-color-dark-app color-light-text">
         <h2>Controle de dados</h2>
     </div>
 
-    <div class="card col-sm-12 px-0">
+    <div class="card col-sm-12 px-5">
         <div class="card-footer d-flex justify-content-center">
-            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-pagamento">Novo
+            <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal"
+                data-bs-target="#cadastrar-pagamento">Novo
                 pagamento</button>
-            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#cadastrar-status">Novo
+            <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal"
+                data-bs-target="#cadastrar-status">Novo
                 status</button>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="card col col-12 col-sm-12 pb-3">
-                <div class="card-body text-center px-0">
-                    {% if status %}
-                    <div class="card-header bg-secondary text-white">
-                        <p class="lead">Status</p>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-tableless table-striped border">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Nome</th>
-                                    <th>Analise</th>
-                                    <th>Autorizado</th>
-                                    <th>Tornar análise</th>
-                                    <th>Tornar autorizado</th>
-                                    <th>Deletar</th>
-                                    <th>Modificar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for statu in status %}
-                                <tr>
-                                    <td>{{ statu.nome }}</td>
-                                    <td>
-                                        {% if statu.analise %}
-                                        <span class="badge badge-warning text-white">X</span>
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if statu.autorizado %}
-                                        <span class="badge badge-success text-white">X</span>
-                                        {% endif %}
-                                    </td>
-                                    <td><a href="{% url 'status_tornar_padrao_analise' statu.id %}">Selecionar</a></td>
-                                    <td><a href="{% url 'status_tornar_padrao_autorizado' statu.id %}">Selecionar</a>
-                                    </td>
-                                    <td><a href="{% url 'status_deletar' statu.id %}">Deletar</a></td>
-                                    <td><a href="{% url 'status_editar' statu.id %}"> Modificar </a></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% endif %}
+    <div class="row mx-0">
+        <div class="card col col-12 col-sm-12 pb-3">
+            <div class="card-body text-center px-0">
+                {% if status %}
+                <div class="card-header primary-color-dark-app color-light-text">
+                    <h4 >Status</h4>
                 </div>
+                <div class="table-responsive">
+                    <table class="table table-striped border">
+                        <thead class="table-dark">
+                            <tr class="">
+                                <th>Nome</th>
+                                <th>Analise</th>
+                                <th>Autorizado</th>
+                                <th>Tornar análise</th>
+                                <th>Tornar autorizado</th>
+                                <th>Deletar</th>
+                                <th>Modificar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for statu in status %}
+                            <tr>
+                                <td>{{ statu.nome }}</td>
+                                <td>
+                                    {% if statu.analise %}
+                                    <span class="badge badge-warning text-white">X</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if statu.autorizado %}
+                                    <span class="badge badge-success text-white">X</span>
+                                    {% endif %}
+                                </td>
+                                <td><a href="{% url 'status_tornar_padrao_analise' statu.id %}" class="badge primary-color-app color-light-text">Selecionar</a></td>
+                                <td><a href="{% url 'status_tornar_padrao_autorizado' statu.id %}" class="badge primary-color-app color-light-text">Selecionar</a>
+                                </td>
+                                <td><a href="{% url 'status_deletar' statu.id %}" class="badge bg-danger">Deletar</a></td>
+                                <td><a href="{% url 'status_editar' statu.id %}" class="badge primary-color-app color-light-text"> Modificar </a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
             </div>
-
-            <div class="card col col-12 col-sm-12 pb-3">
-                <div class="card-body text-center px-0">
-                    {% if formasdepagamentos %}
-                    <div class="card-header bg-secondary text-white">
-                        <p class="lead">Forma de pagamento</p>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-tableless table-striped border">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Opção</th>
-                                    <th>Modificar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for pagamento in formasdepagamentos %}
-                                <tr>
-                                    <td>{{ pagamento.nome }}</td>
-                                    <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}">Deletar</a></td>
-                                    <td><a href="{% url 'forma_de_pagamento_editar' pagamento.id %}">Modificar</a></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="card col col-12 col-sm-12 pb-3">
-                <div class="card-header bg-secondary text-white mt-4">
-                    <p class="lead">Configuração</p>
-                </div>
-                <div class="card-body px-0 py-0">
-                    <div class="table-responsive">
-                        <table class="table table-tableless table-striped border">
-                            <thead class="thead-dark">
-                                <tr>
-                                    <th>Configuração</th>
-                                    <th>valor</th>
-                                    <th>Alterar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for configuracao in configuracoes %}
-                                <tr>
-                                    <td>{{ configuracao.nome }}</td>
-                                    <td>{{ configuracao.valor }}</td>
-                                    <td><a href="{% url 'hash' configuracao.id %}">Modificar</a></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
         </div>
+
+        <div class="card col col-12 col-sm-12 pb-3">
+            <div class="card-body text-center px-0">
+                {% if formasdepagamentos %}
+                <div class="card-header primary-color-dark-app color-light-text">
+                    <h4>Forma(s) de pagamento(s)</h4>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-tableless table-striped border">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Tipo</th>
+                                <th>Opção</th>
+                                <th>Modificar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for pagamento in formasdepagamentos %}
+                            <tr>
+                                <td>{{ pagamento.nome }}</td>
+                                <td><a href="{% url 'forma_de_pagamento_deletar' pagamento.id %}" class="badge bg-danger">Deletar</a></td>
+                                <td><a href="{% url 'forma_de_pagamento_editar' pagamento.id %}" class="badge primary-color-app color-light-text">Modificar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="card col col-12 col-sm-12 pb-3">
+            <div class="card-header primary-color-dark-app color-light-text mt-3">
+                <h4>Configuração(ões)</h4>
+            </div>
+            <div class="card-body px-0 py-0">
+                <div class="table-responsive">
+                    <table class="table table-tableless table-striped border">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>Configuração</th>
+                                <th>valor</th>
+                                <th>Alterar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for configuracao in configuracoes %}
+                            <tr>
+                                <td>{{ configuracao.nome }}</td>
+                                <td>{{ configuracao.valor }}</td>
+                                <td><a href="{% url 'hash' configuracao.id %}" class="badge primary-color-app color-light-text">Modificar</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
 
