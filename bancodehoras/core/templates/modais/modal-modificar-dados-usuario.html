@@ -9,11 +9,8 @@
                 <form id="form-cadastrar-colaborador" action="{% url 'usuario_atualiza' colaborador.username %}"
                     method="post">
                     {% csrf_token %}
-                    <div class="input-group mb-3 mt-2">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">setor</label>
-                        </div>
-                        <select class="custom-select" name="setor" id="setor">
+                    <div class="form-floating mb-3 mt-2">
+                        <select class="form-select" name="setor" id="setor" aria-label="Selecionar setor">
                             {% if setores %}
                             {% for setor in setores %}
                             {% if setor.id == colaborador.perfil.setor.id %}
@@ -24,6 +21,7 @@
                             {% endfor %}
                             {% endif %}
                         </select>
+                        <label for="setor">Setor</label>
                     </div>
 
                     <div class="form-group">
@@ -40,7 +38,8 @@
 
                     <div class="form-group">
                         <label for="email" class="col-form-label">Email (*):</label>
-                        <input class="form-control" name="email" id="email" type="text" value="{{ colaborador.email }}" required>
+                        <input class="form-control" name="email" id="email" type="text" value="{{ colaborador.email }}"
+                            required>
                     </div>
 
                     <div class="form-group">

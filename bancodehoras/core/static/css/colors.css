@@ -24,6 +24,14 @@
     background-color: #ffffff;
 }
 
+.danger-color-app {
+    background-color: #E53935;
+}
+
+.success-color-app {
+    background-color: #E53935;
+}
+
 /* Text color */
 
 .bg-color-text {
