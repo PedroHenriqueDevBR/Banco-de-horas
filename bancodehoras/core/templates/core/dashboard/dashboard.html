@@ -6,18 +6,18 @@
     {% include 'utils/barra-menu-dashboard.html' %}
 
     <div class="card-body">
-        <p class="lead"> Painel de gestão </p>
+        <p class="lead text-center"> Painel de gestão </p>
 
         <div class="card full-w d-none d-sm-block">
             <div class="card-body">
-                <canvas id="general-vision" width="100%"></canvas>
+                <canvas id="general-vision" width="100%" height="30"></canvas>
             </div>
         </div>
 
         <div class="row">
             <section class="card col my-3 mx-3 px-0 auto-h">
-                <div class="card-header">
-                    <p class="text-center lead">Colaboradores do meu setor</p>
+                <div class="card-header primary-color-dark-app color-light-text">
+                    <h5 class="text-center">Colaboradores do meu setor</h5>
                 </div>
                 <div class="card-body px-0 py-0">
                     <ul class="list-group list-group-flush full-w">
@@ -26,7 +26,7 @@
                         <li class="list-group-item list-group-item-action">
                             <div class="list-item-colaborador">
                                 <img src="{% static 'img/icon-user.png' %}" width="50" alt="Colaborador">
-                                <p class="pl-1 lead"><a href="{% url 'listar_solicitacoes' colaborador.usuario.username %}">{{ colaborador.nome }}</a></p>
+                                <p class="px-2" style="margin-top: auto;"><a href="{% url 'listar_solicitacoes' colaborador.usuario.username %}">{{ colaborador.nome }}</a></p>
                             </div>
                         </li>
                         {% endfor %}

@@ -10,21 +10,21 @@
 
     <div class="card full-w">
         <div class="card-body d-none d-sm-block">
-            <canvas id="general-vision" width="100%" height="50px"></canvas>
+            <canvas id="general-vision" width="100%" height="30"></canvas>
         </div>
     </div>
 </div>
 
 {% if solciitacoes_pendentes %}
-<div class="container bg-light mt-5 card px-0">
-    <div class="card-header">
-        <p class="lead">Solicitações de banco de horas em análise</p>
+<div class="container bg-light mt-3 card px-0">
+    <div class="card-header primary-color-dark-app color-light-text">
+        <p class="lead text-center">Solicitações de banco de horas em análise</p>
     </div>
 
-    <div class="card-body">
+    <div class="card-bod px-0 py-0">
         <div class="table-responsive">
             <table class="table mb-0">
-                <thead class="thead-dark">
+                <thead class="table-dark">
                     <tr>
                         <th scope="col">Data</th>
                         <th scope="col">Colaborador</th>
@@ -46,7 +46,7 @@
                         <td>{{ banco.hora_total }}</td>
                         <td>{{ banco.motivo }}</td>
                         <td class="text-warning">{{ banco.status.nome }}</td>
-                        <td><a href="{% url 'solicitacoes_mostrar' banco.id %}">Acessar</a></td>
+                        <td><a href="{% url 'solicitacoes_mostrar' banco.id %}" class="badge primary-color-app color-light-text">Acessar</a></td>
                     </tr>
                     {% endfor %}
                 </tbody>

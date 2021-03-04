@@ -9,44 +9,34 @@
             <div class="modal-body">
                 <form method="POST"> {% csrf_token %}
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="status">Status</label>
-                        </div>
-                        <select class="custom-select" id="status" name="id_status">
+                    <div class="form-floating">
+                        <select class="form-select" id="status" name="id_status" aria-label="Status da solicitação">
                             {% if status %}
                             {% for statu in status %}
                             <option value="{{ statu.id }}">{{ statu.nome }}</option>
                             {% endfor %}
                             {% endif %}
                         </select>
-
-                        
+                        <label for="status">Status</label>
                     </div>
 
-
                     {% if solicitacao.entrada == False %}
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="pagamento">Pagamento</label>
-                        </div>
-
-                        <select class="custom-select" id="pagamento" name="id_pagamento">
+                    <div class="form-floating">
+                        <select class="form-select" id="pagamento" name="id_pagamento" aria-label="Forma de pagamento">
                             {% if forma_de_pagamento %}
                             {% for pagamento in forma_de_pagamento %}
                             <option value="{{ pagamento.id }}">{{ pagamento.nome }}</option>
                             {% endfor %}
                             {% endif %}
                         </select>
+                        <label for="pagamento">Pagamento</label>
                     </div>
                     {% endif %}
 
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Descrição</span>
-                        </div>
-                        <textarea class="form-control" name="descricao"
-                            placeholder="Descreva o motivo da alteração"></textarea>
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Descreva o motivo da alteração" name="descricao"
+                            id="descricao" style="height: 100px"></textarea>
+                        <label for="descricao">Descrição</label>
                     </div>
 
                     <input type="text" value="{{ solicitacao.id }}" style="display: none;" name="id_movimentacao">

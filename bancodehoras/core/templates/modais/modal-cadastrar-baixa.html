@@ -12,16 +12,16 @@
                         <input name="data_folga" type="date" class="form-control" id="form-input-data-cadastro" required>
                     </div>
 
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="inputGroupSelect01">Carga horária</label>
-                        </div>
-                        <select class="custom-select" name="horas_total">
+                    <div class="form-floating">
+                        <select class="form-select" name="horas_total" id="horas_total" aria-label="Carga horária">
                             <option selected value="total">Dia completo</option>
                             <option value="{{ perfil_logado.perfil.ch_primeira }}">Primeira: {{ perfil_logado.perfil.ch_primeira }} horas</option>
                             <option value="{{ perfil_logado.perfil.ch_segunda }}">Segunda: {{ perfil_logado.perfil.ch_segunda }} horas</option>
                         </select>
-                    </div>
+                        <label for="horas_total">Carga horária</label>
+                      </div>
+
+
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>

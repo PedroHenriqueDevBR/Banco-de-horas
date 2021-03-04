@@ -4,18 +4,18 @@
 {% block content %}
 
 <div class="container bg-light mt-0 card px-0">
-    <div class="card-header px-0">
+    <div class="card-header primary-color-dark-app px-0">
         <ul class="nav justify-content-center">
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'solicitacoes' %}">Página inicial</a>
+                <a class="nav-link secondary-color-text" href="{% url 'solicitacoes' %}">Página inicial</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'solicitacoes_banco_de_horas' %}">Solicitações</a>
+                <a class="nav-link secondary-color-text" href="{% url 'solicitacoes_banco_de_horas' %}">Solicitações</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'solicitacoes_baixas' %}">Folgas</a>
+                <a class="nav-link secondary-color-text" href="{% url 'solicitacoes_baixas' %}">Folgas</a>
             </li>
         </ul>
     </div>
@@ -76,11 +76,11 @@
                 <div class="card-footer">
                     <div class="row">
                         <div class="col d-flex flex-row-reverse px-0">
-                            <button class="btn btn-primary mx-1" data-toggle="modal"
-                                data-target="#cadastrar-banco-de-horas">cadastrar banco de horas</button>
+                            <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal"
+                                data-bs-target="#cadastrar-banco-de-horas">cadastrar banco de horas</button>
                         </div>
                         <div class="col px-0">
-                            <button class="btn btn-primary mx-1" data-toggle="modal" data-target="#solicitar-folga">Solicitar
+                            <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal" data-bs-target="#solicitar-folga">Solicitar
                                 nova folga</button>                            
                         </div>
                     </div>

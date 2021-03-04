@@ -29,7 +29,15 @@
 }
 
 .success-color-app {
-    background-color: #E53935;
+    background-color: #8BC34A;
+}
+
+.danger-color-light-app {
+    background-color: #EF9A9A;
+}
+
+.success-color-light-app {
+    background-color: #C5E1A5;
 }
 
 /* Text color */

@@ -3,13 +3,13 @@
 
 {% block content %}
 <div class="bg-light card">
-    <div class="card-header bg-dark text-white text-center">
-        <h3>Solicitacao número: {{ solicitacao.id }}</h3>
+    <div class="card-header primary-color-dark-app color-light-text text-center">
+        <h5>Solicitacao número: {{ solicitacao.id }}</h5>
     </div>
 
     {% if solicitacao %}
     <table class="table table-striped">
-        <thead class="thead-dark">
+        <thead class="table-dark">
             <tr>
                 <th>Propriedade</th>
                 <th>Informação</th>
@@ -51,15 +51,15 @@
                 <td>
                     {% if perfil_logado.is_superuser or perfil_logado.perfil.gerente %}
                         {% if solicitacao.finalizado == True %}
-                        <a class="badge badge-danger text-white" data-toggle="modal" data-target="#modal-modifica-log">Reabrir solicitação</a>
+                        <a class="badge bg-danger" data-bs-toggle="modal" data-bs-target="#modal-modifica-log">Reabrir solicitação</a>
                         {% else %}
-                        <a href="{% url 'solicitacoes_finalizar' solicitacao.id %}" class="badge badge-primary">Finalizar agora</a>
+                        <a href="{% url 'solicitacoes_finalizar' solicitacao.id %}" class="badge primary-color-app color-light-text hover-efect">Finalizar agora</a>
                         {% endif %}
                     {% else %}
                         {% if solicitacao.finalizado == True %}
-                        <span class="badge badge-danger">Solicitacao finalizada</span>
+                        <span class="badge bg-danger">Solicitacao finalizada</span>
                         {% else %}
-                        <span class="badge badge-primary">Solicitação em aberto</span>
+                        <span class="badge primary-color-app color-light-text hover-efect">Solicitação em aberto</span>
                         {% endif %}
                     {% endif %}
                 </td>
@@ -83,11 +83,11 @@
     {% endif %}
 
     <div class="card-footer">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modal-log">
+        <button class="btn primary-color-app color-light-text hover-efect" data-bs-toggle="modal" data-bs-target="#modal-log">
             Mostrar log
         </button>
         {% if perfil_logado.is_superuser or perfil_logado.perfil.gerente %}
-        <button class="btn btn-primary" data-toggle="modal" data-target="#modal-modifica-log">
+        <button class="btn primary-color-app color-light-text hover-efect" data-bs-toggle="modal" data-bs-target="#modal-modifica-log">
             Modificar solicitação
         </button>
         {% endif %}
