@@ -2,16 +2,16 @@
 {% load static %}
 
 {% block content %}
-<div class="bg-light card">
+<div class="bg-light card mx-3">
     <div class="card-body">
         
         {% if perfil_logado.perfil.gerente %}
-        <button class="btn btn-success float-right mb-3" type="button" data-toggle="modal" data-target="#gerar_relatorio_personalizado">Personalizar</button>
+        <button class="btn primary-color-app color-light-text hover-efect m-3 mt-1" type="button" data-bs-toggle="modal" data-bs-target="#gerar_relatorio_personalizado">Personalizar</button>
         {% endif %}
         
         
         <table class="table table-bordered table-striped">
-            <thead class="thead-dark">
+            <thead class="table-dark">
                 <tr>
                     <th>Relatório</th>
                     <th>Ação</th>

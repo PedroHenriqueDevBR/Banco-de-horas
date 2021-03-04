@@ -21,66 +21,60 @@
                                 <input type="date" class="form-control" name="data_final" required>
                             </div>
                         </div>
-                        <small id="emailHelp" class="form-text text-muted">Digite o período das movimentações.</small>
+                        <small id="emailHelp" class="form-text text-muted mt-2">Digite o período das movimentações.</small>
                     </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="status">Selec. status</label>
-                        </div>
-                        <select class="custom-select" name="status" id="status">
+                    <div class="form-floating my-2">
+                        <select class="form-select" name="status" id="status" aria-label="Selecionar status">
                             <option value="0">Todos</option>
                             {% for statu in status %}
                             <option value="{{ statu.id }}">{{ statu.nome }}</option>
                             {% endfor %}
                         </select>
+                        <label for="status">Selec. status</label>
                     </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="andamento">Selec. andamento</label>
-                        </div>
-                        <select class="custom-select" name="andamento" id="andamento">
+                    <div class="form-floating my-2">
+                        <select class="form-select" name="andamento" id="andamento"
+                            aria-label="Selecionar andamento da solicitação">
                             <option value="0">Todos</option>
                             <option value="1">Selecionar finalizadas</option>
                             <option value="2">Selecionar não finalizadas</option>
                         </select>
+                        <label for="andamento">Selec. andamento</label>
                     </div>
 
-                    <div class="input-group mb-2">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text" for="colaborador">Selec. Colaborador</label>
-                            </div>
-                            <select class="custom-select" name="colaborador" id="colaborador">
-                                <option value="0">Todos</option>
-                                {% for colaborador in perfil_logado.perfil.setor.perfis_do_setor.all %}
-                                <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                    <div class="form-floating my-2">
+                        <select class="form-select" name="colaborador" id="colaborador"
+                            aria-label="Selecionar colaborador">
+                            <option value="0">Todos</option>
+                            {% for colaborador in perfil_logado.perfil.setor.perfis_do_setor.all %}
+                            <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
+                            {% endfor %}
+                        </select>
+                        <label for="colaborador">Selec. Colaborador</label>
+                    </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="forma_pagamento">Forma de pagamento</label>
-                        </div>
-                        <select class="custom-select" name="forma_pagamento" id="forma_pagamento">
+                    <div class="form-floating my-2">
+                        <select class="form-select" name="forma_pagamento" id="forma_pagamento"
+                            aria-label="Forma de pagamento">
                             <option value="0">Todos</option>
                             {% for pagamento in forma_de_pagamento %}
                             <option value="{{ pagamento.id }}">{{ pagamento.nome }}</option>
                             {% endfor %}
                         </select>
+                        <label for="forma_pagamento">Forma de pagamento</label>
                     </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <label class="input-group-text" for="tipo_movimentacao">Tipo de movimentacao</label>
-                        </div>
-                        <select class="custom-select" name="tipo_movimentacao" id="tipo_movimentacao">
+                    <div class="form-floating my-2">
+                        <select class="form-select" name="tipo_movimentacao" id="tipo_movimentacao" aria-label="Tipo de movimentacao">
                             <option value="0">Todos</option>
                             <option value="1">Banco de horas</option>
                             <option value="2">Baixa</option>
                         </select>
+                        <label for="floatingSelect">Tipo de movimentacao</label>
                     </div>
+
                     <div class="modal-footer bg-light">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                         <button type="submit" class="btn btn-success">Gerar</button>
