@@ -20,69 +20,67 @@
         </ul>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="card col col-12 col-sm-12 col-md-6">
-                <div class="card-body px-0">
-                    <table class="table table-striped table-bordered">
-                        <thead class="thead-dark">
-                                <tr>
-                                    <th>BANCO DE HORAS</th>
-                                    <th>Total</th>
-                                </tr>
-                            </thead>
-                        <tbody>
+    <div class="row mx-0">
+        <div class="card col col-12 col-sm-12 col-md-6">
+            <div class="card-body px-0">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
                             <tr>
-                                <td>Horas em análise</td>
-                                <td>{{ horas_solicitadas }}</td>
-                            </tr>
-                            <tr>
-                                <td>Horas autorizadas / mês</td>
-                                <td>{{ horas_autorizadas_mes }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="card col col-12 col-sm-12 col-md-6">
-                <div class="card-body px-0">
-                    <table class="table table-striped table-bordered">
-                        <thead class="thead-dark">
-                            <tr>
-                                <th>FOLGAS</th>
+                                <th>BANCO DE HORAS</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Horas em análise</td>
-                                <td>{{ baixas_solicitadas }}</td>
-                            </tr>
-                            <tr>
-                                <td>Horas autorizadas / mês</td>
-                                <td>{{ baixas_autorizadas_mes }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <tbody>
+                        <tr>
+                            <td>Horas em análise</td>
+                            <td>{{ horas_solicitadas }}</td>
+                        </tr>
+                        <tr>
+                            <td>Horas autorizadas / mês</td>
+                            <td>{{ horas_autorizadas_mes }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
 
-            <div class="card-footer col col-sm-12">
-                Total de horas disponíveis: {{ horas_disponiveis }}
+        <div class="card col col-12 col-sm-12 col-md-6">
+            <div class="card-body px-0">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>FOLGAS</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Horas em análise</td>
+                            <td>{{ baixas_solicitadas }}</td>
+                        </tr>
+                        <tr>
+                            <td>Horas autorizadas / mês</td>
+                            <td>{{ baixas_autorizadas_mes }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+        </div>
 
-            <div class="card col-sm-12 px-0">
-                <div class="card-footer">
-                    <div class="row">
-                        <div class="col d-flex flex-row-reverse px-0">
-                            <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal"
-                                data-bs-target="#cadastrar-banco-de-horas">cadastrar banco de horas</button>
-                        </div>
-                        <div class="col px-0">
-                            <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal" data-bs-target="#solicitar-folga">Solicitar
-                                nova folga</button>                            
-                        </div>
+        <div class="card-footer col col-sm-12">
+            Total de horas disponíveis: {{ horas_disponiveis }}
+        </div>
+
+        <div class="card col-sm-12 px-0">
+            <div class="card-footer">
+                <div class="row">
+                    <div class="col d-flex flex-row-reverse px-0">
+                        <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal"
+                            data-bs-target="#cadastrar-banco-de-horas">cadastrar banco de horas</button>
+                    </div>
+                    <div class="col px-0">
+                        <button class="btn primary-color-app color-light-text hover-efect mx-1" data-bs-toggle="modal" data-bs-target="#solicitar-folga">Solicitar
+                            nova folga</button>                            
                     </div>
                 </div>
             </div>
