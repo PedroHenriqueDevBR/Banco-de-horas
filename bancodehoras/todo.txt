@@ -1,0 +1,3 @@
+- Colocar a aplicação para ser executada pelo docker
+- Criar o método para alteração de senha para o usuário logado
+- Criar o diretório apps e colocar todas as aplicações nesse diretório
