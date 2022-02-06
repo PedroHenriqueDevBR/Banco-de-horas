@@ -4,7 +4,7 @@ from django.urls import path, include
 
 from apps.core.views import views as views_core
 from apps.movimentacao import views as views_mov
-from relatorio import views as views_rel
+from apps.relatorio import views as views_rel
 from apps.usuario import views as views_usuario
 
 urlpatterns = [

@@ -24,7 +24,7 @@ INSTALLED_APPS = [
     'apps.core',
     'apps.usuario',
     'apps.movimentacao',
-    'relatorio',
+    'apps.relatorio',
 ]
 
 MIDDLEWARE = [
