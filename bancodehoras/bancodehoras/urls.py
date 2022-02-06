@@ -5,7 +5,7 @@ from django.urls import path, include
 from apps.core.views import views as views_core
 from movimentacao import views as views_mov
 from relatorio import views as views_rel
-from usuario import views as views_usuario
+from apps.usuario import views as views_usuario
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')),
