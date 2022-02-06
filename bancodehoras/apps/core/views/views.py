@@ -5,8 +5,8 @@ from django.shortcuts import render, redirect
 from .controller import FuncionalidadesCore
 from apps.core.models import *
 from apps.core import constants
-from movimentacao.controller import FuncionalidadesMovimentacao
-from movimentacao.views import seleciona_dados
+from apps.movimentacao.controller import FuncionalidadesMovimentacao
+from apps.movimentacao.views import seleciona_dados
 
 
 def isntalar_sistema(request):

@@ -6,7 +6,7 @@ from django.conf import settings
 from relatorio import controller
 from datetime import datetime
 from apps.core.models import *
-from movimentacao.views import seleciona_dados
+from apps.movimentacao.views import seleciona_dados
 import os
 
 # Create your views here.

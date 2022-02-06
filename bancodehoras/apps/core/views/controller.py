@@ -1,5 +1,5 @@
 from apps.core.models import *
-from movimentacao.controller import FuncionalidadesMovimentacao
+from apps.movimentacao.controller import FuncionalidadesMovimentacao
 
 
 class FuncionalidadesCore:

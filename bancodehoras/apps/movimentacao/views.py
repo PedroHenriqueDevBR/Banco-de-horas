@@ -7,10 +7,10 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
+import apps.core.constants as constant
 from apps.core.models import *
 from apps.core.views.controller import FuncionalidadesCore
-import apps.core.constants as constant
-from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
+from apps.movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
 
 
 class PainelDeControleSolicitacoesView(View):

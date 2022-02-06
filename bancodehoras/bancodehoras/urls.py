@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 
 from apps.core.views import views as views_core
-from movimentacao import views as views_mov
+from apps.movimentacao import views as views_mov
 from relatorio import views as views_rel
 from apps.usuario import views as views_usuario
 

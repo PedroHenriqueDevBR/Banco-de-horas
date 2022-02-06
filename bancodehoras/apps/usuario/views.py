@@ -6,8 +6,8 @@ from django.views.generic.base import View
 
 from apps.core.models import *
 from apps.core.views.controller import FuncionalidadesCore
-from movimentacao.views import seleciona_dados
 from apps.usuario.forms import RegistrarUsuarioForm
+from apps.movimentacao.views import seleciona_dados
 
 
 class LoginUsuarioView(View):
