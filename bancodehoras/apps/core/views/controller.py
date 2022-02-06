@@ -1,4 +1,4 @@
-from core.models import *
+from apps.core.models import *
 from movimentacao.controller import FuncionalidadesMovimentacao
 
 

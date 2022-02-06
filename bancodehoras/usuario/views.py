@@ -4,10 +4,10 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from core.models import *
+from apps.core.models import *
+from apps.core.views.controller import FuncionalidadesCore
 from movimentacao.views import seleciona_dados
 from usuario.forms import RegistrarUsuarioForm
-from core.controller import FuncionalidadesCore
 
 
 class LoginUsuarioView(View):

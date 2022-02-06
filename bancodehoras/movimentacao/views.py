@@ -7,9 +7,9 @@ from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
 
-from core.models import *
-import core.constants as constant
-from core.controller import FuncionalidadesCore
+from apps.core.models import *
+from apps.core.views.controller import FuncionalidadesCore
+import apps.core.constants as constant
 from movimentacao.controller import FormataDados, FuncionalidadesMovimentacao, Utilidades
 
 

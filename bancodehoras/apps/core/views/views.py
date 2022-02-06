@@ -2,11 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
-from core.controller import FuncionalidadesCore
-from core.models import *
+from .controller import FuncionalidadesCore
+from apps.core.models import *
+from apps.core import constants
 from movimentacao.controller import FuncionalidadesMovimentacao
 from movimentacao.views import seleciona_dados
-from core import constants
 
 
 def isntalar_sistema(request):

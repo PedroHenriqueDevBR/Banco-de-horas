@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from relatorio import controller
 from datetime import datetime
-from core.models import *
+from apps.core.models import *
 from movimentacao.views import seleciona_dados
 import os
 
