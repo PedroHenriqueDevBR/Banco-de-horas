@@ -2,10 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from django.urls import path, include
 
-from core import views as views_core
-from movimentacao import views as views_mov
-from relatorio import views as views_rel
-from usuario import views as views_usuario
+from apps.core.views import views as views_core
+from apps.movimentacao import views as views_mov
+from apps.relatorio import views as views_rel
+from apps.usuario import views as views_usuario
 
 urlpatterns = [
     path('grappelli/', include('grappelli.urls')),

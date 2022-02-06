@@ -1,4 +1,4 @@
-from core.models import *
+from apps.core.models import *
 
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4

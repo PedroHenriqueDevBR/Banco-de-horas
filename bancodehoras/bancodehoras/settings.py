@@ -19,10 +19,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'usuario',
-    'core',
-    'movimentacao',
-    'relatorio',
+
+    # Meus Apps
+    'apps.core',
+    'apps.usuario',
+    'apps.movimentacao',
+    'apps.relatorio',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bancodehoras.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
@@ -111,8 +112,8 @@ GRAPPELLI_ADMIN_TITLE = 'Banco de Horas'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     'statics'
 ]
-STATIC_URL = '/static/'

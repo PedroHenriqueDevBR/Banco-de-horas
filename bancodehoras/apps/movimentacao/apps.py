@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class MovimentacaoConfig(AppConfig):
-    name = 'movimentacao'
+    name = 'apps.movimentacao'

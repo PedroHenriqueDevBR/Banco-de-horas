@@ -3,10 +3,10 @@ from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.conf import settings
-from relatorio import controller
+from apps.relatorio import controller
 from datetime import datetime
-from core.models import *
-from movimentacao.views import seleciona_dados
+from apps.core.models import *
+from apps.movimentacao.views import seleciona_dados
 import os
 
 # Create your views here.

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import *
+from apps.core.models import *
 from django.contrib.auth.models import User
 
 
