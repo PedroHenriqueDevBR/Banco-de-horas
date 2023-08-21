@@ -1,0 +1,15 @@
+[flake8]
+extend-ignore = E203
+exclude =
+    .git,
+    __pycache__,
+    migrations,
+    settings,
+    old,
+    build,
+    dist,
+    venv,
+    ./apps/core/static/,
+    ./apps/*/scripts/,
+
+max-complexity = 10

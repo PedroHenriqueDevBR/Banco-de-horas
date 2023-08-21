@@ -6,9 +6,9 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_NAME=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_NAME=${DB_DATABASE_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - "5432:5432"
 
@@ -16,7 +16,9 @@ services:
     build:
       context: .
       dockerfile: ./dockerfiles/python/Dockerfile
-    command: python manage.py runserver 0.0.0.0:8000 --settings=bancodehoras.settings.dev
+    command: gunicorn ldap_password.wsgi_prod:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
     volumes:
       - .:/code
     environment:
@@ -28,9 +30,25 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_HOST=${DB_HOST}
       - POSTGRES_PORT=${DB_HOST}
-    ports:
-      - "8000:8000"
     links:
       - db
     depends_on:
       - db
+
+  nginx:
+
+    build:
+      context: .
+      dockerfile: ./dockerfiles/nginx/Dockerfile
+    volumes:
+      - ./staticfiles/:/code/staticfiles
+      - ./mediafiles/:/code/mediafiles
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - web
+
+volumes:
+  static_volume:
+  media_volume:
