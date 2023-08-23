@@ -7,7 +7,7 @@ RUN mkdir $HOME
 RUN mkdir $HOME/staticfiles
 WORKDIR $HOME
 
-RUN apt-get update && apt-get upgrade -y && apt-get install -y libsqlite3-dev libpq-dev build-essential python3-dev libldap2-dev libsasl2-dev ldap-utils tox lcov valgrind  
+RUN apt-get update && apt-get upgrade -y && apt-get install -y libsqlite3-dev libpq-dev build-essential python3-dev libldap2-dev libsasl2-dev ldap-utils tox lcov valgrind zlib1g-dev libjpeg-dev libpng-dev  
 RUN pip install -U pip setuptools
 RUN pip install virtualenv
 RUN python -m virtualenv venv
