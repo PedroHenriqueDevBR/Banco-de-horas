@@ -6,7 +6,7 @@ from apps.usuario.models import Perfil
 class FuncionalidadesCore:
     def formata_dados_do_grafico(self, perfil_arg: Perfil):
         movimentacao_func = FuncionalidadesMovimentacao([], [])
-        perfis = perfil_arg.setor.perfis_do_setor.all()
+        perfis = perfil_arg.setor.internos.all()
         resultado = []
 
         for perfil in perfis:

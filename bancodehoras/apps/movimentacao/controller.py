@@ -1,3 +1,6 @@
+from apps.movimentacao.models import Movimentacao
+
+
 class FormataDados:
     def calcular_hora(self, inicio, fim, multiplo):
         if ":" not in inicio or ":" not in fim:
@@ -111,8 +114,18 @@ class FuncionalidadesMovimentacao:
 class Utilidades:
     def seleciona_todas_movimentacoes(self, perfis, entrada):
         movimentacoes = []
-        for perfil in perfis:
-            movimentacoes.extend(
-                perfil.movimentacoes.all().filter(finalizado=False, entrada=entrada)
-            )
+        if entrada:
+            for perfil in perfis:
+                movimentacoes.extend(
+                    perfil.solicitacoes_horas.filter(
+                        status=Movimentacao.DEFERIDO,
+                    )
+                )
+        else:
+            for perfil in perfis:
+                movimentacoes.extend(
+                    perfil.solicitacoes_pagamentos.filter(
+                        status=Movimentacao.DEFERIDO,
+                    )
+                )
         return movimentacoes

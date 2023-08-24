@@ -50,7 +50,7 @@ def dashboard(request):
 def formata_dados_do_grafico(request):
     try:
         funcionalidade = FuncionalidadesMovimentacao([], [])
-        internos = request.user.perfil.setor.perfis_do_setor.all()
+        internos = request.user.perfil.setor.internos.all()
         resultado = []
 
         for perfil in internos:
@@ -183,7 +183,7 @@ def setor_delete(request, id):
         return redirect("solicitacoes")
 
     setor = Setor.objects.get(id=id)
-    colaboradores = setor.perfis_do_setor.all()
+    colaboradores = setor.internos.all()
 
     if colaboradores.count() > 0:
         messages.add_message(

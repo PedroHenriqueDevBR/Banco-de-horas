@@ -6,6 +6,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
+from django.contrib.auth.models import User
 
 import apps.core.constants as constant
 from apps.core.models import Hash
@@ -34,13 +35,13 @@ class PainelDeControleSolicitacoesView(View):
         func = Utilidades()
         dados = seleciona_dados(request)
         setor = request.user.perfil.setor
-        dados["colaboradores_do_setor"] = setor.perfis_do_setor.all()
+        dados["colaboradores_do_setor"] = setor.internos.all()
         dados["dados_grafico"] = self.formata_dados_do_grafico(request)
 
         # Sistema de paginação
         paginacao = Paginator(
             func.seleciona_todas_movimentacoes(
-                perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=True
+                perfis=request.user.perfil.setor.internos.all(), entrada=True
             ),
             5,
         )
@@ -62,7 +63,7 @@ class PainelDeControleSolicitacoesView(View):
         try:
             funcionalidade = FuncionalidadesMovimentacao([], [])
             autorizado = Status.objects.filter(autorizado=True)[0]
-            perfis = request.user.perfil.setor.perfis_do_setor.all()
+            perfis = request.user.perfil.setor.internos.all()
             resultado = []
 
             for perfil in perfis:
@@ -95,13 +96,13 @@ class PainelDeControleFolgasView(View):
         func = Utilidades()
         dados = seleciona_dados(request)
         setor = request.user.perfil.setor
-        dados["colaboradores_do_setor"] = setor.perfis_do_setor.all()
+        dados["colaboradores_do_setor"] = setor.internos.all()
         dados["dados_grafico"] = self.formata_dados_do_grafico(request)
 
         # Sistema de paginação
         paginacao = Paginator(
             func.seleciona_todas_movimentacoes(
-                perfis=request.user.perfil.setor.perfis_do_setor.all(), entrada=False
+                perfis=request.user.perfil.setor.internos.all(), entrada=False
             ),
             5,
         )
@@ -123,7 +124,7 @@ class PainelDeControleFolgasView(View):
         try:
             funcionalidade = FuncionalidadesMovimentacao([], [])
             autorizado = Status.objects.filter(autorizado=True)[0]
-            perfis = request.user.perfil.setor.perfis_do_setor.all()
+            perfis = request.user.perfil.setor.internos.all()
             resultado = []
 
             for perfil in perfis:
@@ -328,7 +329,7 @@ def listar_solicitacoes(request, id):
 
     # Sistema de paginação
     paginacao = Paginator(
-        User.objects.get(username=id).perfil.movimentacoes.all()[::-1], 15
+        User.objects.get(username=id).perfil.solicitacoes_horas.all()[::-1], 15
     )
     page = request.GET.get("pagina")
     dados["username"] = id

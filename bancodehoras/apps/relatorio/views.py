@@ -270,7 +270,7 @@ def solicitacoes_pendentes_do_perfil(request):
 def solicitacoes_pendentes_do_meu_setor(request):
     # try:
     user = request.user
-    usuarios_do_setor = user.perfil.setor.perfis_do_setor.all()
+    usuarios_do_setor = user.perfil.setor.internos.all()
     controller.relatorio_solicitacoes_do_meu_setor(usuarios_do_setor)
 
     pasta = "relatorio/arquivos/"

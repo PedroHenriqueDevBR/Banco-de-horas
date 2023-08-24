@@ -48,7 +48,7 @@
                         <select class="form-select" name="colaborador" id="colaborador"
                             aria-label="Selecionar colaborador">
                             <option value="0">Todos</option>
-                            {% for colaborador in perfil_logado.perfil.setor.perfis_do_setor.all %}
+                            {% for colaborador in perfil_logado.perfil.setor.internos.all %}
                             <option value="{{ colaborador.id }}">{{ colaborador.nome }}</option>
                             {% endfor %}
                         </select>

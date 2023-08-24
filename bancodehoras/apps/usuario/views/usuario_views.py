@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.db import OperationalError
+from django.core.exceptions import ObjectDoesNotExist
+
 from django.views.generic.base import View
 
 from apps.core.views.controller import FuncionalidadesCore
@@ -45,6 +47,12 @@ class LoginUsuarioView(View):
                 elif perfil.gerente:
                     return redirect("dashboard")
                 return redirect("solicitacoes")
+            except ObjectDoesNotExist:
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Sem permissão para acessar o sistema",
+                )
             except OperationalError:
                 messages.add_message(
                     request,
