@@ -35,16 +35,9 @@ class Movimentacao(models.Model):
         choices=STATUS_MOVIMENTACAO,
         default=SOLICITADO,
     )
-    colaborador = models.ForeignKey(
-        Perfil,
-        related_name="movimentacoes",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-    )
 
     def __str__(self):
-        return f"{self.data_cadastro} - {self.colaborador.nome}"
+        return f"{self.data_cadastro}"
 
     class Meta:
         verbose_name = "Movimentação"
@@ -55,12 +48,26 @@ class SolicitacaoHoras(Movimentacao):
     hora_inicial = models.TimeField(null=True, blank=True)
     hora_final = models.TimeField(null=True, blank=True)
     hora_total = models.CharField(max_length=10)
+    colaborador = models.ForeignKey(
+        Perfil,
+        related_name="solicitacoes_horas",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
 
 class SolicitacaoPagamento(Movimentacao):
     forma_de_pagamento = models.ForeignKey(
         FormaPagamento,
         related_name="pagamento_movimentacoes",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    colaborador = models.ForeignKey(
+        Perfil,
+        related_name="solicitacoes_pagamentos",
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

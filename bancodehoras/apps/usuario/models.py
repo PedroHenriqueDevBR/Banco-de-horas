@@ -5,6 +5,13 @@ from django.contrib.auth.models import User
 class Unidade(models.Model):
     nome = models.CharField(max_length=250)
 
+    def __str__(self) -> str:
+        return f"{self.nome}"
+
+    class Meta:
+        verbose_name = "Unidade"
+        verbose_name_plural = "Unidades"
+
 
 class Setor(models.Model):
     nome = models.CharField(max_length=250)
@@ -48,7 +55,7 @@ class Perfil(models.Model):
         return f"{self.nome}"
 
     def display_setor(self):
-        return f"{self.setor.nome}"
+        return f"{self.setor}"
 
     display_setor.short_description = "Setor"
 
