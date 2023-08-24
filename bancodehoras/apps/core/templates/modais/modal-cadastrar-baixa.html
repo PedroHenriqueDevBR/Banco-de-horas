@@ -15,8 +15,8 @@
                     <div class="form-floating">
                         <select class="form-select" name="horas_total" id="horas_total" aria-label="Carga horária">
                             <option selected value="total">Dia completo</option>
-                            <option value="{{ perfil_logado.perfil.ch_primeira }}">Primeira: {{ perfil_logado.perfil.ch_primeira }} horas</option>
-                            <option value="{{ perfil_logado.perfil.ch_segunda }}">Segunda: {{ perfil_logado.perfil.ch_segunda }} horas</option>
+                            <option value="{{ perfil_logado.perfil.primeiro_horario }}">Primeira: {{ perfil_logado.perfil.primeiro_horario }} horas</option>
+                            <option value="{{ perfil_logado.perfil.segundo_horario }}">Segunda: {{ perfil_logado.perfil.segundo_horario }} horas</option>
                         </select>
                         <label for="horas_total">Carga horária</label>
                       </div>

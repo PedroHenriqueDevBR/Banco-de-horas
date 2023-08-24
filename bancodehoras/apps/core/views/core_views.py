@@ -2,8 +2,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 
+from apps.movimentacao.models import FormaPagamento, Movimentacao
+from apps.usuario.models import Perfil, Setor
+
 from .controller import FuncionalidadesCore
-from apps.core.models import *
+from apps.core.models import Hash
 from apps.core import constants
 from apps.movimentacao.controller import FuncionalidadesMovimentacao
 from apps.movimentacao.views.movimentacao_views import seleciona_dados
@@ -19,15 +22,9 @@ def isntalar_sistema(request):
             valor = 1
             Hash.objects.create(nome=nome, chave=chave, valor=valor)
 
-        if len(FormaDePagamento.objects.all()) == 0:
+        if len(FormaPagamento.objects.all()) == 0:
             print("Instalando sistema, criando forma de pagamento")
-            FormaDePagamento.objects.create(nome="Dinheiro")
-
-        if len(Status.objects.all()) == 0:
-            print("Instalando sistema, criando status")
-            Status.objects.create(nome="Análise", analise=True)
-            Status.objects.create(nome="Autorizado", autorizado=True)
-            Status.objects.create(nome="Cancelado")
+            FormaPagamento.objects.create(nome="Dinheiro")
 
         print("Sistema instalado")
     else:
@@ -53,19 +50,22 @@ def dashboard(request):
 def formata_dados_do_grafico(request):
     try:
         funcionalidade = FuncionalidadesMovimentacao([], [])
-        autorizado = Status.objects.filter(autorizado=True)[0]
-        perfis = request.user.perfil.setor.perfis_do_setor.all()
+        internos = request.user.perfil.setor.perfis_do_setor.all()
         resultado = []
 
-        for perfil in perfis:
-            bancos = perfil.movimentacoes.filter(entrada=True, status=autorizado)
-            baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
+        for perfil in internos:
+            bancos = perfil.solicitacoes_horas.filter(
+                status=Movimentacao.DEFERIDO,
+            )
+            baixas = perfil.solicitacoes_pagamentos.filter(
+                status=Movimentacao.DEFERIDO,
+            )
             resultado.append(
                 {
                     "nome": perfil.nome,
                     "total_horas": int(
                         funcionalidade.total_de_horas_disponivel_do_perfil(
-                            autorizado, bancos, baixas
+                            Movimentacao.DEFERIDO, bancos, baixas
                         ).split(":")[0]
                     ),
                 }
@@ -106,7 +106,7 @@ def administrador_extra(request):
 
     tamplate_name = "core/super/super-dados-extras.html"
     dados = seleciona_dados(request)
-    dados["formasdepagamentos"] = FormaDePagamento.objects.all()
+    dados["formasdepagamentos"] = FormaPagamento.objects.all()
     dados["configuracoes"] = Hash.objects.all()
     return render(request, tamplate_name, dados)
 
@@ -377,13 +377,13 @@ def forma_de_pagamento(request):
 
     if request.method == "POST":
         forma_de_pagamento = request.POST.get("forma_de_pagamento")
-        pagamentos = FormaDePagamento.objects.filter(nome=forma_de_pagamento)
+        pagamentos = FormaPagamento.objects.filter(nome=forma_de_pagamento)
         if len(pagamentos) > 0:
             messages.add_message(
                 request, messages.INFO, "Forma de pagamento já cadastrada."
             )
         else:
-            FormaDePagamento.objects.create(nome=forma_de_pagamento)
+            FormaPagamento.objects.create(nome=forma_de_pagamento)
             messages.add_message(
                 request, messages.INFO, "Forma de pagamento cadastrada com sucesso."
             )
@@ -396,7 +396,7 @@ def forma_de_pagamento_delete(request, id):
     if not func.superuser(request):
         return redirect("solicitacoes")
 
-    pagamento = FormaDePagamento.objects.get(id=id)
+    pagamento = FormaPagamento.objects.get(id=id)
     pagamento.delete()
     return redirect("administrador_extra")
 
@@ -410,7 +410,7 @@ def forma_de_pagamento_editar(request, id):
     if request.method == "POST":
         nome = request.POST.get("nome")
         if len(nome) > 0:
-            pagamento = FormaDePagamento.objects.get(id=id)
+            pagamento = FormaPagamento.objects.get(id=id)
             pagamento.nome = nome
             pagamento.save()
             messages.add_message(
@@ -421,8 +421,8 @@ def forma_de_pagamento_editar(request, id):
         return redirect("administrador_extra")
     else:
         dados = seleciona_dados(request)
-        dados["pagamento"] = FormaDePagamento.objects.get(id=id)
-        return render(request, "core/super/alterar-formadepagamento.html", dados)
+        dados["pagamento"] = FormaPagamento.objects.get(id=id)
+        return render(request, "core/super/alterar-formapagamento.html", dados)
 
 
 @login_required(login_url="login")

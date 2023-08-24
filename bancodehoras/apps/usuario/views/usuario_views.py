@@ -9,6 +9,7 @@ from django.views.generic.base import View
 from apps.core.views.controller import FuncionalidadesCore
 from apps.usuario.forms import RegistrarUsuarioForm
 from apps.movimentacao.views.movimentacao_views import seleciona_dados
+from apps.usuario.models import Perfil, Setor
 
 
 class LoginUsuarioView(View):
@@ -80,8 +81,8 @@ def cadastrar_usuario(request):
                     nome=dados_form["nome"],
                     usuario=usuario,
                     setor=setor,
-                    ch_primeira=dados_form["ch_primeira"],
-                    ch_segunda=dados_form["ch_segunda"],
+                    primeiro_horario=dados_form["primeiro_horario"],
+                    segundo_horario=dados_form["segundo_horario"],
                 )
                 perfil.save()
 
@@ -124,16 +125,16 @@ def atualiza_usuario(request, id):
             id_setor = request.POST.get("setor")
             email = request.POST.get("email")
             senha = request.POST.get("senha")
-            ch_primeira = request.POST.get("ch_primeira")
-            ch_segunda = request.POST.get("ch_segunda")
+            primeiro_horario = request.POST.get("primeiro_horario")
+            segundo_horario = request.POST.get("segundo_horario")
 
             if (
                 len(nome) == 0
                 or len(matricula) == 0
                 or len(id_setor) == 0
                 or len(email) == 0
-                or len(ch_primeira) == 0
-                or len(ch_segunda) == 0
+                or len(primeiro_horario) == 0
+                or len(segundo_horario) == 0
             ):
                 messages.add_message(
                     request,
@@ -151,8 +152,8 @@ def atualiza_usuario(request, id):
             perfil = user.perfil
             perfil.nome = nome
             perfil.setor = setor
-            perfil.ch_primeira = ch_primeira
-            perfil.ch_segunda = ch_segunda
+            perfil.primeiro_horario = primeiro_horario
+            perfil.segundo_horario = segundo_horario
 
             if senha != "":
                 user.set_password(senha)

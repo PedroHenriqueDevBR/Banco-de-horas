@@ -19,7 +19,7 @@
             <div class="card-footer d-flex justify-content-center">
                 <button class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#editar-setor">Editar setor</button>
                 <button class="btn btn-primary mx-1" data-bs-toggle="modal" data-bs-target="#cadastrar-colaborador">Cadastrar colaborador</button>
-                <a href="{% url 'setor_deletar' setor.id %}" class="btn btn-danger mx-1">Deletar colaborador</a>
+                <a href="{% url 'setor_deletar' setor.id %}" class="btn btn-danger mx-1">Deletar setor</a>
             </div>
         </div>
     </div>
@@ -42,16 +42,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% if setor.perfis_do_setor.all %}
-                    {% for colaborador in setor.perfis_do_setor.all %}
+                    {% for colaborador in setor.internos.all %}
                     <tr>
                         <td>{{ colaborador.nome }}</td>
                         <td>{{ colaborador.usuario.username }}</td>
                         <td>{{ colaborador.usuario.email }}</td>
                         <td><a href="{% url 'usuario_atualiza' colaborador.usuario.username %}" class="badge primary-color-app color-light-text">Acessar</a></td>
                     </tr>
+                    {% empty %}
+                    <tr>
+                        <td> - </td>
+                        <td> - </td>
+                        <td> - </td>
+                        <td> - </td>
+                    </tr>
                     {% endfor %}
-                    {% endif %}
                 </tbody>
             </table>
         </div>

@@ -275,9 +275,9 @@ class SolicitacaoBaixaView(View):
 
             if total_horas == "total":
                 horas_solicitadas = funcionalidade.converte_hora_em_minutos(
-                    str(request.user.perfil.ch_primeira)
+                    str(request.user.perfil.primeiro_horario)
                 ) + funcionalidade.converte_hora_em_minutos(
-                    str(request.user.perfil.ch_segunda)
+                    str(request.user.perfil.segundo_horario)
                 )
             else:
                 horas_solicitadas = funcionalidade.converte_hora_em_minutos(total_horas)

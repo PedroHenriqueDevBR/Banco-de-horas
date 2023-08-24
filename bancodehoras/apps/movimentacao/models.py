@@ -96,7 +96,7 @@ class LogSolicitacaoHoras(LogMovimentacao):
     )
 
     def __str__(self):
-        return f"{self.data} - {self.perfil_emissor.nome}"
+        return f"{self.data} - {self.perfil_emissor}"
 
     class Meta:
         verbose_name = "Log solicitacao hora"
@@ -113,7 +113,7 @@ class LogSolicitacaoPagamento(LogMovimentacao):
     )
 
     def __str__(self):
-        return f"{self.data} - {self.perfil_emissor.nome}"
+        return f"{self.data} - {self.perfil_emissor}"
 
     class Meta:
         verbose_name = "Log solicitacao pagamento"
