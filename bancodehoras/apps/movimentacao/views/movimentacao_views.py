@@ -3,6 +3,7 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db import OperationalError
 from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.views.generic.base import View
@@ -12,6 +13,7 @@ import apps.core.constants as constant
 from apps.core.models import Hash
 from apps.movimentacao.models import (
     FormaPagamento,
+    LogSolicitacaoHoras,
     Movimentacao,
     SolicitacaoHoras,
     SolicitacaoPagamento,
@@ -49,9 +51,9 @@ class PainelDeControleSolicitacoesView(View):
         dados["username"] = id
 
         try:
-            dados["solciitacoes_pendentes"] = paginacao.get_page(page)
+            dados["solicitacoes_pendentes"] = paginacao.get_page(page)
         except Exception:
-            dados["solciitacoes_pendentes"] = paginacao.page(1)
+            dados["solicitacoes_pendentes"] = paginacao.page(1)
             if page is not None:
                 messages.add_message(
                     request, messages.INFO, "A página {} não existe".format(page)
@@ -62,19 +64,24 @@ class PainelDeControleSolicitacoesView(View):
     def formata_dados_do_grafico(self, request):
         try:
             funcionalidade = FuncionalidadesMovimentacao([], [])
-            autorizado = Status.objects.filter(autorizado=True)[0]
             perfis = request.user.perfil.setor.internos.all()
             resultado = []
 
             for perfil in perfis:
-                bancos = perfil.movimentacoes.filter(entrada=True, status=autorizado)
-                baixas = perfil.movimentacoes.filter(entrada=False, status=autorizado)
+                bancos = perfil.solicitacoes_horas.filter(
+                    status=Movimentacao.DEFERIDO,
+                )
+                baixas = perfil.solicitacoes_pagamentos.filter(
+                    status=Movimentacao.DEFERIDO,
+                )
                 resultado.append(
                     {
                         "nome": perfil.nome,
                         "total_horas": int(
                             funcionalidade.total_de_horas_disponivel_do_perfil(
-                                autorizado, bancos, baixas
+                                Movimentacao.DEFERIDO,
+                                bancos,
+                                baixas,
                             ).split(":")[0]
                         ),
                     }
@@ -110,9 +117,9 @@ class PainelDeControleFolgasView(View):
         dados["username"] = id
 
         try:
-            dados["solciitacoes_pendentes"] = paginacao.get_page(page)
+            dados["solicitacoes_pendentes"] = paginacao.get_page(page)
         except Exception:
-            dados["solciitacoes_pendentes"] = paginacao.page(1)
+            dados["solicitacoes_pendentes"] = paginacao.page(1)
             if page is not None:
                 messages.add_message(
                     request, messages.INFO, "A página {} não existe".format(page)
@@ -164,7 +171,7 @@ class SolicitacaoBancoDeHorasView(View):
 
         try:
             dados["solicitacoes"] = paginacao.get_page(page)
-        except Exception:
+        except:
             dados["solicitacoes"] = paginacao.page(1)
             if page is not None:
                 messages.add_message(
@@ -174,55 +181,64 @@ class SolicitacaoBancoDeHorasView(View):
         return render(request, self.template_name, dados)
 
     def post(self, request):
+        solicitante = request.user.perfil
+        data_movimentacao = request.POST.get("data")
+        hora_inicial = request.POST.get("hora_inicial")
+        hora_final = request.POST.get("hora_final")
+        motivo = request.POST.get("motivo")
+
+        format_data = FormataDados()
+
+        if (
+            len(data_movimentacao) == 0
+            or len(hora_inicial) == 0
+            or len(hora_final) == 0
+            or len(motivo) == 0
+        ):
+            messages.add_message(
+                request,
+                messages.WARNING,
+                "Todos os campos devem ser preenchidos",
+            )
+            return redirect("solicitacoes")
+
         try:
-            data_movimentacao = request.POST.get("data")
-            hora_inicial = request.POST.get("hora_inicial")
-            hora_final = request.POST.get("hora_final")
-            motivo = request.POST.get("motivo")
-
-            if (
-                len(data_movimentacao) == 0
-                or len(hora_inicial) == 0
-                or len(hora_final) == 0
-                or len(motivo) == 0
-            ):
-                messages.add_message("Todos os campos devem ser preenchidos")
-                return redirect("solicitacoes")
-
-            status = Status.objects.filter(analise=True)[0]
-            solicitante = request.user.perfil
-            format_data = FormataDados()
-            multiplo = float(Hash.objects.filter(chave=constant.VALOR_HORA)[0].valor)
-            hora_total = format_data.calcular_hora(hora_inicial, hora_final, multiplo)
+            chave = constant.VALOR_HORA
+            valor_hora = Hash.objects.filter(chave=chave)[0].valor
+            multiplo = float(valor_hora)
+            hora_total = format_data.calcular_hora(
+                hora_inicial,
+                hora_final,
+                multiplo,
+            )
             data_movimentacao_formatada = datetime.strptime(
                 data_movimentacao, "%Y-%m-%d"
             ).date()
 
-            movimentacao = Movimentacao(
+            movimentacao = SolicitacaoHoras(
                 data_movimentacao=data_movimentacao_formatada,
                 hora_inicial=hora_inicial,
                 hora_final=hora_final,
                 hora_total=hora_total,
                 motivo=motivo,
-                status=status,
-                entrada=True,
+                status=Movimentacao.ANALISE,
                 colaborador=solicitante,
             )
             movimentacao.save()
 
-            log = "Solicitação realizada com sucesso, solicitação de número: {}".format(
-                movimentacao.id
-            )
+            log = f"Solicitação realizada com sucesso, solicitação de número: {movimentacao.id}"
 
-            LogMovimentacao.objects.create(
-                log=log, perfil_emissor=solicitante, movimentacao=movimentacao
+            LogSolicitacaoHoras.objects.create(
+                log=log,
+                perfil_emissor=solicitante,
+                movimentacao=movimentacao,
             )
 
             messages.add_message(
                 request, messages.INFO, "Banco de horas solicitado com sucesso."
             )
             return redirect("solicitacoes")
-        except:
+        except OperationalError:
             messages.add_message(
                 request,
                 messages.INFO,
@@ -257,19 +273,15 @@ class SolicitacaoBaixaView(View):
         return render(request, self.template_name, dados)
 
     def post(self, request):
+        solicitante = request.user.perfil
+        data_folga = request.POST.get("data_folga")
+        total_horas = request.POST.get("horas_total")
+
+        if len(data_folga) == 0 or len(total_horas) == 0:
+            messages.add_message(request, messages.INFO, "Preencha todos os campos.")
+            return redirect("solicitacoes")
+
         try:
-            data_folga = request.POST.get("data_folga")
-            total_horas = request.POST.get("horas_total")
-
-            if len(data_folga) == 0 or len(total_horas) == 0:
-                messages.add_message(
-                    request, messages.INFO, "Preencha todos os campos."
-                )
-                return redirect("solicitacoes")
-
-            status = Status.objects.filter(analise=True)[0]
-            solicitante = request.user.perfil
-
             # Verifica saldo de horas
             funcionalidade = FormataDados()
             dados = seleciona_dados(request)
@@ -289,16 +301,17 @@ class SolicitacaoBaixaView(View):
 
             if horas_solicitadas > horas_disponiveis:
                 messages.add_message(
-                    request, messages.INFO, "Você não possui horas disponívies."
+                    request,
+                    messages.INFO,
+                    "Você não possui horas disponívies.",
                 )
             else:
-                Movimentacao.objects.create(
+                SolicitacaoPagamento.objects.create(
                     data_movimentacao=data_folga,
-                    entrada=False,
                     hora_total=funcionalidade.converter_minutos_em_horas(
-                        horas_solicitadas
+                        horas_solicitadas,
                     ),
-                    status=status,
+                    status=Movimentacao.ANALISE,
                     colaborador=solicitante,
                 )
 
@@ -352,31 +365,27 @@ def solicitacao_mostra_view(request, id):
 
     if request.method == "POST":
         try:
-            id_status = int(request.POST.get("id_status"))
+            status = int(request.POST.get("id_status"))
             id_movimentacao = int(request.POST.get("id_movimentacao"))
             descricao = request.POST.get("descricao")
 
-            forma_de_pagamento = None
+            pagamento = None
             if request.POST.get("id_pagamento"):
                 id_pagamento = int(request.POST.get("id_pagamento"))
-                forma_de_pagamento = FormaDePagamento.objects.get(id=id_pagamento)
+                pagamento = FormaPagamento.objects.get(id=id_pagamento)
 
-            status = Status.objects.get(id=id_status)
-            movimentacao = Movimentacao.objects.get(id=id_movimentacao)
-            perfil = request.user.perfil
-
-            if status.autorizado:
-                movimentacao.finalizado = True
-            else:
-                movimentacao.finalizado = False
-
-            msg_padrao = "{}".format(descricao)
+            movimentacao = SolicitacaoHoras.objects.get(id=id_movimentacao)
             movimentacao.status = status
-            movimentacao.forma_de_pagamento = forma_de_pagamento
+            movimentacao.forma_de_pagamento = pagamento
             movimentacao.save()
 
-            LogMovimentacao.objects.create(
-                log=msg_padrao, perfil_emissor=perfil, movimentacao=movimentacao
+            perfil = request.user.perfil
+            msg_padrao = f"{descricao}"
+
+            LogSolicitacaoHoras.objects.create(
+                log=msg_padrao,
+                perfil_emissor=perfil,
+                movimentacao=movimentacao,
             )
         except Exception:
             messages.add_message(

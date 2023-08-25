@@ -15,7 +15,7 @@
     </div>
 </div>
 
-{% if solciitacoes_pendentes %}
+{% if solicitacoes_pendentes %}
 <div class="container bg-light mt-3 card px-0">
     <div class="card-header primary-color-dark-app color-light-text">
         <p class="lead text-center">Solicitações de banco de horas em análise</p>
@@ -37,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for banco in solciitacoes_pendentes %}
+                    {% for banco in solicitacoes_pendentes %}
                     <tr>
                         <th scope="row">{{ banco.data_movimentacao }}</th>
                         <th scope="row">{{ banco.colaborador.nome }}</th>
@@ -54,9 +54,9 @@
 
             <nav class="full-w d-flex justify-content-center">
                 <ul class="pagination">
-                  {% if solciitacoes_pendentes.has_previous %}
+                  {% if solicitacoes_pendentes.has_previous %}
                   <li class="page-item">
-                      <a class="page-link" href="?pagina={{ solciitacoes_pendentes.previous_page_number }}">Voltar</a>
+                      <a class="page-link" href="?pagina={{ solicitacoes_pendentes.previous_page_number }}">Voltar</a>
                   </li>
                   {% else %}
                   <li class="page-item disabled">
@@ -65,9 +65,9 @@
                   {% endif %}
   
   
-                  {% if solciitacoes_pendentes.has_next %}
+                  {% if solicitacoes_pendentes.has_next %}
                   <li class="page-item">
-                      <a class="page-link" href="?pagina={{ solciitacoes_pendentes.next_page_number }}">Próximo</a>
+                      <a class="page-link" href="?pagina={{ solicitacoes_pendentes.next_page_number }}">Próximo</a>
                   </li>
                   {% else %}
                   <li class="page-item disabled">

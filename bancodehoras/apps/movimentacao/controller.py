@@ -92,16 +92,18 @@ class FuncionalidadesMovimentacao:
         for banco in bancos:
             if banco.status == base:
                 total_entrada += self.formatar.converte_hora_em_minutos(
-                    banco.hora_total
+                    banco.hora_total,
                 )
 
         for baixa in baixas:
             if baixa.status == base:
-                total_saida += self.formatar.converte_hora_em_minutos(baixa.hora_total)
+                total_saida += self.formatar.converte_hora_em_minutos(
+                    baixa.hora_total,
+                )
 
-        # import pdb; pdb.set_trace()
-
-        return self.formatar.converter_minutos_em_horas(total_entrada - total_saida)
+        return self.formatar.converter_minutos_em_horas(
+            total_entrada - total_saida,
+        )
 
     def calcular_total_de_horas(self, obj):
         total_min = 0
@@ -118,14 +120,14 @@ class Utilidades:
             for perfil in perfis:
                 movimentacoes.extend(
                     perfil.solicitacoes_horas.filter(
-                        status=Movimentacao.DEFERIDO,
+                        status=Movimentacao.ANALISE,
                     )
                 )
         else:
             for perfil in perfis:
                 movimentacoes.extend(
                     perfil.solicitacoes_pagamentos.filter(
-                        status=Movimentacao.DEFERIDO,
+                        status=Movimentacao.ANALISE,
                     )
                 )
         return movimentacoes

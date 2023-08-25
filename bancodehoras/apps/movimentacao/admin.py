@@ -29,7 +29,7 @@
 
 
 # @admin.register(FormaPagamento)
-# class FormaDePagamentoAdmin(admin.ModelAdmin):
+# class FormaPagamentoAdmin(admin.ModelAdmin):
 #     list_display = ["nome"]
 #     ordering = ["nome"]
 #     search_fields = ["nome"]

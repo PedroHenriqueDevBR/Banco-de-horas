@@ -17,8 +17,8 @@ class Movimentacao(models.Model):
     SOLICITADO = 1
     ANALISE = 2
     REVISAO = 3
-    DEFERIDO = 3
-    INDEFERIDO = 4
+    DEFERIDO = 4
+    INDEFERIDO = 5
 
     STATUS_MOVIMENTACAO = [
         (SOLICITADO, "Solicitado"),  # Criação da movimentação
@@ -31,6 +31,7 @@ class Movimentacao(models.Model):
     data_cadastro = models.DateTimeField(auto_now_add=True)
     data_movimentacao = models.DateTimeField(auto_now=True)
     motivo = models.TextField(null=True, blank=True)
+    hora_total = models.CharField(max_length=10)
     status = models.IntegerField(
         choices=STATUS_MOVIMENTACAO,
         default=SOLICITADO,
@@ -47,7 +48,6 @@ class Movimentacao(models.Model):
 class SolicitacaoHoras(Movimentacao):
     hora_inicial = models.TimeField(null=True, blank=True)
     hora_final = models.TimeField(null=True, blank=True)
-    hora_total = models.CharField(max_length=10)
     colaborador = models.ForeignKey(
         Perfil,
         related_name="solicitacoes_horas",

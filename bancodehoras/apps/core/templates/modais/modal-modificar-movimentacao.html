@@ -11,16 +11,16 @@
 
                     <div class="form-floating">
                         <select class="form-select" id="status" name="id_status" aria-label="Status da solicitação">
-                            {% if status %}
-                            {% for statu in status %}
-                            <option value="{{ statu.id }}">{{ statu.nome }}</option>
-                            {% endfor %}
-                            {% endif %}
+                            <option value="1">Solicitado</option>
+                            <option value="2">Análise</option>
+                            <option value="3">Revisão</option>
+                            <option value="4">Deferido</option>
+                            <option value="5">Indeferido</option>
                         </select>
                         <label for="status">Status</label>
                     </div>
 
-                    {% if solicitacao.entrada == False %}
+                    {% if solicitar_pagamento == True %}
                     <div class="form-floating">
                         <select class="form-select" id="pagamento" name="id_pagamento" aria-label="Forma de pagamento">
                             {% if forma_de_pagamento %}

@@ -422,7 +422,7 @@ def forma_de_pagamento_editar(request, id):
     else:
         dados = seleciona_dados(request)
         dados["pagamento"] = FormaPagamento.objects.get(id=id)
-        return render(request, "core/super/alterar-formapagamento.html", dados)
+        return render(request, "core/super/alterar-FormaPagamento.html", dados)
 
 
 @login_required(login_url="login")

@@ -50,7 +50,7 @@ def relatorio(request):
             if forma_pagamento != "0" and forma_pagamento != "":  # Forma de pagamento
                 controller.gera_log("Aplicou o filtro de Forma de pagamento")
                 id_aux = int(forma_pagamento)
-                forma_pagamento = FormaDePagamento.objects.get(id=id_aux)
+                forma_pagamento = FormaPagamento.objects.get(id=id_aux)
                 dados = dados.filter(forma_de_pagamento=forma_pagamento)
 
             if (
