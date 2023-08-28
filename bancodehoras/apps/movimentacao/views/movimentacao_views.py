@@ -180,6 +180,9 @@ class SolicitacaoBancoDeHorasView(View):
 
         return render(request, self.template_name, dados)
 
+    def normalizar_valor_hora(self, valor: str):
+        return valor.replace(",", ".")
+
     def post(self, request):
         solicitante = request.user.perfil
         data_movimentacao = request.POST.get("data")
@@ -205,6 +208,7 @@ class SolicitacaoBancoDeHorasView(View):
         try:
             chave = constant.VALOR_HORA
             valor_hora = Hash.objects.filter(chave=chave)[0].valor
+            valor_hora = self.normalizar_valor_hora(valor_hora)
             multiplo = float(valor_hora)
             hora_total = format_data.calcular_hora(
                 hora_inicial,
